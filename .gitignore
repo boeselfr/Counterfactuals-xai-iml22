@@ -1,0 +1,5 @@
+react-frontend/node_modules/*
+.venv
+
+backend/NLI/*
+backend/sentiment/*
