@@ -24,3 +24,5 @@ class ExampleDataResponse(BaseModel):
                 {"X1": 0.5659110175854882, "X2": 0.9090551671240439, "cluster": 1},
             ]
         }
+
+

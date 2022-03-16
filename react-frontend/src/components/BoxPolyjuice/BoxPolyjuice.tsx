@@ -14,7 +14,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion }: Props) => 
         <div className='itemS'>
             <span className='titleS'> Polyjuice / GPT-3 Suggestion </span>
             <div className='suggestionS'>
-                The girl in yellow shorts has a tennis ball.
+                {suggestion}
             </div>
             <div className='buttonsS'>
                 <div className='buttonS'>

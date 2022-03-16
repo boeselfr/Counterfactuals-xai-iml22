@@ -7,6 +7,7 @@ interface Props {
     sentence2: string;
     gold_label: string;
     suggestion: string;
+
 }
 
 const Box: React.FunctionComponent<Props> = ({ sentence1, sentence2, gold_label, suggestion }: Props) => {
