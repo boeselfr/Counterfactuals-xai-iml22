@@ -36,17 +36,8 @@ def upload_data(split: str):
     data['suggestionRH'] = ''
     data['suggestionRH_label'] = ''
     # take random line from the data and return it
-    print(data)
     data = data.sample()
-    print(data)
-    print(data.to_dict(orient="records"))
-    # generate suggestions here or have them precomputed in the tsv
-
-    """kmeans = KMeans(n_clusters=2, random_state=0).fit(data)
-    labels = kmeans.labels_
-    data["cluster"] = labels.tolist()
-    print(data.head())
-    print(data.to_dict(orient="records"))"""
+    # TODO generate suggestions here or have them precomputed in the tsv
     return data.to_dict(orient="records")
 
 

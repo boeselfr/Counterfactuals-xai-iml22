@@ -2,9 +2,7 @@ import { JsonDecoder } from 'ts.data.json';
 import { NLIDataPoint } from "../types/NLIDataPoint";
 import {NLIDataArray} from "../types/NLIDataArray";
 
-/* **********
- * number[] *
- ********** */
+
 const NLIDataPointDecoder = JsonDecoder.object<NLIDataPoint>(
     {
         sentence1: JsonDecoder.string,

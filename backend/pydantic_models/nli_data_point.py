@@ -9,7 +9,9 @@ class NLIDataPoint(TypedDict):
     sentence 2: hypothesis
     gold_label: label of relationship
     suggestionRP: suggested counterfactual by manipulating the premise
+    suggestionRP_label: (not sure aboput this one) suggested label from a model?
     suggestionRH: suggested counterfactual by manipulating the hypothesis
+    suggestionRHlabel: (not sure aboput this one) suggested label from a model?
     """
     sentence1: str
     sentence2: str

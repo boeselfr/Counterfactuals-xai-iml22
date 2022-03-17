@@ -1,5 +1,3 @@
-
-import { NLIDataPoint } from "../types/NLIDataPoint";
 import { NLIDataArray } from "../types/NLIDataArray";
 
 export interface queryBackendProps {

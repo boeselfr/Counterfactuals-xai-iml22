@@ -32,9 +32,7 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
         <div className="Vis">
             <BoxSentencePair sentence1={sentence1[0]}
                              sentence2={sentence2[0]}
-                             gold_label={gold_label[0]}
-                             suggestionRP={suggestionRP[0]}
-                             suggestionRH={suggestionRH[0]}/>
+                             gold_label={gold_label[0]}/>
             <BoxPolyjuice suggestion={suggestionRH[0]} />
             <BoxTable sentence1={sentence1[0]}
                           sentence2={sentence2[0]}
