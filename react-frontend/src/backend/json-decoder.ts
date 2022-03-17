@@ -1,19 +1,21 @@
 import { JsonDecoder } from 'ts.data.json';
-import { DataPoint } from '../types/DataPoint';
+import { NLIDataPoint } from "../types/NLIDataPoint";
+import {NLIDataArray} from "../types/NLIDataArray";
 
-/* **********
- * number[] *
- ********** */
-const dataPointDecoder = JsonDecoder.object<DataPoint>(
+
+const NLIDataPointDecoder = JsonDecoder.object<NLIDataPoint>(
     {
-        X1: JsonDecoder.number,
-        X2: JsonDecoder.number,
-        cluster: JsonDecoder.number
+        sentence1: JsonDecoder.string,
+        sentence2: JsonDecoder.string,
+        gold_label: JsonDecoder.string,
+        suggestionRP: JsonDecoder.string,
+        suggestionRP_label: JsonDecoder.string,
+        suggestionRH: JsonDecoder.string,
+        suggestionRH_label: JsonDecoder.string,
+
     },
-    'DataPoint'
+    'NLIDataPoint'
 );
 
-/* ***********
- * DataArray *
- *********** */
-export const dataArrayDecoder = JsonDecoder.array<DataPoint>(dataPointDecoder, 'DataArray');
+export const NLIDataPointArrayDecoder = JsonDecoder.array<NLIDataPoint>(NLIDataPointDecoder, 'NLIDataArray');
+

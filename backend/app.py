@@ -8,8 +8,8 @@ import csv
 import codecs
 from io import StringIO
 from pydantic_models.example_data_points import ExampleDataResponse
+from pydantic_models.nli_data_point import NLIDataResponse
 from typing import Callable
-from sklearn.cluster import KMeans
 
 app = FastAPI(
     title="Test Python Backend",
@@ -28,14 +28,16 @@ app.add_middleware(
 )
 
 
-@app.post("/upload-data", response_model=ExampleDataResponse)
-def upload_data(name: str):
-    data = pd.read_csv(f"data/dataset_{name}.csv")
-    kmeans = KMeans(n_clusters=2, random_state=0).fit(data)
-    labels = kmeans.labels_
-    data["cluster"] = labels.tolist()
-    print(data.head())
-    print(data.to_dict(orient="records"))
+@app.post("/upload-data", response_model=NLIDataResponse)
+def upload_data(split: str):
+    data = pd.read_csv(f"data/NLI/original/{split}.tsv", sep="\t")
+    data['suggestionRP'] = ''
+    data['suggestionRP_label'] = ''
+    data['suggestionRH'] = ''
+    data['suggestionRH_label'] = ''
+    # take random line from the data and return it
+    data = data.sample()
+    # TODO generate suggestions here or have them precomputed in the tsv
     return data.to_dict(orient="records")
 
 
