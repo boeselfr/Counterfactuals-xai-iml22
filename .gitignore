@@ -1,5 +1,5 @@
 react-frontend/node_modules/*
 .venv
 
-backend/NLI/*
-backend/sentiment/*
+*.pyc
+*.DS_Store

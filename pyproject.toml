@@ -108,6 +108,7 @@ black = "^22.1.0"
 transformers = "^4.17.0"
 tokenizers = "^0.11.6"
 polyjuice-nlp = {git = "https://github.com/tongshuangwu/polyjuice.git", rev = "main"}
+datasets = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 

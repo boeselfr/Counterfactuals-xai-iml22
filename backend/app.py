@@ -31,12 +31,12 @@ app.add_middleware(
 @app.post("/upload-data", response_model=NLIDataResponse)
 def upload_data(split: str):
     data = pd.read_csv(f"data/NLI/original/{split}.tsv", sep="\t")
-    data['suggestionRP'] = ''
-    data['suggestionRP_label'] = ''
-    data['suggestionRH'] = ''
-    data['suggestionRH_label'] = ''
-    # take random line from the data and return it
-    data = data.sample()
+    # data['suggestionRP'] = ''
+    # data['suggestionRP_label'] = ''
+    # data['suggestionRH'] = ''
+    # data['suggestionRH_label'] = ''
+    # # take random line from the data and return it
+    # data = data.sample()
     # TODO generate suggestions here or have them precomputed in the tsv
     return data.to_dict(orient="records")
 

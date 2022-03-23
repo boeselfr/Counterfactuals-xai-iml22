@@ -1,12 +1,5 @@
-import React from 'react';
-import { DataArray } from './types/DataArray';
+import React, { useState } from 'react';
 import {NLIDataArray} from "./types/NLIDataArray";
-import { Margins } from './types/Margins';
-import { Group } from '@visx/group';
-import { GridColumns, GridRows } from '@visx/grid';
-import { scaleLinear } from '@visx/scale';
-import { AxisBottom, AxisLeft } from '@visx/axis';
-import DataPointComponent from './components/DataPointComponent';
 import BoxSentencePair from "./components/BoxSentencePair/BoxSentencePair";
 import BoxPolyjuice from "./components/BoxPolyjuice/BoxPolyjuice";
 import BoxTable from "./components/BoxTable/BoxTable";
@@ -18,6 +11,11 @@ interface Props {
 }
 
 const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
+    const [count, setCount] = useState(0);
+    const [cflist, setCFList] = useState([]);
+    const [cflabellist, setCFLabelList] = useState([]);
+    const [cfsimilaritylist, setCFSimilarityList] = useState([]);
+
     const sentence1 = data.map((d) => d.sentence1);
     const sentence2 = data.map((d) => d.sentence2);
     const gold_label = data.map((d) => d.gold_label);
@@ -30,15 +28,28 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
     // to display the first nli entry we access the first element in each list below
     return  (
         <div className="Vis">
-            <BoxSentencePair sentence1={sentence1[0]}
-                             sentence2={sentence2[0]}
-                             gold_label={gold_label[0]}/>
-            <BoxPolyjuice suggestion={suggestionRH[0]} />
+            <BoxSentencePair sentence1={sentence1}
+                             sentence2={sentence2}
+                             gold_label={gold_label}
+                             setCount={setCount}
+                             count={count}/>
+            <BoxPolyjuice suggestion={suggestionRP} setCount={setCount} count={count}/>
+
             <BoxTable sentence1={sentence1[0]}
                           sentence2={sentence2[0]}
                           gold_label={gold_label[0]}
-                          suggestion={suggestionRH[0]}/>
-            <BoxCF suggestion={suggestionRH[0]}/>)
+                          suggestion={suggestionRP[0]}/>
+
+            <BoxCF suggestion={suggestionRP} 
+                    setCount={setCount} 
+                    count={count} 
+                    setCFList={setCFList} 
+                    cflist={cflist}
+                    cflabellist={cflabellist}
+                    setCFLabelList={setCFLabelList}
+                    cfsimilaritylist={cfsimilaritylist}
+                    setCFSimilarityList={setCFSimilarityList}
+                    />)
         </div>)
 };
 
