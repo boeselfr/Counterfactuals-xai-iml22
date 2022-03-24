@@ -15,7 +15,7 @@ The project aims to improve [Polyjuice](https://arxiv.org/pdf/2101.00288.pdf), w
 The users of this dashboard are lablers of counterfactuals, fluent english speakers, i.e. lay users. 
 
 ### Datasets
-The used dataset is the original Stanford NLI dataset as well as the manually counterfactually augmented SNLI dataset found (here)[https://github.com/acmi-lab/counterfactually-augmented-data].
+The used dataset is the original Stanford NLI dataset as well as the manually counterfactually augmented SNLI dataset found [here](https://github.com/acmi-lab/counterfactually-augmented-data).
 
 ### Tasks
 As described above, the main task solved by our dashboard is to be point of interaction to increase the level of human interaction with the counterfactual to generate a rich counterfactually augmented dataset. The rough individual tasks involved are:
