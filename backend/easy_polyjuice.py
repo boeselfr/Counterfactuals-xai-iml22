@@ -1,11 +1,68 @@
 import itertools
 from typing import List, Optional, Sequence, Union
 
+import benepar
+import en_core_web_sm
 import numpy as np
 import polyjuice
+import torch
+from nltk import ParentedTree, Tree
 from polyjuice import generations
 from polyjuice.generations import special_tokens
-import torch
+
+nlp = en_core_web_sm.load()
+benepar.download('benepar_en3')
+nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
+
+
+def add_indices_to_terminals(treestring):
+    tree = ParentedTree.fromstring(treestring)
+    for idx, _ in enumerate(tree.leaves()):
+        tree_location = tree.leaf_treeposition(idx)
+        non_terminal = tree[tree_location[:-1]]
+        non_terminal[0] = non_terminal[0] + "_" + str(idx)
+    tree.pretty_print()
+    return str(tree)
+
+
+def find_constituent(node, candidate_list):
+    if len(node) == 1 and type(node[0]) == str:
+        idx = int(node[0].split("_")[-1])
+        return idx, idx + 1
+
+    first_idx = last_idx = 0
+    for i in range(len(node)):
+        idx = find_constituent(node[i], candidate_list)
+        if i == 0:
+            first_idx = idx[0]
+        last_idx = idx[1]
+    candidate_list.append((first_idx, last_idx))
+    return first_idx, last_idx + 1
+
+
+def find_blank_index(sentence):
+    doc = nlp(sentence)
+    sent = list(doc.sents)[0]
+    tree_str = add_indices_to_terminals(sent._.parse_string)
+    tree = Tree.fromstring(tree_str)
+    tree.collapse_unary(collapsePOS=True)
+    candidate_list = []
+    blanked_sentences = []
+    find_constituent(tree, candidate_list)
+    sentence_list = sentence.split()
+    for first_idx, last_idx in candidate_list:
+        if last_idx + 1 < len(sentence) and first_idx > 0:
+            blanked_sentences.append(
+                " ".join(sentence_list[:first_idx]) + " [BLANK] " + " ".join(
+                    sentence_list[last_idx + 1:]))
+        elif first_idx > 0:
+            blanked_sentences.append(" ".join(sentence_list[:first_idx]) + " [BLANK]")
+        elif last_idx + 1 < len(sentence):
+            blanked_sentences.append("[BLANK] " + " ".join(sentence_list[last_idx + 1:]))
+        else:
+            blanked_sentences.append("[BLANK]")
+
+    return blanked_sentences
 
 
 def get_prompts_v2(doc, ctrl_codes, blanked_sents, model_predict_blanks=True):
@@ -30,6 +87,7 @@ def get_prompts_v2(doc, ctrl_codes, blanked_sents, model_predict_blanks=True):
 
 class PolyBetter(polyjuice.Polyjuice):
     """Improved version of Polyjuice."""
+
     def __init__(
             self,
             model_path="uw-hai/polyjuice",
@@ -70,7 +128,7 @@ class PolyBetter(polyjuice.Polyjuice):
         if ctrl_code:
             ctrl_codes = [ctrl_code] if type(ctrl_code) == str else ctrl_code
             if not set(ctrl_codes).issubset(generations.ALL_CTRL_CODES):
-                diff = set(ctrl_codes)-generations.ALL_CTRL_CODES
+                diff = set(ctrl_codes) - generations.ALL_CTRL_CODES
                 raise ValueError(f"{diff} is not a valid ctrl code."
                                  "Please choose from {generations.ALL_CTRL_CODES}.")
         else:
@@ -133,7 +191,8 @@ def _replace_word_with_blank2(sentence: str) -> str:
         # maximum number of blanks per returned sentence
         max_blank_block=1
     )
-    return list(random_blanks)[0]
+    return find_blank_index(sentence)[0]  # TODO: return one randomly?
+    # return list(random_blanks)[0]
 
 
 def generate_nli_perturbations(
@@ -187,7 +246,8 @@ def main_v2():
     text = "It is great for kids."
     n_requests = 30
     perturbations = pj.perturb_better(text, n_results=n_requests)
-    print(f"Requested {n_requests} counterfactual candidates. Got {len(perturbations)} candidates.")
+    print(
+        f"Requested {n_requests} counterfactual candidates. Got {len(perturbations)} candidates.")
     print(perturbations)
 
 
@@ -197,7 +257,8 @@ def main_v3():
     n_requests = 30
     perturbations = generate_nli_perturbations(premise, hypothesis,
                                                n_results=n_requests)
-    print(f"Requested {n_requests} counterfactual candidates. Got {len(perturbations)} candidates.")
+    print(
+        f"Requested {n_requests} counterfactual candidates. Got {len(perturbations)} candidates.")
     print(perturbations)
 
 
