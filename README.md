@@ -172,13 +172,17 @@ python = ">=3.9,<3.11"
     poetry install
     ```
 
-3. Navigate into backend folder, start backend
+3. Install Polyjuice from source: clone repo [from here](https://github.com/tongshuangwu/polyjuice). Then navigate to polyjuice folder and run:
+    ```bash
+    pip install -e .
+    ```
+4. Navigate into backend folder, start backend
 
     ```bash
     uvicorn app:app --reload
     ```
 
-4. Install node modules for react (in react-frontend) and start
+5. Install node modules for react (in react-frontend) and start
 
     ```bash
     npm install
