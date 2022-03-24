@@ -1,5 +1,7 @@
 react-frontend/node_modules/*
 .venv
 
+README_old.md
+
 *.pyc
 *.DS_Store
