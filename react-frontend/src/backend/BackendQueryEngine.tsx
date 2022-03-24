@@ -11,12 +11,14 @@ export const queryBackend = async (route: string): Promise<NLIDataArray> => {
     const formData = new FormData();
     const data = await fetch(requestURL,
         {
-            method: 'POST'
+            method: 'GET'
         }
     ).then(response => response.json()).then(d => d as NLIDataArray);
 
     return data;
 }
+
+
 
 
 export default queryBackend;

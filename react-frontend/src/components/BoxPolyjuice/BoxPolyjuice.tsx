@@ -5,13 +5,15 @@ interface Props {
     suggestion:string[];
     count:number;
     setCount:any;
+    mode:string;
 }
 
-const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion, count, setCount }: Props) => {
+const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion, count, setCount, mode}: Props) => {
     // const [count, setCount] = useState(0);
 
+
     const incrSuggestion = () =>{
-        if (count <suggestion.length - 1){
+        if (count < suggestion.length - 1){
             setCount(count+1)
         }
     };
@@ -27,7 +29,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion, count, setCo
         <div className='itemS'>
             <span className='titleS'> Polyjuice / GPT-3 Suggestion </span>
             <div className='suggestionS'>
-                {suggestion[count]}
+               <span> <strong>New {mode}:</strong> {suggestion[count]} </span>
             </div>
             <div className='buttonsS'>
                 <button className='buttonS'

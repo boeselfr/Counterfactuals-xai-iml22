@@ -17,14 +17,14 @@ const Box: React.FunctionComponent<Props> = ({ sentence1, sentence2, gold_label,
             <div className='itemSP'>
                 <span className='titleSP'>
                 Original Dataset </span>
+                <div className='originalPremiseSP'>
+                    <span> <strong>Premise:</strong> {sentence1[count]} </span>
+                </div>
                 <div className='hypothesisSP'>
                     <span> <strong>Hypothesis:</strong> {sentence2[count]} </span>
                 </div>
-                <div className='originalPremiseSP'>
-                    <span> <strong>Premise</strong>: {sentence1[count]} </span>
-                </div>
                 <div>
-                    <span> <strong>Label</strong>: {gold_label[count]} </span>
+                    <span> <strong>Label:</strong> {gold_label[count]} </span>
                 </div>
             </div>
         </div>);

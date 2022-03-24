@@ -8,7 +8,7 @@ import csv
 import codecs
 from io import StringIO
 from pydantic_models.example_data_points import ExampleDataResponse
-from pydantic_models.nli_data_point import NLIDataResponse
+from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission
 from typing import Callable
 
 app = FastAPI(
@@ -28,7 +28,7 @@ app.add_middleware(
 )
 
 
-@app.post("/upload-data", response_model=NLIDataResponse)
+@app.get("/upload-data", response_model=NLIDataResponse)
 def upload_data(split: str):
     data = pd.read_csv(f"data/NLI/original/{split}.tsv", sep="\t")
     # data['suggestionRP'] = ''
@@ -39,6 +39,16 @@ def upload_data(split: str):
     # data = data.sample()
     # TODO generate suggestions here or have them precomputed in the tsv
     return data.to_dict(orient="records")
+
+
+@app.post("/submit-data")
+async def submit_data(data_row: NLIDataSubmission):
+    """
+    Function receives a new submitted counterfactual and updates it in the submitted tsv file to store.
+    """
+    data = pd.DataFrame.from_dict([data_row])
+    data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", mode='a', index=False, header=False, sep="\t")
+    return True
 
 
 @app.post("/files/")

@@ -11,6 +11,7 @@ interface Props {
 }
 
 const Box: React.FunctionComponent<Props> = ({ sentence1, sentence2, gold_label, suggestion }: Props) => {
+    // I would like to have this access the backend submitted tsv file and display the ones corresponding to the currently displayed original dataset
     return(
         <div className='boxT'>
             <div className='itemT'>

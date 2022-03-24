@@ -1,0 +1,2 @@
+sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	suggestionRH	suggestionRH_label	estimated_similarity
+__root__	[{'sentence1': 'HI', 'sentence2': 'there', 'gold_label': '', 'suggestionRP': '', 'suggestionRP_label': '', 'suggestionRH': '', 'suggestionRH_label': ''}]
