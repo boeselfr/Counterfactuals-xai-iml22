@@ -28,16 +28,19 @@ interface YourFormElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-const BoxCF: React.FunctionComponent<Props> = ({sentence1, sentence2, gold_label, suggestion, count, cflist, cflabellist, cfsimilaritylist, mode}: Props) => {
+const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_label, suggestion, count, cflist, cflabellist, cfsimilaritylist, mode}: Props) => {
     const [cf, setCF] = useState('')
+    const [cflabel, setcflabel] = useState('neutral')
+    const [similarity, setsimilarity] = useState('0')
+
 
     const handleSubmit = (e: React.FormEvent<YourFormElement>) =>{
         e.preventDefault()
-        const input_cf = e.currentTarget.elements.counterfactual.value;
-        const input_cf_label = e.currentTarget.elements.cf_label.value;
-        const similarity = e.currentTarget.elements.similarity.value;
+        const input_cf = cf;
+        const input_cf_label = cflabel;
+        const input_similarity = similarity;
 
-        if(!(cflist.indexOf(input_cf) > -1)){
+        /*if(!(cflist.indexOf(input_cf) > -1)){
             cflist.push(input_cf);
             // cflabellist.push(input_cf_label);
             // cfsimilaritylist.push(input_similarity);
@@ -45,11 +48,11 @@ const BoxCF: React.FunctionComponent<Props> = ({sentence1, sentence2, gold_label
         }else{
             alert(`The counterfactual \"${input_cf}\" already exists`);
         }
-        cflist.push()
+        cflist.push()*/
 
         console.log(input_cf)
         console.log(input_cf_label)
-        console.log(similarity)
+        console.log(input_similarity)
 
         // create new data submission entry for backend:
         const data = {
@@ -86,26 +89,21 @@ const BoxCF: React.FunctionComponent<Props> = ({sentence1, sentence2, gold_label
             <div className='titleCF'>
                 Submit Counterfactuals Here
             </div>
-            <form action="/action_page.php" onSubmit={handleSubmit}>
-                <input id="counterfactual" type="text" placeholder={suggestion[count]}/>
+            <form onSubmit={handleSubmit}>
+                <input id="counterfactual" type="text" placeholder={suggestion[count]} onChange={(e) => setCF(e.target.value)}/>
                 <div className='textCF'>
                     What label would you give this CF?
                     <div className='buttonsCF'>
-                    {/* <div className='buttonCF'> <span> Neutral </span> </div>
-                    <div className='buttonCF'> <span> Entailment </span> </div>
-                    <div className='buttonCF'> <span> Contradiction </span> </div> */}
-                    {/* <input type='button' className='buttonCF'> Neutral</input> */}
 
-                    {/* TODO: make it to only select one of the options & pass onto table*/}
-                    <input id="button" type="cf_label" className='buttonCF' value='Neutral' />
-                    <input id="button" type="cf_label" className='buttonCF' value='Entailment' />
-                    <input id="button" type="cf_label" className='buttonCF' value='Contradiction'/>
+                    <input id="cf_label" type="button" className='buttonCF' value='Neutral' onChange={(e) => setcflabel('neutral')}/>
+                    <input id="cf_label" type="button" className='buttonCF' value='Entailment' onChange={(e) => setcflabel('entailment')}/>
+                    <input id="cf_label" type="button" className='buttonCF' value='Contradiction' onChange={(e) => setcflabel('contradiction')}/>
                     </div>
                 </div>
                 <div className='slideContainer'>
                     How similar is this CF to the previous ones?
                     <div>
-                    <input type="range" min="0" max="100" ></input>
+                    <input id="similarity" type="range" min="0" max="100" onChange={(e) => setsimilarity(e.target.value)}></input>
                     </div>
                 </div>
                 <input type="submit" value="Submit"/>
