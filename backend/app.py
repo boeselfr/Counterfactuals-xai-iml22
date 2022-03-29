@@ -3,12 +3,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import pandas as pd
+import numpy as np
 import os
 import csv
 import codecs
 from io import StringIO
 from pydantic_models.example_data_points import ExampleDataResponse
-from pydantic_models.nli_data_point import NLIDataResponse
+from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, NLISubmissionDisplay
 from typing import Callable
 
 app = FastAPI(
@@ -28,17 +29,45 @@ app.add_middleware(
 )
 
 
-@app.post("/upload-data", response_model=NLIDataResponse)
+@app.get("/upload-data", response_model=NLIDataResponse)
 def upload_data(split: str):
     data = pd.read_csv(f"data/NLI/original/{split}.tsv", sep="\t")
-    # data['suggestionRP'] = ''
-    # data['suggestionRP_label'] = ''
-    # data['suggestionRH'] = ''
-    # data['suggestionRH_label'] = ''
-    # # take random line from the data and return it
-    # data = data.sample()
     # TODO generate suggestions here or have them precomputed in the tsv
     return data.to_dict(orient="records")
+
+
+@app.get("/upload-submitted-data", response_model=NLISubmissionDisplay)
+def upload_submitted_data(sentence1: str, sentence2: str):
+    data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
+    # filter for lines with sentence1, sentence2 matching:
+    matching_data = data[(data['sentence1'] == sentence1) & (data['sentence2'] == sentence2)]
+    # now reorder the table to show neutral entailment and contradiction
+    neutral = pd.Series(matching_data.loc[matching_data['suggestionRH_label']=='Neutral', 'suggestionRH'], name='Neutral').dropna(inplace=False).reset_index(drop=True)
+    entailment = pd.Series(matching_data.loc[matching_data['suggestionRH_label']=='Entailment', 'suggestionRH'], name='Entailment').dropna(inplace=False).reset_index(drop=True)
+    contradiction = pd.Series(matching_data.loc[matching_data['suggestionRH_label']=='Contradiction', 'suggestionRH'], name='Contradiction').dropna(inplace=False).reset_index(drop=True)
+
+    displayed_table = pd.concat([neutral, entailment, contradiction], axis=1)
+
+    return displayed_table.to_dict(orient="records")
+
+
+
+@app.post("/submit-data")
+async def submit_data(data_row: NLIDataSubmission):
+    """
+    Function receives a new submitted counterfactual and updates it in the submitted tsv file to store.
+    """
+
+    # read in the current tsv as well to remove if duplicated
+    old_data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
+
+    new_data = pd.DataFrame.from_dict([data_row])
+    # we handle the duplicates here:
+    data = pd.concat([old_data, new_data], ignore_index=True).replace('', np.nan, regex=True, inplace=False)
+    data.drop_duplicates(inplace=True)
+
+    data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True, sep="\t")
+    return True
 
 
 @app.post("/files/")

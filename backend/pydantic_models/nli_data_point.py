@@ -22,6 +22,27 @@ class NLIDataPoint(TypedDict):
     suggestionRH_label: str
 
 
+class NLIDataSubmission(TypedDict):
+    sentence1: str
+    sentence2: str
+    gold_label: str
+    suggestionRP: str
+    suggestionRP_label: str
+    suggestionRH: str
+    suggestionRH_label: str
+    estimated_similarity: float
+
+
+class NLISubmissionDisplayPoint(TypedDict):
+    Neutral: str
+    Entailment: str
+    Contradiction: str
+
+
+class NLISubmissionDisplay(BaseModel):
+    __root__: List[NLISubmissionDisplayPoint]
+
+
 class NLIDataResponse(BaseModel):
     __root__: List[NLIDataPoint]
 

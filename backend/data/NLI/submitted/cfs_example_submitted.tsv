@@ -1,0 +1,5 @@
+sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	suggestionRH	suggestionRH_label	estimated_similarity
+The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do something really good	Neutral	84.0
+The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do something really bad	Neutral	84.0
+The time for action is now.	It is never too late to do anything.	Neutral			The time for action is later	Contradiction	0.0
+The time for action is now.	It is never too late to do anything.	Neutral			We have to do it now	Entailment	0.0

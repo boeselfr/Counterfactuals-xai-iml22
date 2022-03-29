@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import './ScatterPlot.scss'
 import * as d3 from 'd3'
 import { Types } from './types'
-import queryBackend from '../../backend/BackendQueryEngine'
+import {queryBackendData} from '../../backend/BackendQueryEngine'
 export interface ScatterPlotProps {
     width: number
     height: number
@@ -30,7 +30,7 @@ const ScatterPlot = (props: ScatterPlotProps) => {
             .attr('transform', `translate(${props.left},${props.top})`)
 
         console.log('Hi, all good');
-        const data = await queryBackend(`upload-data?name=moons`);//.then((data) => {
+        const data = await queryBackendData(`upload-data?name=moons`);//.then((data) => {
 
         console.log(data);
         const x = d3.scaleLinear().domain([0, 18000]).range([0, width]);
