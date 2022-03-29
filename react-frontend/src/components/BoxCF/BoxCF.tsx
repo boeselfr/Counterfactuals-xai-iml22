@@ -1,4 +1,5 @@
-import React, {useState}from 'react';
+import React, {useState} from 'react';
+import Visualization from "../../Visualization";
 import './boxcf.css'
 
 
@@ -16,6 +17,7 @@ interface Props {
     cfsimilaritylist: string[];
     setCFSimilarityList: any;
     mode:string;
+    UpdateLabeled:any;
 }
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -28,10 +30,10 @@ interface YourFormElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_label, suggestion, count, cflist, cflabellist, cfsimilaritylist, mode}: Props) => {
+const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_label, suggestion, count, cflist, cflabellist, cfsimilaritylist, mode, UpdateLabeled}: Props) => {
     const [cf, setCF] = useState('')
-    const [cflabel, setcflabel] = useState('neutral')
-    const [similarity, setsimilarity] = useState('0')
+    const [cflabel, setcflabel] = useState('Neutral')
+    const [similarity, setsimilarity] = useState('50')
 
 
     const handleSubmit = (e: React.FormEvent<YourFormElement>) =>{
@@ -40,6 +42,12 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
         const input_cf_label = cflabel;
         const input_similarity = similarity;
 
+        if (input_cf == ''){
+            alert('Please enter a counterfactual')
+            return
+        }
+
+        // we can do the duplicate filtering in the backend
         /*if(!(cflist.indexOf(input_cf) > -1)){
             cflist.push(input_cf);
             // cflabellist.push(input_cf_label);
@@ -81,6 +89,8 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
             body: JSON.stringify(data)
         }).then()
 
+        // trigger an update of the labeled list as there is a new entry now:
+        UpdateLabeled()
     }
 
     return(
@@ -95,9 +105,9 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
                     What label would you give this CF?
                     <div className='buttonsCF'>
 
-                    <input id="cf_label" type="button" className='buttonCF' value='Neutral' onChange={(e) => setcflabel('neutral')}/>
-                    <input id="cf_label" type="button" className='buttonCF' value='Entailment' onChange={(e) => setcflabel('entailment')}/>
-                    <input id="cf_label" type="button" className='buttonCF' value='Contradiction' onChange={(e) => setcflabel('contradiction')}/>
+                    <input id="cf_label" type="button" className='buttonCF' value='Neutral' onClick={(e) => setcflabel('Neutral')}/>
+                    <input id="cf_label" type="button" className='buttonCF' value='Entailment' onClick={(e) => setcflabel('Entailment')}/>
+                    <input id="cf_label" type="button" className='buttonCF' value='Contradiction' onClick={(e) => setcflabel('Contradiction')}/>
                     </div>
                 </div>
                 <div className='slideContainer'>

@@ -1,51 +1,42 @@
 import React from 'react';
-import './boxtable.css'
+import './boxtable.css';
+import {NLISubmissionDisplay} from "../../types/NLISubmissionDisplay";
 //import styled from 'styled-components';
 
+
 interface Props {
-    sentence1: string;
-    sentence2: string;
-    gold_label: string;
-    suggestion: string;
+    CFLabeled: NLISubmissionDisplay;
+    mode: string;
 
 }
+const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, mode}: Props) => {
 
-const Box: React.FunctionComponent<Props> = ({ sentence1, sentence2, gold_label, suggestion }: Props) => {
-    // I would like to have this access the backend submitted tsv file and display the ones corresponding to the currently displayed original dataset
-    return(
-        <div className='boxT'>
-            <div className='itemT'>
-
-            <span className='titleT'>
-                List of Labeled CFs 
+    // put the mode in here for future switches between hypothesis and premise lookups
+    return <div>
+         <span className='titleT'>
+                List of Labeled CFs
             </span>
-
-            <div className='tableT'>
             <table>
-            <tr>
-                <td width="33%" ><strong> Neutral </strong></td>
-                <td width="33%"><strong> Entailment </strong></td>
-                <td width="33%"><strong> Contradiction </strong></td>
+      <thead>
+        <tr>
+          <th>Neutral</th>
+          <th>Entailment</th>
+          <th>Contradiction</th>
+        </tr>
+      </thead>
+      <tbody>
+        {CFLabeled.map(item => {
+          return (
+            <tr >
+              <td>{ item.Neutral }</td>
+              <td>{ item.Entailment }</td>
+              <td>{ item.Contradiction }</td>
             </tr>
-            <tr>
-                <td line-height="0.2">The girl in yellow shorts has a ball in her left pocket. </td>
-                <td>The girl in yellow shorts has a tennis ball in both pockets.</td>
-                <td>The girl in yellow shorts with empty pockets, …</td>
-            </tr>
-            <tr>
-                <td>The girl in yellow shorts …</td>
-                <td>...</td>
-                <td>...</td>
-            </tr>
-            <tr>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-            </tr>
-            </table>
-            </div>
-            </div>
-        </div>);
-};
+          );
+        })}
+      </tbody>
+    </table>
+    </div>
+}
 
-export default Box
+export default LabeledTable

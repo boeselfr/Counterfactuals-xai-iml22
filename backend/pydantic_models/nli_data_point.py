@@ -33,6 +33,16 @@ class NLIDataSubmission(TypedDict):
     estimated_similarity: float
 
 
+class NLISubmissionDisplayPoint(TypedDict):
+    Neutral: str
+    Entailment: str
+    Contradiction: str
+
+
+class NLISubmissionDisplay(BaseModel):
+    __root__: List[NLISubmissionDisplayPoint]
+
+
 class NLIDataResponse(BaseModel):
     __root__: List[NLIDataPoint]
 

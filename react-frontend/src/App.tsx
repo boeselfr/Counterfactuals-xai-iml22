@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import queryBackend from './backend/BackendQueryEngine';
+import {queryBackendData} from './backend/BackendQueryEngine';
 import Visualization from './Visualization';
 import {NLIDataArray} from "./types/NLIDataArray";
 
@@ -9,7 +9,7 @@ function App() {
   const [exampleData, setExampleData] = useState<NLIDataArray>();
 
   useEffect(() => {
-    queryBackend(`upload-data?split=cfs_example`).then((exampleData) => {
+    queryBackendData(`upload-data?split=cfs_example`).then((exampleData) => {
       setExampleData(exampleData);
     });
   }, []);

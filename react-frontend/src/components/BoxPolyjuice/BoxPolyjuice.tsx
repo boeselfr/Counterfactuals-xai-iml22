@@ -6,9 +6,10 @@ interface Props {
     count:number;
     setCount:any;
     mode:string;
+    UpdateLabeled:any;
 }
 
-const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion, count, setCount, mode}: Props) => {
+const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion, count, setCount, mode, UpdateLabeled}: Props) => {
     // const [count, setCount] = useState(0);
 
 
@@ -16,12 +17,15 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion, count, setCo
         if (count < suggestion.length - 1){
             setCount(count+1)
         }
+        // need to update corresponding displayed table in case sentence pair changes
+        UpdateLabeled()
     };
 
     const decrSuggestion = () =>{
         if (count >= 1){
             setCount(count-1)
         }
+        UpdateLabeled()
     };
 
     return(
