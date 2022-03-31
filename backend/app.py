@@ -11,6 +11,8 @@ from io import StringIO
 from pydantic_models.example_data_points import ExampleDataResponse
 from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, NLISubmissionDisplay
 from typing import Callable
+from fastapi.responses import FileResponse
+import base64
 
 app = FastAPI(
     title="Test Python Backend",
@@ -50,6 +52,12 @@ def upload_submitted_data(sentence1: str, sentence2: str):
 
     return displayed_table.to_dict(orient="records")
 
+@app.get("/upload-embeddings")
+def upload_embeddings():
+    # for now just upload the png of the embeddings:
+    # for future upload emebddings of counterfactuals generated
+    path = "../umap_all.png"
+    return FileResponse(path, media_type="image/png")
 
 @app.post("/submit-data")
 async def submit_data(data_row: NLIDataSubmission):
@@ -67,6 +75,8 @@ async def submit_data(data_row: NLIDataSubmission):
 
     data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True, sep="\t")
     return True
+
+
 
 
 @app.post("/files/")
