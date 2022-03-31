@@ -51,7 +51,6 @@ def upload_submitted_data(sentence1: str, sentence2: str):
     return displayed_table.to_dict(orient="records")
 
 
-
 @app.post("/submit-data")
 async def submit_data(data_row: NLIDataSubmission):
     """

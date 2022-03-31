@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Spectral&display=swap');
 
+
 .App {
   width: 100vw;
   height: 100vh;
@@ -8,6 +9,7 @@
   align-items: center;
   background-color: #c1b0d1;
   font-family: "Spectral";
+  overflow: auto;
 }
 
 .App-header {
@@ -32,7 +34,16 @@
   grid-template-columns: 1fr 1fr;
   height: 100%;
   gap: 20px 20px;
+  padding:20px;
+}
 
+.titleUMAP{
+  font-size: 25px;
+  text-align: center;
+}
+
+.umap_all{
+  padding: 50px;
 }
 
 input, select, textarea, button{font-family:inherit;}

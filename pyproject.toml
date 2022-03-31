@@ -109,8 +109,13 @@ transformers = "^4.17.0"
 tokenizers = "^0.11.6"
 polyjuice-nlp = {git = "https://github.com/tongshuangwu/polyjuice.git", rev = "main"}
 datasets = "^2.0.0"
+benepar = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
+
+[[tool.poetry.source]]
+name = "llvmlite"
+url = "https://pypi.anaconda.org/numba/label/wheels_experimental_m1/simple"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

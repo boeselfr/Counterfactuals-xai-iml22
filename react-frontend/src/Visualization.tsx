@@ -6,6 +6,9 @@ import LabeledTable from "./components/BoxTable/BoxTable";
 import BoxCF from "./components/BoxCF/BoxCF";
 import {queryBackendDisplayData} from "./backend/BackendQueryEngine";
 import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
+import umap_all from './umap_all_edited.png';
+// import Image from 'react-native-image-resizer';
+
 
 
 interface Props {
@@ -75,6 +78,10 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
                     setCFSimilarityList={setCFSimilarityList}
                     mode={mode} UpdateLabeled={handleUpdateLabeled}
                     />
+        <div className='titleUMAP'>
+            UMAP Visualization of all Training Samples
+            <img src={umap_all} className='umap_all'/>
+        </div>
         </div>)
 };
 
