@@ -6,7 +6,6 @@ import LabeledTable from "./components/BoxTable/BoxTable";
 import BoxCF from "./components/BoxCF/BoxCF";
 import {queryBackendDisplayData} from "./backend/BackendQueryEngine";
 import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
-import umap_all from './umap_all_edited.png';
 // import Image from 'react-native-image-resizer';
 
 
@@ -97,7 +96,11 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
                     mode={mode} UpdateLabeled={handleUpdateLabeled}
                     />
 
-            {Embeddings && <img src={Embeddings} alt="embeddings"/>}
+             <div className='titleUMAP'>
+                 UMAP Visualization of all Training Samples
+                 {Embeddings && <img src={Embeddings} alt="embeddings"/>}
+             </div>
+
         </div>)
 };
 
