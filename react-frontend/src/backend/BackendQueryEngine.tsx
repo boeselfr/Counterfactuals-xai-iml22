@@ -32,5 +32,18 @@ export const queryBackendDisplayData = async (route: string): Promise<NLISubmiss
 }
 
 
+export const queryBackendEmbedding = async (route: string) => {
+    const requestURL = `${BASE_URL}/${route}`;
+    const formData = new FormData();
+    const data = await fetch(requestURL,
+        {
+            method: 'GET'
+        }
+    )
+
+    return data;
+}
+
+
 
 
