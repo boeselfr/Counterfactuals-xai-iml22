@@ -43,7 +43,7 @@ Specify here the structure of you code and comment what the most important files
 │   │   │   │   ├── test.tsv
 │   │   │   │   └── train.tsv
 │   │   │   ├── original
-│   │   │   │   ├── cfs_example.tsv
+│   │   │   │   ├── cfs_example.tsv # static data used for testing
 │   │   │   │   ├── dev.tsv
 │   │   │   │   ├── snli_1.0_test.txt
 │   │   │   │   ├── test.tsv
@@ -63,26 +63,7 @@ Specify here the structure of you code and comment what the most important files
 │   │   │   └── submitted
 │   │   │       └── cfs_example_submitted.tsv
 │   │   ├── generate_data.py
-│   │   └── sentiment
-│   │       ├── combined
-│   │       │   ├── dev.tsv
-│   │       │   ├── paired
-│   │       │   │   ├── dev_paired.tsv
-│   │       │   │   ├── test_paired.tsv
-│   │       │   │   └── train_paired.tsv
-│   │       │   ├── test.tsv
-│   │       │   └── train.tsv
-│   │       ├── new
-│   │       │   ├── dev.tsv
-│   │       │   ├── test.tsv
-│   │       │   └── train.tsv
-│   │       └── orig
-│   │           ├── dev.tsv
-│   │           ├── eighty_percent
-│   │           │   ├── test.tsv
-│   │           │   └── train.tsv
-│   │           ├── test.tsv
-│   │           └── train.tsv
+│   │   └── umap_all_edited.png
 │   ├── easy_polyjuice.py
 │   ├── pydantic_models
 │   │   ├── __pycache__
@@ -91,7 +72,7 @@ Specify here the structure of you code and comment what the most important files
 │   │   │   └── nli_data_point.cpython-310.pyc
 │   │   ├── example_data_points.py
 │   │   └── nli_data_point.py
-│   └── umap_visualization.py
+│   └── umap_visualization.py # create umap visualizations
 ├── exploratory_notebooks
 │   └── polyjuice.ipynb
 ├── poetry.lock
@@ -115,7 +96,7 @@ Specify here the structure of you code and comment what the most important files
 │   │   ├── backend
 │   │   │   ├── BackendQueryEngine.tsx
 │   │   │   └── json-decoder.ts
-│   │   ├── components
+│   │   ├── components # individual boxes in app.tsx
 │   │   │   ├── BasicLineChart
 │   │   │   │   ├── BasicLineChart.scss
 │   │   │   │   ├── BasicLineChart.tsx
@@ -144,16 +125,17 @@ Specify here the structure of you code and comment what the most important files
 │   │   ├── reportWebVitals.ts
 │   │   ├── setupTests.ts
 │   │   ├── system.js
-│   │   └── types
-│   │       ├── DataArray.ts
-│   │       ├── DataPoint.ts
-│   │       ├── Margins.ts
-│   │       ├── NLIDataArray.ts
-│   │       ├── NLIDataPoint.ts
-│   │       ├── NLISubmissionDisplay.ts
-│   │       └── NLISubmissionDisplayPoint.ts
+│   │   ├── types
+│   │   │   ├── DataArray.ts
+│   │   │   ├── DataPoint.ts
+│   │   │   ├── Margins.ts
+│   │   │   ├── NLIDataArray.ts
+│   │   │   ├── NLIDataPoint.ts
+│   │   │   ├── NLISubmissionDisplay.ts
+│   │   │   └── NLISubmissionDisplayPoint.ts
+│   │   └── umap_all.png
 │   └── tsconfig.json
-├── requirements.txt
+├── requirements.txt # implicitely used by poetry to setup venv
 └── umap_all.png
 ```
 
@@ -194,21 +176,25 @@ python = ">=3.9,<3.11"
 
 ## Milestones
 Document here the major milestones of your code and future planned steps.\
-- [x] Week 1
+- [x] Week 3
   - [x] Create first draft of the frontend: [#c1e6dfec](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/c1e6dfec525ed0507b65c058c8a511eeed1f8d15)
   - [x] Upload data to backend and connect it to the draft of the frontend: [#781542e6](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/781542e6b207d95f2984ba026235dd231250495b)
-  - Explore polyjuice API: [#42e02967](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/405dff47b02ebfc327cb1b569a1ce286cfdc05df)
+  - [x] Explore polyjuice API: [#42e02967](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/405dff47b02ebfc327cb1b569a1ce286cfdc05df)
 
-- [x] Week 2
+- [x] Week 4
   - [x] Add interactive functional elements to the frontend: [#4763df84](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/4763df841263e13f9bd73f9be5cc532b533038a8)
   - [x] Create static mock dataset: [#4763df84](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/4763df841263e13f9bd73f9be5cc532b533038a8)
   - [x] Add installation instructions for code reproducability: [#19ab819e](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/19ab819ea22cf6a230896048cea5c6912e5dfa95), [#ebe5f4d3](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/ebe5f4d3009c03d635d202ac945b58a257a20b1e)
   - [x] Create easy NLI interface for polyjuice [#ab954dc7](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/ab954dc739d00600e928082f97b01614b4ff6f19)
 
-- [] Week 3
+- [x] Week 5
   - [x] Wire CF submission to display in the frontend: [#7ecb58bf](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/7ecb58bf30702d3c4e939a68fbac03ff2ca3eee1)
   - [x] Create high-dimensional visualizations for pre-activations: [#66b35361](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/66b353616bd51011792ae9e9beb58015a382cf92)
-  - [] Display visualizations of pre-activations in frontend: [#1](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/1)
+  - [x] Display first visualizations of pre-activations in frontend: [#9663a9bb](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/9663a9bbf0aca42e6bd089e78f5715158bbc093f)
+
+- [ ] Week 6
+  - [ ] Refactor umap visualization: [#3](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/3)
+  - [ ] Integrate polyjuice into frontend: [#6](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/6)
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
