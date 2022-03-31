@@ -210,7 +210,7 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Create high-dimensional visualizations for pre-activations: [#66b35361](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/66b353616bd51011792ae9e9beb58015a382cf92)
   - [] Display visualizations of pre-activations in frontend: [#1](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/1)
 
-<--! Create a list subtask.\
+[comment]:# Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
 Create a merge request (with corresponding branch) from each issue.\
 Finally accept the merge request once issue is resolved. Once you complete a task, link the corresponding merge commit.\
