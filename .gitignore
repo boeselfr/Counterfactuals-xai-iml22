@@ -5,3 +5,6 @@ README_old.md
 
 *.pyc
 *.DS_Store
+
+.idea
+.ipynb_checkpoints
