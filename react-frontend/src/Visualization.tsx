@@ -17,7 +17,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
     const [cflist, setCFList] = useState([]);
     const [cflabellist, setCFLabelList] = useState([]);
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
-    const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplay>()
+    const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplay>();
+    const [Embeddings, setEmbeddings] = useState('')
 
     // adding a mode of what we are changing. Hidden to the user for now but we can integrate this at some point
     const mode = 'Hypothesis'
@@ -41,10 +42,27 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
     const handleUpdateLabeled = () => {
         queryBackendDisplayData(`upload-submitted-data?sentence1=` + sentence1[count] + '&sentence2=' + sentence2[count]).then((response) => {
       setCFLabeled(response);
+      fetchImage();
     })
     };
     useEffect(handleUpdateLabeled, [])
     console.log(CFLabeled)
+
+    //initiate the embedding display:
+    // in future this can be updated when a new counterfactual is added to the lsit of cfs.
+    const fetchImage = async () => {
+        const res = await fetch('http://127.0.0.1:8000/upload-embeddings', {
+            method: 'GET'
+        });
+        const imageBlob = await res.blob();
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        setEmbeddings(imageObjectURL);
+    };
+
+    useEffect(() => {
+        fetchImage();
+    }, []);
+    console.log(Embeddings)
 
  //<LabeledTable CFLabeled={CFLabeled} mode={mode}/>
     // all const above are lists ( with only one entry )
@@ -75,6 +93,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
                     setCFSimilarityList={setCFSimilarityList}
                     mode={mode} UpdateLabeled={handleUpdateLabeled}
                     />
+
+            {Embeddings && <img src={Embeddings} alt="embeddings"/>}
         </div>)
 };
 
