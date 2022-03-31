@@ -59,7 +59,6 @@ def upload_embeddings():
     path = "../umap_all.png"
     return FileResponse(path, media_type="image/png")
 
-
 @app.post("/submit-data")
 async def submit_data(data_row: NLIDataSubmission):
     """

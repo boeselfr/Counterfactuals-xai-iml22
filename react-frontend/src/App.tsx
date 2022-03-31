@@ -3,6 +3,7 @@ import './App.css';
 import {queryBackendData} from './backend/BackendQueryEngine';
 import Visualization from './Visualization';
 import {NLIDataArray} from "./types/NLIDataArray";
+import umap_all from '../umap_all_edited.png';
 
 
 function App() {
@@ -13,6 +14,8 @@ function App() {
       setExampleData(exampleData);
     });
   }, []);
+
+
   console.log('we are in the app script')
   console.log(exampleData);
   return (
