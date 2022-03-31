@@ -36,14 +36,14 @@ Specify here the structure of you code and comment what the most important files
 │   ├── __pycache__
 │   │   └── app.cpython-310.pyc
 │   ├── app.py
-│   ├── data # original counterfactually augmented dataset
+│   ├── data
 │   │   ├── NLI
 │   │   │   ├── all_combined
 │   │   │   │   ├── dev.tsv
 │   │   │   │   ├── test.tsv
 │   │   │   │   └── train.tsv
 │   │   │   ├── original
-│   │   │   │   ├── cfs_example.tsv # this is a first mock sample
+│   │   │   │   ├── cfs_example.tsv
 │   │   │   │   ├── dev.tsv
 │   │   │   │   ├── snli_1.0_test.txt
 │   │   │   │   ├── test.tsv
@@ -56,13 +56,12 @@ Specify here the structure of you code and comment what the most important files
 │   │   │   │   ├── dev.tsv
 │   │   │   │   ├── test.tsv
 │   │   │   │   └── train.tsv
-│   │   │   └── revised_premise
-│   │   │       ├── dev.tsv
-│   │   │       ├── test.tsv
-│   │   │       └── train.tsv
-│   │   ├── dataset_blobs.csv
-│   │   ├── dataset_circles.csv
-│   │   ├── dataset_moons.csv
+│   │   │   ├── revised_premise
+│   │   │   │   ├── dev.tsv
+│   │   │   │   ├── test.tsv
+│   │   │   │   └── train.tsv
+│   │   │   └── submitted
+│   │   │       └── cfs_example_submitted.tsv
 │   │   ├── generate_data.py
 │   │   └── sentiment
 │   │       ├── combined
@@ -85,13 +84,14 @@ Specify here the structure of you code and comment what the most important files
 │   │           ├── test.tsv
 │   │           └── train.tsv
 │   ├── easy_polyjuice.py
-│   └── pydantic_models
-│       ├── __pycache__
-│       │   ├── example_data_points.cpython-310.pyc
-│       │   ├── example_data_points.cpython-39.pyc
-│       │   └── nli_data_point.cpython-310.pyc
-│       ├── example_data_points.py
-│       └── nli_data_point.py
+│   ├── pydantic_models
+│   │   ├── __pycache__
+│   │   │   ├── example_data_points.cpython-310.pyc
+│   │   │   ├── example_data_points.cpython-39.pyc
+│   │   │   └── nli_data_point.cpython-310.pyc
+│   │   ├── example_data_points.py
+│   │   └── nli_data_point.py
+│   └── umap_visualization.py
 ├── exploratory_notebooks
 │   └── polyjuice.ipynb
 ├── poetry.lock
@@ -149,9 +149,12 @@ Specify here the structure of you code and comment what the most important files
 │   │       ├── DataPoint.ts
 │   │       ├── Margins.ts
 │   │       ├── NLIDataArray.ts
-│   │       └── NLIDataPoint.ts
+│   │       ├── NLIDataPoint.ts
+│   │       ├── NLISubmissionDisplay.ts
+│   │       └── NLISubmissionDisplayPoint.ts
 │   └── tsconfig.json
-└── requirements.txt # not directly contains the relevant dependencies, but is used by the poetry env
+├── requirements.txt
+└── umap_all.png
 ```
 
 ## Requirements
@@ -192,32 +195,33 @@ python = ">=3.9,<3.11"
 ## Milestones
 Document here the major milestones of your code and future planned steps.\
 - [x] Week 1
-  - [x] Completed Sub-task: [#20984ec2](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/dummy-fullstack/-/commit/20984ec2197fa8dcdc50f19723e5aa234b9588a3)
-  - [x] Completed Sub-task: ...
+  - [x] Create first draft of the frontend: [#c1e6dfec](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/c1e6dfec525ed0507b65c058c8a511eeed1f8d15)
+  - [x] Upload data to backend and connect it to the draft of the frontend: [#781542e6](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/781542e6b207d95f2984ba026235dd231250495b)
+  - Explore polyjuice API: [#42e02967](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/405dff47b02ebfc327cb1b569a1ce286cfdc05df)
 
-- [ ] Week 2
-  - [ ] Sub-task: [#2](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/dummy-fullstack/-/issues/2)
-  - [ ] Sub-task: ...
+- [x] Week 2
+  - [x] Add interactive functional elements to the frontend: [#4763df84](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/4763df841263e13f9bd73f9be5cc532b533038a8)
+  - [x] Create static mock dataset: [#4763df84](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/4763df841263e13f9bd73f9be5cc532b533038a8)
+  - [x] Add installation instructions for code reproducability: [#19ab819e](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/19ab819ea22cf6a230896048cea5c6912e5dfa95), [#ebe5f4d3](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/ebe5f4d3009c03d635d202ac945b58a257a20b1e)
+  - [x] Create easy NLI interface for polyjuice [#ab954dc7](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/ab954dc739d00600e928082f97b01614b4ff6f19)
 
-Create a list subtask.\
+- [] Week 3
+  - [x] Wire CF submission to display in the frontend: [#7ecb58bf](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/7ecb58bf30702d3c4e939a68fbac03ff2ca3eee1)
+  - [x] Create high-dimensional visualizations for pre-activations: [#66b35361](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/66b353616bd51011792ae9e9beb58015a382cf92)
+  - [] Display visualizations of pre-activations in frontend: [#1](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/1)
+
+<--! Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
 Create a merge request (with corresponding branch) from each issue.\
 Finally accept the merge request once issue is resolved. Once you complete a task, link the corresponding merge commit.\
 Take a look at [Issues and Branches](https://www.youtube.com/watch?v=DSuSBuVYpys) for more details. 
-
-This will help you have a clearer overview of what you are currently doing, track your progress and organise your work among yourselves. Moreover it gives us more insights on your progress.  
+This will help you have a clearer overview of what you are currently doing, track your progress and organise your work among yourselves. Moreover it gives us more insights on your progress.  -->
 
 ## Versioning
-Create stable versions of your code each week by using gitlab tags.\
-Take a look at [Gitlab Tags](https://docs.gitlab.com/ee/topics/git/tags.html) for more details. 
-
-Then list here the weekly tags. \
-We will evaluate your code every week, based on the corresponding version.
 
 Tags:
-- Week 1: [Week 1 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/dummy-fullstack/-/tags/stable-readme)
-- Week 2: ..
-- Week 3: ..
-- ...
+- Week 1: [Week 1 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week1)
+- Week 2: [Week 2 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week2)
+- Week 3: [Week 3 Tag]
 
 
