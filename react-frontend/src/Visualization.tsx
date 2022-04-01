@@ -7,7 +7,8 @@ import BoxCF from "./components/BoxCF/BoxCF";
 import {queryBackendDisplayData} from "./backend/BackendQueryEngine";
 import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
 // import Image from 'react-native-image-resizer';
-
+import * as Bokeh from "bokehjs"
+import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 
 
 interface Props {
@@ -101,6 +102,7 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
                  {Embeddings && <img src={Embeddings} alt="embeddings"/>}
              </div>
 
+            <EmbeddingPlot/>
         </div>)
 };
 

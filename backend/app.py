@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import pandas as pd
@@ -12,6 +12,14 @@ from pydantic_models.example_data_points import ExampleDataResponse
 from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, NLISubmissionDisplay
 from typing import Callable
 from fastapi.responses import FileResponse
+from bokeh.plotting import Figure
+from bokeh.resources import CDN
+from bokeh.embed import json_item
+from bokeh.layouts import column
+from bokeh.models import CustomJS, ColumnDataSource, Slider
+from bokeh.sampledata.autompg import autompg
+import json
+
 
 
 app = FastAPI(
@@ -52,12 +60,34 @@ def upload_submitted_data(sentence1: str, sentence2: str):
 
     return displayed_table.to_dict(orient="records")
 
-@app.get("/upload-embeddings")
+@app.get("/upload-embeddings-plot")
 def upload_embeddings():
     # for now just upload the png of the embeddings:
     # for future upload emebddings of counterfactuals generated
-    path = "data/umap_all_edited.png"
-    return FileResponse(path, media_type="image/png")
+    #path = "data/umap_all_edited.png"
+    #return FileResponse(path, media_type="image/png")
+    grouped = autompg.groupby("yr")
+    mpg = grouped.mpg
+    avg, std = mpg.mean(), mpg.std()
+    years = list(grouped.groups)
+    american = autompg[autompg["origin"] == 1]
+    japanese = autompg[autompg["origin"] == 3]
+
+    p = Figure(title="MPG by Year (Japan and US)")
+
+    p.vbar(x=years, bottom=avg - std, top=avg + std, width=0.8,
+           fill_alpha=0.2, line_color=None, legend="MPG 1 stddev")
+
+    p.circle(x=japanese["yr"], y=japanese["mpg"], size=10, alpha=0.5,
+             color="red", legend="Japanese")
+
+    p.triangle(x=american["yr"], y=american["mpg"], size=10, alpha=0.3,
+               color="blue", legend="American")
+
+    p.legend.location = "top_left"
+    return json.dumps(json_item(p, "myplot"))
+
+
 
 @app.post("/submit-data")
 async def submit_data(data_row: NLIDataSubmission):
