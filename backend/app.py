@@ -8,17 +8,10 @@ import os
 import csv
 import codecs
 from io import StringIO
-from pydantic_models.example_data_points import ExampleDataResponse
-from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, NLISubmissionDisplay
+from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, NLISubmissionDisplay, NLIEmbeddingResponse
 from typing import Callable
-from fastapi.responses import FileResponse
-from bokeh.plotting import Figure
-from bokeh.resources import CDN
-from bokeh.embed import json_item
-from bokeh.layouts import column
-from bokeh.models import CustomJS, ColumnDataSource, Slider
-from bokeh.sampledata.autompg import autompg
-import json
+import pickle
+
 
 
 
@@ -60,33 +53,20 @@ def upload_submitted_data(sentence1: str, sentence2: str):
 
     return displayed_table.to_dict(orient="records")
 
-@app.get("/upload-embeddings-plot")
+
+@app.get("/upload-embeddings-plot", response_model=NLIEmbeddingResponse)
 def upload_embeddings():
-    # for now just upload the png of the embeddings:
-    # for future upload emebddings of counterfactuals generated
-    #path = "data/umap_all_edited.png"
-    #return FileResponse(path, media_type="image/png")
-    grouped = autompg.groupby("yr")
-    mpg = grouped.mpg
-    avg, std = mpg.mean(), mpg.std()
-    years = list(grouped.groups)
-    american = autompg[autompg["origin"] == 1]
-    japanese = autompg[autompg["origin"] == 3]
-
-    p = Figure(title="MPG by Year (Japan and US)")
-
-    p.vbar(x=years, bottom=avg - std, top=avg + std, width=0.8,
-           fill_alpha=0.2, line_color=None, legend="MPG 1 stddev")
-
-    p.circle(x=japanese["yr"], y=japanese["mpg"], size=10, alpha=0.5,
-             color="red", legend="Japanese")
-
-    p.triangle(x=american["yr"], y=american["mpg"], size=10, alpha=0.3,
-               color="blue", legend="American")
-
-    p.legend.location = "top_left"
-    return json.dumps(json_item(p, "myplot"))
-
+    # for now just read in the file and create a scatterplot
+    records = np.load("data/hidden_states.npz", allow_pickle=True)["records"]
+    records_df = pd.DataFrame.from_records(records)
+    # read in umap embeddings
+    infile = open("data/umap_mapper.pkl", "rb")
+    umap = pickle.load(infile)
+    embeddings = umap.embedding_
+    embeddings_df = pd.DataFrame(embeddings, columns=["X1", "X2"])
+    # join the two dataframes
+    response = records_df.join(embeddings_df, on=None).reset_index(drop=True).drop(columns=['i'])
+    return response.to_dict(orient="records")
 
 
 @app.post("/submit-data")

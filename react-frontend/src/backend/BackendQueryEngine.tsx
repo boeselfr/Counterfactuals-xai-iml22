@@ -1,5 +1,6 @@
 import { NLIDataArray } from "../types/NLIDataArray";
 import {NLISubmissionDisplay} from "../types/NLISubmissionDisplay";
+import {NLIEmbeddingArray} from "../types/NLIEmbeddingArray";
 
 export interface queryBackendProps {
     route: string;
@@ -32,14 +33,14 @@ export const queryBackendDisplayData = async (route: string): Promise<NLISubmiss
 }
 
 
-export const queryBackendEmbedding = async (route: string) => {
+export const queryBackendEmbedding = async (route: string): Promise<NLIEmbeddingArray> => {
     const requestURL = `${BASE_URL}/${route}`;
     const formData = new FormData();
     const data = await fetch(requestURL,
         {
             method: 'GET'
         }
-    )
+    ).then(response => response.json()).then(d => d as NLIEmbeddingArray);
 
     return data;
 }

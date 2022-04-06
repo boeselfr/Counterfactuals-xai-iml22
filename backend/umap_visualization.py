@@ -42,7 +42,7 @@ def main_load_model():
 
 def load_nli() -> List[dict]:
     # path = "data/NLI/original/train.tsv"
-    path = "backend/data/NLI/original/train.tsv"
+    path = "/Users/fredericboesel/Documents/master/frühling22/interactive_ml/project/Counterfactuals-xai-iml22/backend/data/NLI/original/test.tsv"
     data = pd.read_csv(path, sep="\t")
     # print(data)
     records = data.to_dict(orient="records")
@@ -53,18 +53,18 @@ def load_nli() -> List[dict]:
     return records
 
 
-def main_make_hidden_states_from_records(model_name="roberta-large-mnli") -> Tuple[np.ndarray, List[dict]]:
+def main_make_hidden_states_from_records(model_name="roberta-base-mnli") -> Tuple[np.ndarray, List[dict]]:
     records = load_nli()
     # TODO(shwang): batch size? for start_idx in range(0, len(records), batch_size):
     # inputs = [(record["sentence1"], record["sentence2"]) for record in records]
     # output = get_last_hidden_state(inputs)
     # print(output)
 
-    model = transformers.AutoModel.from_pretrained(model_name).cuda()
+    model = transformers.AutoModel.from_pretrained(model_name)
     tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
     def get_last_hidden_state(inputs):
         enc_input = tokenizer(inputs, return_tensors="pt", padding=True, truncation=True)
-        enc_input = {k: v.cuda() for k, v in enc_input.items()}
+        enc_input = {k: v for k, v in enc_input.items()}
 
         model.eval()
         with th.no_grad():
@@ -101,15 +101,22 @@ def main_umapper_all():
 
     labels = np.array([record["gold_label"] for record in records])
     umap.plot.points(mapper, labels=labels, theme='fire')
-    plt.title("Static UMAP embeddings: roberta-large-mnli activations")
+    plt.title("Static UMAP embeddings: roberta-base-mnli activations")
     # plt.show()
-    plt.savefig("umap_all.png")
+    print(mapper)
+    print(np.shape(hidden_states))
+
+    plt.savefig("umap_all_testf.png")
+
+
+
 
     # Selling this as a Lay-user feature -- we could show the lay user what the classifier predicts
     # their new sentence is.
     #
     # Model output Logits  => bar plot shows the probability of the sentence.
     # Model activations => add a star point to the UMAP plot.
+
 
 
 def main_umapper_by_premise():

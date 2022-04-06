@@ -22,6 +22,14 @@ class NLIDataPoint(TypedDict):
     suggestionRH_label: str
 
 
+class NLIEmbeddingPoint(TypedDict):
+    sentence1: str
+    sentence2: str
+    gold_label: str
+    X1: float
+    X2: float
+
+
 class NLIDataSubmission(TypedDict):
     sentence1: str
     sentence2: str
@@ -57,6 +65,21 @@ class NLIDataResponse(BaseModel):
                 "suggestionRH": "A girl with a tennis ball in her hand.",
                 "suggestionRH_label": "contradiction",
 
+            }]
+        }
+
+
+class NLIEmbeddingResponse(BaseModel):
+    __root__: List[NLIEmbeddingPoint]
+
+    class Config:
+        schema_extra = {
+            "example": [{
+                "sentence1": "The girl in yellow shorts has a tennis ball in her left pocket.",
+                "sentence2": "A girl with a tennis ball in her bag.",
+                "gold_label": "Entailment",
+                "X1": 2.52,
+                "X2": 1.392
             }]
         }
 
