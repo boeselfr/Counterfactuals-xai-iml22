@@ -193,7 +193,7 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Display first visualizations of pre-activations in frontend: [#9663a9bb](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/9663a9bbf0aca42e6bd089e78f5715158bbc093f)
 
 - [ ] Week 6
-  - [x] Refactor umap visualization: [#3](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/3)
+  - [x] Refactor umap visualization: [#3](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/3) (relevant commit is lined in Issue.)
   - [ ] Integrate polyjuice into frontend: [#6](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/6)
 
 Create a list subtask.\
