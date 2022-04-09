@@ -9,6 +9,9 @@ import {NLIEmbeddingArray} from "../../types/NLIEmbeddingArray";
 import {NLIEmbeddingPoint} from "../../types/NLIEmbeddingPoint";
 import {queryBackendEmbedding} from "../../backend/BackendQueryEngine";
 import DataPointComponent from "../DataPointComponent";
+/*import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';*/
 
 
 export interface Props {
@@ -40,43 +43,14 @@ const EmbeddingPlot: React.FunctionComponent<Props> = ({data}: Props) => {
                 .range(["#440154ff", "#21908dff", "#fde725ff"])
 
 
-  /*const tooltip = d3.select("#my_dataviz")
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "1px")
-    .style("border-radius", "5px")
-    .style("padding", "10px")
-
-
-
-  // A function that change this tooltip when the user hover a point.
-  // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
-  const mouseover = function(event, d) {
-    tooltip
-      .style("opacity", 1)
-  }
-
-  const mousemove = function(event, d) {
-    tooltip
-      .html(`The exact value of<br>the Ground Living area is: ${d.GrLivArea}`)
-      .style("left", (event.x)/2 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-      .style("top", (event.y)/2 + "px")
-  }
-
-  // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-  const mouseleave = function(event,d) {
-    tooltip
-      .transition()
-      .duration(200)
-      .style("opacity", 0)
-  }*/
-
 //<AxisBottom top={yMax} scale={xScale} stroke='white'/>
-    // @ts-ignore
-    return (<svg width={width} height={height}>
+    // maybe put this in: needs debugging tho
+  /*<FormGroup>
+        <FormControlLabel control={<Switch defaultChecked />} label="Advanced Mode" />
+      </FormGroup>*/
+    return (<div>
+      UMAP Visualization of Sentence Embeddings
+      <svg width={width} height={height}>
       <Group left={margin.left} top={margin.top}>
 
         {/* <GridRows scale={yScale} width={xMax} height={yMax} stroke="#eaf0f6" /> */}
@@ -93,7 +67,8 @@ const EmbeddingPlot: React.FunctionComponent<Props> = ({data}: Props) => {
             />
         ))}
       </Group>
-    </svg>);
+    </svg>
+    </div>);
 }
 
 

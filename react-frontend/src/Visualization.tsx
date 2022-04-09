@@ -9,6 +9,9 @@ import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
 // import Image from 'react-native-image-resizer';
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import FormGroup from "@mui/material/FormGroup";
 
 
 interface Props {
@@ -87,8 +90,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
                     mode={mode} UpdateLabeled={handleUpdateLabeled}
                     />
 
+
              <div className='titleUMAP'>
-                 UMAP Visualization of all Training Samples
                  {Embeddings && <EmbeddingPlot data={Embeddings}/>}
              </div>
         </div>)
