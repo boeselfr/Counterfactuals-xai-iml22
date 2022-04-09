@@ -8,7 +8,7 @@ import {queryBackendDisplayData, queryBackendEmbedding} from "./backend/BackendQ
 import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
 // import Image from 'react-native-image-resizer';
-import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot2";
+import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 
 
 interface Props {
