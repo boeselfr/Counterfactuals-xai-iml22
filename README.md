@@ -193,7 +193,7 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Display first visualizations of pre-activations in frontend: [#9663a9bb](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/9663a9bbf0aca42e6bd089e78f5715158bbc093f)
 
 - [ ] Week 6
-  - [ ] Refactor umap visualization: [#3](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/3)
+  - [x] Refactor umap visualization: [#1ba0f0ba0848](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/merge_requests/4/diffs?commit_id=11ba0f0ba0848c47086d9553892e87700896321c)
   - [ ] Integrate polyjuice into frontend: [#6](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/6)
 
 Create a list subtask.\
@@ -206,8 +206,8 @@ This will help you have a clearer overview of what you are currently doing, trac
 ## Versioning
 
 Tags:
-- Week 1: [Week 1 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week1)
-- Week 2: [Week 2 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week2)
-- Week 3: [Week 3 Tag]
+- Week 3: [Week 3 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week1)
+- Week 4: [Week 4 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week2)
+- Week 5: [Week 5 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week3)
 
 
