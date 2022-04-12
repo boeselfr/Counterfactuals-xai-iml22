@@ -76,10 +76,9 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
-        }).then()
-
+        }).then(UpdateLabeled())
         // trigger an update of the labeled list as there is a new entry now:
-        UpdateLabeled()
+        
     }
 
     return(

@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "paths": {
+      "*": ["../build/js/tree/*", "../build/js/types/*", "../src/lib/external/*"]
+    },
     "lib": [
       "dom",
       "dom.iterable",
