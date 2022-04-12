@@ -1,6 +1,6 @@
 import React from 'react';
-import { Circle } from '@visx/shape';
 import './boxsentencepair.css'
+
 //import styled from 'styled-components';
 
 interface Props {

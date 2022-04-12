@@ -5,7 +5,6 @@ import Visualization from './Visualization';
 import {NLIDataArray} from "./types/NLIDataArray";
 
 
-
 function App() {
   const [exampleData, setExampleData] = useState<NLIDataArray>();
 

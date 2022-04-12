@@ -40,11 +40,11 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({ suggestion, count, setCo
                     onClick={() =>  navigator.clipboard.writeText(suggestion[count])}>
                     Copy
                     </button>
-                <button className='buttonS' onClick={incrSuggestion}>
-                    Next
-                </button>
                 <button className='buttonS' onClick={decrSuggestion}>
                     Previous
+                </button>
+                <button className='buttonS' onClick={incrSuggestion}>
+                    Next
                 </button>
                 </div>
             </div>

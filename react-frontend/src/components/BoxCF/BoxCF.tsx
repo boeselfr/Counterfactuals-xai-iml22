@@ -34,7 +34,7 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
     const [cf, setCF] = useState('')
     const [cflabel, setcflabel] = useState('Neutral')
     const [similarity, setsimilarity] = useState('50')
-
+    const [buttonState, setButtonState] = useState(['buttonCF', 'buttonCF', 'buttonCF'])
 
     const handleSubmit = (e: React.FormEvent<YourFormElement>) =>{
         e.preventDefault()
@@ -46,17 +46,6 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
             alert('Please enter a counterfactual')
             return
         }
-
-        // we can do the duplicate filtering in the backend
-        /*if(!(cflist.indexOf(input_cf) > -1)){
-            cflist.push(input_cf);
-            // cflabellist.push(input_cf_label);
-            // cfsimilaritylist.push(input_similarity);
-            alert(`${e.currentTarget.elements.cf_label.value[0]}`)
-        }else{
-            alert(`The counterfactual \"${input_cf}\" already exists`);
-        }
-        cflist.push()*/
 
         console.log(input_cf)
         console.log(input_cf_label)
@@ -94,7 +83,7 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
     }
 
     return(
-        <div  className='boxCF'>
+        <div className='boxCF'>
             <div className='itemCF'>
             <div className='titleCF'>
                 Submit Counterfactuals Here
@@ -104,19 +93,23 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
                 <div className='textCF'>
                     What label would you give this CF?
                     <div className='buttonsCF'>
-
-                    <input id="cf_label" type="button" className='buttonCF' value='Neutral' onClick={(e) => setcflabel('Neutral')}/>
-                    <input id="cf_label" type="button" className='buttonCF' value='Entailment' onClick={(e) => setcflabel('Entailment')}/>
-                    <input id="cf_label" type="button" className='buttonCF' value='Contradiction' onClick={(e) => setcflabel('Contradiction')}/>
+                        <input id='cf_label' type='button' className={buttonState[0]} value='Neutral' onClick={(e)=>{setcflabel('Neutral'); 
+                                setButtonState(['buttonsCF_clicked', 'buttonCF', 'buttonCF'])}} />
+                        <input id='cf_label' type='button' className={buttonState[1]} value='Entailment' onClick={(e)=>{setcflabel('Entailment'); 
+                                setButtonState(['buttonCF', 'buttonsCF_clicked', 'buttonCF'])}} />
+                        <input id='cf_label' type='button' className={buttonState[2]} value='Contradiction' onClick={(e)=>{setcflabel('Contradiction'); 
+                                setButtonState(['buttonCF', 'buttonCF', 'buttonsCF_clicked'])}} />
                     </div>
                 </div>
                 <div className='slideContainer'>
                     How similar is this CF to the previous ones?
                     <div>
-                    <input id="similarity" type="range" min="0" max="100" onChange={(e) => setsimilarity(e.target.value)}></input>
+                    <input id="similarity" type="range" min="0" max="100" value={similarity} onChange={(e) => {
+                        setsimilarity(e.target.value)}}></input>
+                        {similarity}
                     </div>
                 </div>
-                <input type="submit" value="Submit"/>
+                <input type="submit" value="Submit" onClick={(e)=>{setButtonState(['buttonCF', 'buttonCF', 'buttonCF']); setsimilarity('50')}}/>
             </form>
             </div>
         </div>

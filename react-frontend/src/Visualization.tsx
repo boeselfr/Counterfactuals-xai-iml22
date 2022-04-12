@@ -6,9 +6,6 @@ import LabeledTable from "./components/BoxTable/BoxTable";
 import BoxCF from "./components/BoxCF/BoxCF";
 import {queryBackendDisplayData} from "./backend/BackendQueryEngine";
 import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
-// import Image from 'react-native-image-resizer';
-
-
 
 interface Props {
     data: NLIDataArray;
