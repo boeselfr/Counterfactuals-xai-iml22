@@ -215,6 +215,6 @@ Tags:
 - Week 3: [Week 3 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week1)
 - Week 4: [Week 4 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week2)
 - Week 5: [Week 5 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week3)
-- Weeek 5: [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
+- Week 6: [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
 
 
