@@ -2,7 +2,7 @@ import itertools
 from typing import List, Optional, Sequence, Union
 
 import benepar
-import en_core_web_sm
+import spacy
 import numpy as np
 import polyjuice
 import torch
@@ -10,7 +10,7 @@ from nltk import ParentedTree, Tree
 from polyjuice import generations
 from polyjuice.generations import special_tokens
 
-nlp = en_core_web_sm.load()
+nlp = spacy.load("en_core_web_sm")
 benepar.download('benepar_en3')
 nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
 
