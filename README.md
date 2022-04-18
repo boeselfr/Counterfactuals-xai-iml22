@@ -194,6 +194,7 @@ Document here the major milestones of your code and future planned steps.\
 
 - [x] Week 6
   - [x] Refactor umap visualization: [#1ba0f0ba0848](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/merge_requests/4/diffs?commit_id=11ba0f0ba0848c47086d9553892e87700896321c)
+  - [x] Refactor frontend interactive components: [#79980775](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/799807754fad6ba509f430f6339dea12b0721d6c)
   - [ ] Integrate polyjuice into frontend: [#6](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/6)
   - [ ] Dynamic counterfactual generation with polyjuice: [#12](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/12) completed but not merged with the main since the generation takes considerable amount of time on CPU.
 
@@ -209,11 +210,17 @@ Finally accept the merge request once issue is resolved. Once you complete a tas
 Take a look at [Issues and Branches](https://www.youtube.com/watch?v=DSuSBuVYpys) for more details. 
 This will help you have a clearer overview of what you are currently doing, track your progress and organise your work among yourselves. Moreover it gives us more insights on your progress.
 
+## Weekly summary
+
+Week 6: The progress this week included assessing the feasibility of using polyjuice in real-time and accelerating it. For a good user-expericence few seconds of loading time would be required, which is likely only possible if polyjuice is run on a GPU. Further changes included improvements to the interactive components of the frontend components (such as scrollable tables and improving button functionalities). Finally, we continued work on the high-dimensional umap visualization of the pre-activations, which we are still unsure about how to include in the dashboard to aid the user. 
+
+
 ## Versioning
 
 Tags:
 - Week 3: [Week 3 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week1)
 - Week 4: [Week 4 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week2)
 - Week 5: [Week 5 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week3)
+- Week 6: [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
 
 
