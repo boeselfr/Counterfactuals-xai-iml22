@@ -202,6 +202,7 @@ Document here the major milestones of your code and future planned steps.\
   - [ ] Front-end incremental improvements
   - [ ] Integrate umap visualization
   - [ ] Add 
+  - [x] Script for replicating polyjuice classifer fine-tuning results [https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/10]
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
