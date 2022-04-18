@@ -192,9 +192,15 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Create high-dimensional visualizations for pre-activations: [#66b35361](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/66b353616bd51011792ae9e9beb58015a382cf92)
   - [x] Display first visualizations of pre-activations in frontend: [#9663a9bb](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/9663a9bbf0aca42e6bd089e78f5715158bbc093f)
 
-- [ ] Week 6
+- [x] Week 6
   - [x] Refactor umap visualization: [#1ba0f0ba0848](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/merge_requests/4/diffs?commit_id=11ba0f0ba0848c47086d9553892e87700896321c)
   - [ ] Integrate polyjuice into frontend: [#6](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/6)
+  - [ ] Dynamic counterfactual generation with polyjuice: [#12](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/12) completed but not merged with the main since the generation takes considerable amount of time on CPU.
+
+- [x] Week 7
+  - [ ] Front-end incremental improvements
+  - [ ] Integrate umap visualization
+  - [ ] Add 
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
