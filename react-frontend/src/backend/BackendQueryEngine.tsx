@@ -10,13 +10,22 @@ export const BASE_URL = 'http://127.0.0.1:8000';
 
 export const queryBackendData = async (route: string): Promise<NLIDataArray> => {
     const requestURL = `${BASE_URL}/${route}`;
-    const formData = new FormData();
     const data = await fetch(requestURL,
         {
             method: 'GET'
         }
     ).then(response => response.json()).then(d => d as NLIDataArray);
 
+    return data;
+}
+
+export const queryBackendInt = async (route: string) => {
+    const requestURL = `${BASE_URL}/${route}`;
+    const data = await fetch(requestURL,
+        {
+            method: 'GET'
+        }
+    ).then(response => response.json()).then(d => d as number);
     return data;
 }
 

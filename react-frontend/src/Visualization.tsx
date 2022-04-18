@@ -9,17 +9,16 @@ import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
 // import Image from 'react-native-image-resizer';
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import FormGroup from "@mui/material/FormGroup";
 
 
 interface Props {
     data: NLIDataArray;
+    incrCount: any;
+    decrCount: any;
 }
 
-const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
-    const [count, setCount] = useState(0);
+const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCount }: Props) =>{
+    const [cfCount, setCfCount] = useState(0);
     const [cflist, setCFList] = useState([]);
     const [cflabellist, setCFLabelList] = useState([]);
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
@@ -28,9 +27,9 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
 
     // adding a mode of what we are changing. Hidden to the user for now but we can integrate this at some point
     const mode = 'Hypothesis'
-    const sentence1 = data.map((d) => d.sentence1);
-    const sentence2 = data.map((d) => d.sentence2);
-    const gold_label = data.map((d) => d.gold_label);
+    const sentence1 = data.map((d) => d.sentence1)[0];
+    const sentence2 = data.map((d) => d.sentence2)[0];
+    const gold_label = data.map((d) => d.gold_label)[0];
     const suggestionRP = data.map((d) => d.suggestionRP);
     const suggestionRP_label = data.map((d) => d.suggestionRP_label);
     const suggestionRH = data.map((d) => d.suggestionRH);
@@ -47,7 +46,7 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
     // initiate the labeled list of counterfactuals:
     const handleUpdateLabeled = () => {
         // update the counterfactual table
-        queryBackendDisplayData(`upload-submitted-data?sentence1=` + sentence1[count] + '&sentence2=' + sentence2[count]).then((response) => {
+        queryBackendDisplayData(`upload-submitted-data?sentence1=` + sentence1 + '&sentence2=' + sentence2).then((response) => {
       setCFLabeled(response);
         // update the embeddings of the counterfactuals
         queryBackendEmbedding('upload-embeddings-plot').then((response) => {
@@ -55,7 +54,7 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
         })
     })
     };
-    useEffect(handleUpdateLabeled, [])
+    useEffect(handleUpdateLabeled, [data])
     console.log(CFLabeled)
     console.log(Embeddings)
 
@@ -68,10 +67,11 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
             <BoxSentencePair sentence1={sentence1}
                              sentence2={sentence2}
                              gold_label={gold_label}
-                             setCount={setCount}
-                             count={count}/>
+                             incrCount={incrCount}
+                             decrCount={decrCount}
+                             />
 
-            <BoxPolyjuice suggestion={suggestion} setCount={setCount} count={count} mode={mode} UpdateLabeled={handleUpdateLabeled}/>
+            <BoxPolyjuice suggestion={suggestion} setCount={setCfCount} count={cfCount} mode={mode} UpdateLabeled={handleUpdateLabeled}/>
 
             {CFLabeled && <LabeledTable CFLabeled={CFLabeled} mode={mode}/>}
 
@@ -79,8 +79,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data }: Props) =>{
                     sentence2={sentence2}
                     gold_label={gold_label}
                     suggestion={suggestion}
-                    setCount={setCount} 
-                    count={count} 
+                    setCount={setCfCount}
+                    count={cfCount}
                     setCFList={setCFList} 
                     cflist={cflist}
                     cflabellist={cflabellist}
