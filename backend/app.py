@@ -8,19 +8,16 @@ import os
 import csv
 import codecs
 from io import StringIO
-from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, NLISubmissionDisplay, NLIEmbeddingResponse
+from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, \
+    NLISubmissionDisplay, NLIEmbeddingResponse
 from typing import Callable
 import pickle
-
-
-
 
 app = FastAPI(
     title="Interactive Counterfactual Generation",
     description="""This is a dashboard for counterfactual generation tailored for NLI task.""",
     version="0.1.0",
 )
-
 
 # Allow CORS
 app.add_middleware(
@@ -30,12 +27,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+data = pd.read_csv(f"data/NLI/poly_cfs/train_cf.csv")
+grouped_data = data.groupby(["sentence1", "sentence2"])[["gold_label"]].count()
+
+
+@app.get("/data-count")
+def get_data_length() -> int:
+    max_count = len(grouped_data)
+    return max_count
+
 
 @app.get("/upload-data", response_model=NLIDataResponse)
-def upload_data(split: str):
-    data = pd.read_csv(f"data/NLI/original/{split}.tsv", sep="\t")
-    # TODO generate suggestions here or have them precomputed in the tsv
-    return data.to_dict(orient="records")
+def upload_data(count: int):
+    sentence1 = grouped_data.iloc[count].name[0]
+    sentence2 = grouped_data.iloc[count].name[1]
+    filtered_data = data[(data["sentence1"] == sentence1) & (data["sentence2"] == sentence2)]
+    return filtered_data.to_dict(orient="records")
 
 
 @app.get("/upload-submitted-data", response_model=NLISubmissionDisplay)
@@ -44,9 +51,16 @@ def upload_submitted_data(sentence1: str, sentence2: str):
     # filter for lines with sentence1, sentence2 matching:
     matching_data = data[(data['sentence1'] == sentence1) & (data['sentence2'] == sentence2)]
     # now reorder the table to show neutral entailment and contradiction
-    neutral = pd.Series(matching_data.loc[matching_data['suggestionRH_label']=='Neutral', 'suggestionRH'], name='Neutral').dropna(inplace=False).reset_index(drop=True)
-    entailment = pd.Series(matching_data.loc[matching_data['suggestionRH_label']=='Entailment', 'suggestionRH'], name='Entailment').dropna(inplace=False).reset_index(drop=True)
-    contradiction = pd.Series(matching_data.loc[matching_data['suggestionRH_label']=='Contradiction', 'suggestionRH'], name='Contradiction').dropna(inplace=False).reset_index(drop=True)
+    neutral = pd.Series(
+        matching_data.loc[matching_data['suggestionRH_label'] == 'Neutral', 'suggestionRH'],
+        name='Neutral').dropna(inplace=False).reset_index(drop=True)
+    entailment = pd.Series(matching_data.loc[matching_data[
+                                                 'suggestionRH_label'] == 'Entailment', 'suggestionRH'],
+                           name='Entailment').dropna(inplace=False).reset_index(drop=True)
+    contradiction = pd.Series(matching_data.loc[matching_data[
+                                                    'suggestionRH_label'] == 'Contradiction', 'suggestionRH'],
+                              name='Contradiction').dropna(inplace=False).reset_index(
+        drop=True)
 
     displayed_table = pd.concat([neutral, entailment, contradiction], axis=1)
 
@@ -64,7 +78,8 @@ def upload_embeddings():
     embeddings = umap.embedding_
     embeddings_df = pd.DataFrame(embeddings, columns=["X1", "X2"])
     # join the two dataframes
-    response = records_df.join(embeddings_df, on=None).reset_index(drop=True).drop(columns=['i'])
+    response = records_df.join(embeddings_df, on=None).reset_index(drop=True).drop(
+        columns=['i'])
     return response.to_dict(orient="records")
 
 
@@ -79,13 +94,13 @@ async def submit_data(data_row: NLIDataSubmission):
 
     new_data = pd.DataFrame.from_dict([data_row])
     # we handle the duplicates here:
-    data = pd.concat([old_data, new_data], ignore_index=True).replace('', np.nan, regex=True, inplace=False)
+    data = pd.concat([old_data, new_data], ignore_index=True).replace('', np.nan, regex=True,
+                                                                      inplace=False)
     data.drop_duplicates(inplace=True)
 
-    data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True, sep="\t")
+    data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True,
+                sep="\t")
     return True
-
-
 
 
 @app.post("/files/")

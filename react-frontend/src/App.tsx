@@ -1,28 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import {queryBackendData} from './backend/BackendQueryEngine';
+import {queryBackendInt} from "./backend/BackendQueryEngine";
 import Visualization from './Visualization';
 import {NLIDataArray} from "./types/NLIDataArray";
 
 
 function App() {
   const [exampleData, setExampleData] = useState<NLIDataArray>();
+  const [count, setCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0)
+
 
   useEffect(() => {
-    queryBackendData(`upload-data?split=cfs_example`).then((exampleData) => {
-      setExampleData(exampleData);
+      queryBackendInt(`data-count`).then((maxCount) => {
+      setTotalCount(maxCount);
     });
   }, []);
 
+  useEffect(() => {
+      queryBackendData(`upload-data?count=${count}`).then((exampleData) => {
+          setExampleData(exampleData);
+      });
+  }, [count]);
 
-  console.log('we are in the app script')
-  console.log(exampleData);
+
+
+  const incrCount = () => {
+      console.log(totalCount)
+      if (count < totalCount - 1){
+          console.log("here?")
+            setCount(count+1)
+        }
+  };
+
+  const decrCount = () => {
+      if (count > 0){
+            setCount(count-1)
+        }
+  };
+
   return (
     <div className="App">
       <header className="App-header"> Counterfactual Generation
       </header>
       <div>
-        {exampleData && <Visualization data={exampleData} />}
+        {exampleData && <Visualization
+            data={exampleData}
+            incrCount={incrCount}
+            decrCount={decrCount}/>}
       </div>
     </div>
   )

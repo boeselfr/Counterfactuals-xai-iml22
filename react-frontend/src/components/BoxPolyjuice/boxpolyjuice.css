@@ -3,7 +3,7 @@
 .boxS{
     padding-top: 20px;
     margin: 0px 10px;
-    height: 200px; 
+    height: 270px;
 }
 
 .itemS{
@@ -15,7 +15,7 @@
     box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
     border-radius: 0px;
     padding: 10px 10px;
-    height: 200px; 
+    height: 270px;
 }
 
 .titleS{

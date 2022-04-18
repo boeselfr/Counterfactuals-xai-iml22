@@ -4,9 +4,9 @@ import './boxcf.css'
 
 
 interface Props {
-    sentence1: string[];
-    sentence2: string[];
-    gold_label: string[];
+    sentence1: string;
+    sentence2: string;
+    gold_label: string;
     suggestion: string[];
     count: number;
     setCount: any;
@@ -53,9 +53,9 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
 
         // create new data submission entry for backend:
         const data = {
-            "sentence1": sentence1[count],
-            "sentence2": sentence2[count],
-            "gold_label": gold_label[count],
+            "sentence1": sentence1,
+            "sentence2": sentence2,
+            "gold_label": gold_label,
             "suggestionRP": "",
             "suggestionRP_label": "",
             "suggestionRH": "",
