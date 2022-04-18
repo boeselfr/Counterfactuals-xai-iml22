@@ -279,13 +279,19 @@ def main_v3():
     print(perturbations)
 
 
+def add_row(premise, hypo, label, cf):
+    empty_row = {"sentence1": premise, "sentence2": hypo, "gold_label": label,
+                 "suggestionRP": "-", "suggestionRP_label": "-", "suggestionRH": cf,
+                 "suggestionRH_label": "-"}
+    return empty_row
+
+
 def generate_cf_for_corpus():
     n_results = 20
     original_df = pd.read_csv("./data/NLI/original/train.tsv", sep="\t")
     cf_df = []
     t_count = len(original_df)
     for i, row in tq(original_df.iterrows(), total=t_count):
-        print(row)
         premise = row["sentence1"]
         hypo = row["sentence2"]
         cf_sentences = generate_nli_perturbations(premise, hypo, n_results=n_results)
@@ -293,7 +299,7 @@ def generate_cf_for_corpus():
         for cf in cf_sentences:
             if len(cf.split(".")) < 2:
                 continue
-            cf_df.append({"sentence1": premise, "sentence2": hypo, "cf": cf.split(".")[1]})
+            cf_df.append(add_row(premise, hypo, row["gold_label"], cf.split(".")[1]))
     cf_df = pd.DataFrame(cf_df)
     print(cf_df.head())
     cf_df.to_csv("train_cf.csv")

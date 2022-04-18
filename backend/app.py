@@ -16,9 +16,8 @@ import pickle
 
 
 app = FastAPI(
-    title="Test Python Backend",
-    description="""This is a template for a Python backend.
-                   It provides acess via REST API.""",
+    title="Interactive Counterfactual Generation",
+    description="""This is a dashboard for counterfactual generation tailored for NLI task.""",
     version="0.1.0",
 )
 
