@@ -2,13 +2,16 @@ import itertools
 from typing import List, Optional, Sequence, Union
 
 import benepar
-import spacy
 import numpy as np
+import pandas as pd
 import polyjuice
+import spacy
 import torch
 from nltk import ParentedTree, Tree
 from polyjuice import generations
 from polyjuice.generations import special_tokens
+from tqdm import tqdm as tq
+from random import sample
 
 nlp = spacy.load("en_core_web_sm")
 benepar.download('benepar_en3')
@@ -21,7 +24,6 @@ def add_indices_to_terminals(treestring):
         tree_location = tree.leaf_treeposition(idx)
         non_terminal = tree[tree_location[:-1]]
         non_terminal[0] = non_terminal[0] + "_" + str(idx)
-    tree.pretty_print()
     return str(tree)
 
 
@@ -177,22 +179,38 @@ def get_pj() -> PolyBetter:
     return _pj_cached
 
 
-def _replace_word_with_blank2(sentence: str) -> str:
-    random_blanks = get_pj().get_random_blanked_sentences(
-        sentence=sentence,
-        # only allow selecting from a preset range of token indexes
-        pre_selected_idxes=None,
-        # only select from a subset of dep tags
-        deps=None,
-        # blank sub-spans or just single tokens
-        is_token_only=False,
-        # maximum number of returned index tuple
-        max_blank_sent_count=3,
-        # maximum number of blanks per returned sentence
-        max_blank_block=1
-    )
-    return find_blank_index(sentence)[0]  # TODO: return one randomly?
-    # return list(random_blanks)[0]
+def _replace_word_with_blank2(sentence: str, n_results: int) -> [str]:
+    """
+    Blank constituents in a sentence. If the number of constituents * contorl codes is
+    larger than number of desired results (n_results) sample the blanked sentences.
+    An alternative commented methods is implemented, where we randomly generate blanks.
+    The random function does not care about constituents
+    Args:
+        sentence: original sentence
+        n_results: desired number of counterfactuals
+
+    Returns: list of blanked sentences
+
+    """
+    # uncomment the following function if random blank generation is desired:
+    # random_blanks = get_pj().get_random_blanked_sentences(
+    #     sentence=sentence,
+    #     # only allow selecting from a preset range of token indexes
+    #     pre_selected_idxes=None,
+    #     # only select from a subset of dep tags
+    #     deps=None,
+    #     # blank sub-spans or just single tokens
+    #     is_token_only=False,
+    #     # maximum number of returned index tuple
+    #     max_blank_sent_count=3,
+    #     # maximum number of blanks per returned sentence
+    #     max_blank_block=1
+    # )
+    blanked_hypos = find_blank_index(sentence)
+    req_blanks = int((n_results + 1) / len(generations.ALL_CTRL_CODES))
+    if len(blanked_hypos) > req_blanks:
+        return sample(blanked_hypos, req_blanks)
+    return blanked_hypos
 
 
 def generate_nli_perturbations(
@@ -213,9 +231,8 @@ def generate_nli_perturbations(
     :return:
     """
     orig_sent = f"{premise} {hypothesis}"
-    blanks_hyp = [_replace_word_with_blank2(hypothesis) for _ in range(n_results)]
+    blanks_hyp = _replace_word_with_blank2(hypothesis, n_results)
     blanks = [f"{premise} {hypo2}" for hypo2 in blanks_hyp]
-    print(orig_sent, blanks)
 
     pj = get_pj()
     perturbations = pj.perturb_better(
@@ -262,5 +279,26 @@ def main_v3():
     print(perturbations)
 
 
+def generate_cf_for_corpus():
+    n_results = 20
+    original_df = pd.read_csv("./data/NLI/original/train.tsv", sep="\t")
+    cf_df = []
+    t_count = len(original_df)
+    for i, row in tq(original_df.iterrows(), total=t_count):
+        print(row)
+        premise = row["sentence1"]
+        hypo = row["sentence2"]
+        cf_sentences = generate_nli_perturbations(premise, hypo, n_results=n_results)
+        cf_sentences = sample(cf_sentences, n_results)
+        for cf in cf_sentences:
+            if len(cf.split(".")) < 2:
+                continue
+            cf_df.append({"sentence1": premise, "sentence2": hypo, "cf": cf.split(".")[1]})
+    cf_df = pd.DataFrame(cf_df)
+    print(cf_df.head())
+    cf_df.to_csv("train_cf.csv")
+
+
 if __name__ == "__main__":
-    main_v3()
+    # main_v3()
+    generate_cf_for_corpus()
