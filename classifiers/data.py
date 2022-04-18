@@ -77,7 +77,7 @@ def to_dataset(tsv_path=TRAIN_PATH, tokenizer=None) -> datasets.Dataset:
 
     fast = False
     if fast:
-        ds = ds.select(range(100))
+        ds = ds.select(range(1000))
 
     if tokenizer is None:
         tokenizer = transformers.AutoTokenizer.from_pretrained('roberta-large-mnli')

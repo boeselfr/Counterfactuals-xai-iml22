@@ -198,11 +198,11 @@ def console_main():
     parser.add_argument("--nruns", "-r", type=int, default=1)
 
     parser.add_argument("--ngpus", "-n", type=int, default=1)
-    parser.add_argument("--nepochs", "-e", type=int, default=2)
+    parser.add_argument("--nepochs", "-e", type=int, default=6)
     parser.add_argument("--eval_interval", "-i", type=int, default=1)
     parser.add_argument("--dry_run", "-d", action="store_true")
 
-    parser.add_argument("--batch_size", "-b", type=int, default=16)
+    parser.add_argument("--batch_size", "-b", type=int, default=8)
     parser.add_argument("--max_length", "-t", type=int, default=64)
     parser.add_argument("--weight_decay", "-w", type=float, default=0.01)
     parser.add_argument("--learning_rate", "-l", type=float, default=2e-5)
