@@ -247,6 +247,8 @@ Document here the major milestones of your code and future planned steps.\
       correspondingly [#fb309384](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/merge_requests/8)
     - [x] Script for replicating polyjuice classifer fine-tuning
       results [#10](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/10)
+- [ ] Week 8
+  - [x] Heavy refactor with material-ui [#16](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/16)
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
