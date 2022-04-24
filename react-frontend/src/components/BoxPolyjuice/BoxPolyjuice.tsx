@@ -23,7 +23,6 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                                                           mode,
                                                           UpdateLabeled
                                                       }: Props) => {
-    // const [count, setCount] = useState(0);
 
 
     const incrSuggestion = () => {

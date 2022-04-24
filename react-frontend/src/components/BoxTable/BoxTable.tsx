@@ -1,5 +1,4 @@
 import React from 'react';
-import './boxtable.css';
 import {NLISubmissionDisplay} from "../../types/NLISubmissionDisplay";
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';

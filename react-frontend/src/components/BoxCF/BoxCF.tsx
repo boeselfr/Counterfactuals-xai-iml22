@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import Visualization from "../../Visualization";
-import './boxcf.css'
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
