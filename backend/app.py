@@ -63,6 +63,7 @@ def upload_submitted_data(sentence1: str, sentence2: str):
         drop=True)
 
     displayed_table = pd.concat([neutral, entailment, contradiction], axis=1)
+    displayed_table["id"] = displayed_table.index + 1
 
     return displayed_table.to_dict(orient="records")
 
@@ -80,6 +81,7 @@ def upload_embeddings():
     # join the two dataframes
     response = records_df.join(embeddings_df, on=None).reset_index(drop=True).drop(
         columns=['i'])
+    print(response)
     return response.to_dict(orient="records")
 
 

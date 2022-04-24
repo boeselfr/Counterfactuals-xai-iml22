@@ -1,45 +1,46 @@
 import React from 'react';
 import './boxtable.css';
 import {NLISubmissionDisplay} from "../../types/NLISubmissionDisplay";
-//import styled from 'styled-components';
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
-import { MDBDataTable } from 'mdbreact';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import {Divider, Typography} from "@mui/material";
+import Box from '@mui/material/Box';
+
+import {DataGrid, GridColDef} from '@mui/x-data-grid';
 
 
 interface Props {
     CFLabeled: NLISubmissionDisplay;
     mode: string;
-
 }
 
 const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, mode}: Props) => {
-  const data={
-    columns: [
-      {
-        label: 'Neutral',
-      }, 
-      {
-        label: 'Entailment',
-      },
-      {
-        label: 'Contradiction',
-      }
-    ],
-    rows: CFLabeled
-  }
-  return (
-    <div className='itemT'>
-      <span className='titleT'>
-            List of Labeled CFs
-        </span>
-        <div className='tableContainer'>
-          <MDBTable scrollY>
-          <MDBTableHead columns={data.columns} />
-          <MDBTableBody rows={data.rows} />
-          </MDBTable>
-        </div>
-    </div>
-  );
+    const columns: GridColDef[] = [
+        {field: 'id', headerName: 'ID', flex: 0.1, },
+        {field: 'Neutral', headerName: 'Neutral', flex: 0.3},
+        {field: 'Entailment', headerName: 'Entailment', flex: 0.3},
+        {field: 'Contradiction', headerName: 'Contradiction', flex: 0.3},
+    ];
+
+    return (
+        <Container fixed>
+            <Paper elevation={3} sx={{p: 2}}>
+                <Typography variant="h4"> List of Generated Counterfactuals </Typography>
+                <Divider />
+                <Box sx={{ my: 3, mx: 2 }}>
+                <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                        rows={CFLabeled}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                     />
+                </div>
+                </Box>
+            </Paper>
+        </Container>
+    );
 };
 export default LabeledTable
 

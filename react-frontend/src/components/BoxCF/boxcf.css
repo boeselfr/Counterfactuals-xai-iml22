@@ -1,7 +1,7 @@
 
 .boxCF{
-    width: auto;
-    height: 300px;
+    /*width: auto;*/
+    /*height: 300px;*/
 }
 
 .titleCF{
@@ -17,7 +17,7 @@
     -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
     border-radius: 0px;
-    height: 300px;
+    /*height: 300px;*/
 }
 
 input[type=text], select {
@@ -88,7 +88,7 @@ input[type=submit]:hover {
 .buttonCF:hover{
     background-color: #655d7c;
 }
- 
+
 .buttonsCF_clicked{
     border-radius: 4px;
     background-color: #655d7c;
@@ -108,7 +108,7 @@ input[type=submit]:hover {
     width: 100%;
     position: relative;
   }
-  
+
 
 .slider {
     -webkit-appearance: none;
@@ -120,7 +120,7 @@ input[type=submit]:hover {
     -webkit-transition: .2s;
     transition: opacity .2s;
   }
-  
+
 .slider:hover {
 opacity: 1;
 }
