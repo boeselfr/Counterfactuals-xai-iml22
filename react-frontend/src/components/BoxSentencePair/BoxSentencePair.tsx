@@ -29,7 +29,7 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
         <Container fixed>
             <Card elevation={3}>
                 <CardContent>
-                    <Typography variant="h4"> Original Dataset </Typography>
+                    <Typography variant="h4"> <strong>Step 1: </strong> select the original sentence pair </Typography>
                     <Divider />
                     <Box sx={{ my: 3, mx: 2 }}>
                     <Typography variant="body1"> <strong>Premise:</strong> {sentence1}

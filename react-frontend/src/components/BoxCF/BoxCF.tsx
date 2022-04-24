@@ -128,8 +128,8 @@ const BoxCF: React.FunctionComponent<Props> = ({
         <Container fixed>
             <Card elevation={3}>
                 <CardContent>
-                    <Typography variant="h4" component="div"> Submit Counterfactuals
-                        Here </Typography>
+                    <Typography variant="h4" component="div"> <strong>Step 4: </strong> submit the new counterfactual
+                        </Typography>
                     <Divider />
                     <Box
                         component="form"

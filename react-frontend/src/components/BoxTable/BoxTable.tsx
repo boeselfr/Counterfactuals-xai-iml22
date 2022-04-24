@@ -24,7 +24,7 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, mode}: Props) 
     return (
         <Container fixed>
             <Paper elevation={3} sx={{p: 2}}>
-                <Typography variant="h4"> List of Generated Counterfactuals </Typography>
+                <Typography variant="h4"> <strong>Step 3: </strong> take a look at the existing counterfactuals </Typography>
                 <Divider />
                 <Box sx={{ my: 3, mx: 2 }}>
                 <div style={{ height: 400, width: '100%' }}>

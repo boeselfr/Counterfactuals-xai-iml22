@@ -44,8 +44,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
         <Container fixed>
             <Card elevation={3}>
                 <CardContent>
-                    <Typography variant="h4" component="div"> Polyjuice / GPT-3
-                        Suggestion </Typography>
+                    <Typography variant="h4" component="div"> <strong>Step 2: </strong> find and copy a new hypothesis as a base for the counterfactual </Typography>
                     <Divider />
                     <Box sx={{ my: 3, mx: 2 }}>
                     <Typography variant="body1">
