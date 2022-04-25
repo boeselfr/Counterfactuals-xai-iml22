@@ -1,9 +1,8 @@
-sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	suggestionRH	suggestionRH_label	estimated_similarity
-The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do something really good	Neutral	84.0
-The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do something really bad	Neutral	84.0
-The time for action is now.	It is never too late to do anything.	Neutral			The time for action is later	Contradiction	0.0
-The time for action is now.	It is never too late to do anything.	Neutral			We have to do it now	Entailment	0.0
-The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do what's required.	Neutral	50.0
-The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do something.	Entailment	50.0
-The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do something.	Neutral	50.0
-The time for action is now.	It is never too late to do anything.	Neutral			It is never too late to do something wd	Neutral	50.0
+Unnamed: 0	sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	suggestionRH	suggestionRH_label	estimated_similarity
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Neutral	50.0
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			You don't need to take any actions at the moment	Neutral	50.0
+	2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	Neutral			 The people are near a laptop	Entailment	50.0
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Entailment	50.0
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was on spending their week with a musical tour group	Neutral	50.0
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour group	Neutral	50.0
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour groupdfdsfd	Neutral	50.0

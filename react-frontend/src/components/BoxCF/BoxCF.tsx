@@ -1,7 +1,19 @@
 import React, {useState} from 'react';
 import Visualization from "../../Visualization";
-import './boxcf.css'
 
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Card from "@mui/material/Card";
+import Container from '@mui/material/Container';
+import {CardActions, CardContent, Typography} from "@mui/material";
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import Radio from '@mui/material/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Slider from '@mui/material/Slider';
+import Divider from "@mui/material/Divider";
 
 interface Props {
     sentence1: string;
@@ -16,8 +28,8 @@ interface Props {
     setCFLabelList: any;
     cfsimilaritylist: string[];
     setCFSimilarityList: any;
-    mode:string;
-    UpdateLabeled:any;
+    mode: string;
+    UpdateLabeled: any;
 }
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -30,19 +42,30 @@ interface YourFormElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_label, suggestion, count, cflist, cflabellist, cfsimilaritylist, mode, UpdateLabeled}: Props) => {
+
+const BoxCF: React.FunctionComponent<Props> = ({
+                                                   sentence1,
+                                                   sentence2,
+                                                   gold_label,
+                                                   suggestion,
+                                                   count,
+                                                   cflist,
+                                                   cflabellist,
+                                                   cfsimilaritylist,
+                                                   mode,
+                                                   UpdateLabeled
+                                               }: Props) => {
     const [cf, setCF] = useState('')
     const [cflabel, setcflabel] = useState('Neutral')
-    const [similarity, setsimilarity] = useState('50')
+    const [similarity, setsimilarity] = useState(50)
     const [buttonState, setButtonState] = useState(['buttonCF', 'buttonCF', 'buttonCF'])
 
-    const handleSubmit = (e: React.FormEvent<YourFormElement>) =>{
-        e.preventDefault()
+    const handleSubmit = () => {
         const input_cf = cf;
         const input_cf_label = cflabel;
         const input_similarity = similarity;
 
-        if (input_cf == ''){
+        if (input_cf == '') {
             alert('Please enter a counterfactual')
             return
         }
@@ -64,54 +87,115 @@ const BoxCF : React.FunctionComponent<Props> = ({sentence1, sentence2, gold_labe
         }
 
         // insert suggestion and labels depending on mode:
-        if (mode=="Hypothesis"){
+        if (mode == "Hypothesis") {
             data["suggestionRH"] = input_cf
             data["suggestionRH_label"] = input_cf_label
-        } else if (mode=="Premise"){
+        } else if (mode == "Premise") {
             data["suggestionRP"] = input_cf
             data["suggestionRP_label"] = input_cf_label
         }
 
         fetch("http://127.0.0.1:8000/submit-data", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
         }).then(UpdateLabeled())
         // trigger an update of the labeled list as there is a new entry now:
-        
+
     }
 
-    return(
-        <div className='boxCF'>
-            <div className='itemCF'>
-            <div className='titleCF'>
-                Submit Counterfactuals Here
-            </div>
-            <form onSubmit={handleSubmit}>
-                <input id="counterfactual" type="text" placeholder={suggestion[count]} onChange={(e) => setCF(e.target.value)}/>
-                <div className='textCF'>
-                    What label would you give this CF?
-                    <div className='buttonsCF'>
-                        <input id='cf_label' type='button' className={buttonState[0]} value='Neutral' onClick={(e)=>{setcflabel('Neutral'); 
-                                setButtonState(['buttonsCF_clicked', 'buttonCF', 'buttonCF'])}} />
-                        <input id='cf_label' type='button' className={buttonState[1]} value='Entailment' onClick={(e)=>{setcflabel('Entailment'); 
-                                setButtonState(['buttonCF', 'buttonsCF_clicked', 'buttonCF'])}} />
-                        <input id='cf_label' type='button' className={buttonState[2]} value='Contradiction' onClick={(e)=>{setcflabel('Contradiction'); 
-                                setButtonState(['buttonCF', 'buttonCF', 'buttonsCF_clicked'])}} />
-                    </div>
-                </div>
-                <div className='slideContainer'>
-                    How similar is this CF to the previous ones?
-                    <div>
-                    <input id="similarity" type="range" min="0" max="100" value={similarity} onChange={(e) => {
-                        setsimilarity(e.target.value)}}></input>
-                        {similarity}
-                    </div>
-                </div>
-                <input type="submit" value="Submit" onClick={(e)=>{setButtonState(['buttonCF', 'buttonCF', 'buttonCF']); setsimilarity('50')}}/>
-            </form>
-            </div>
-        </div>
+    const marks = [
+        {
+            value: 0,
+            label: 'Not similar',
+        },
+        {
+            value: 100,
+            label: 'Exact duplicate',
+        },
+    ];
+
+    function valuetext(value: number) {
+        return `${value}`;
+    }
+
+    const handleChange = (event: any, newValue: number | number[]) => {
+        setsimilarity(newValue as number);
+    };
+
+
+    return (
+        <Container fixed>
+            <Card elevation={3}>
+                <CardContent>
+                    <Typography variant="h4" component="div"> <strong>Step 4: </strong> submit the new counterfactual
+                        </Typography>
+                    <Divider />
+                    <Box
+                        component="form"
+                        sx={{
+                            '& > :not(style)': {my: 3, mx: 2},
+                        }}
+                        noValidate
+                        autoComplete="on"
+                    >
+                        <div>
+                            <TextField
+                                fullWidth
+                                required
+                                id="counterfactual"
+                                label="Required"
+                                defaultValue={suggestion[count]}
+                                onChange={(e) => setCF(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <Typography variant="body1" component="div"> What label would you
+                                give to this counterfactual? </Typography>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                            >
+                                <FormControlLabel value="Neutral" control={<Radio/>}
+                                                  label="Neutral" onClick={(e) => {
+                                    setcflabel('Neutral');
+                                }}/>
+                                <FormControlLabel value="Entailment" control={<Radio/>}
+                                                  label="Entailment" onClick={(e) => {
+                                    setcflabel('Entailment');
+                                }}/>
+                                <FormControlLabel value="Contradiction" control={<Radio/>}
+                                                  label="Contradiction" onClick={(e) => {
+                                    setcflabel('Contradiction');
+                                }}/>
+                            </RadioGroup>
+                        </div>
+                        <div>
+                            <Typography variant="body1" component="div"> How similar is this
+                                counterfactual to the previous ones? </Typography>
+                            <Box m="auto" display="flex" alignItems="center"
+                                 justifyContent="center" sx={{width: 300}}>
+                                <Slider
+                                    aria-label="Custom marks"
+                                    defaultValue={20}
+                                    getAriaValueText={valuetext}
+                                    step={10}
+                                    value={similarity}
+                                    valueLabelDisplay="auto"
+                                    marks={marks}
+                                    onChange={handleChange}
+                                />
+                            </Box>
+                        </div>
+                        <Button variant={"contained"} onClick={handleSubmit}>
+                            Submit
+                        </Button>
+                    </Box>
+
+                </CardContent>
+            </Card>
+        </Container>
     )
 
 };

@@ -31,13 +31,11 @@ export const queryBackendInt = async (route: string) => {
 
 export const queryBackendDisplayData = async (route: string): Promise<NLISubmissionDisplay> => {
     const requestURL = `${BASE_URL}/${route}`;
-    const formData = new FormData();
     const data = await fetch(requestURL,
         {
             method: 'GET'
         }
     ).then(response => response.json()).then(d => d as NLISubmissionDisplay);
-
     return data;
 }
 

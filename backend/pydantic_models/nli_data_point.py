@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import List, TypedDict
+from typing import List
+from typing_extensions import TypedDict
 from pydantic import BaseModel
 
 
@@ -45,6 +46,7 @@ class NLISubmissionDisplayPoint(TypedDict):
     Neutral: str
     Entailment: str
     Contradiction: str
+    id: int
 
 
 class NLISubmissionDisplay(BaseModel):
