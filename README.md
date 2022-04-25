@@ -52,8 +52,6 @@ Specify here the structure of you code and comment what the most important files
 .
 ├── README.md
 ├── backend
-│   ├── __pycache__
-│   │   └── app.cpython-310.pyc
 │   ├── app.py
 │   ├── data
 │   │   ├── NLI
@@ -249,7 +247,8 @@ Document here the major milestones of your code and future planned steps.\
       results [#10](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/10)
 - [ ] Week 8
   - [x] Heavy refactor with material-ui [#16](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/16)
-  - [x] Project roadmap and slides for presentation to professor [#17](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/17)
+  - [ ] Project roadmap and slides for presentation to professor [#17](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/17).
+  - [ ] Time and document CPU and GPU polyjuice generation times [#15](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/15).
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
