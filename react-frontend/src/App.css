@@ -46,4 +46,12 @@
   padding: 50px;
 }
 
+.demo_test {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+
+
 input, select, textarea, button{font-family:inherit;}

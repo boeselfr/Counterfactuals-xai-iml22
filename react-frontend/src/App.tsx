@@ -15,6 +15,9 @@ import {Typography} from "@mui/material";
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
 
+import ReactJoyride from 'react-joyride';
+import { Step } from "react-joyride";
+import useTour from "./useTour";
 
 const theme = createTheme({
     palette: {
@@ -36,58 +39,56 @@ const theme = createTheme({
     },
 });
 
-
 function App() {
-    const [exampleData, setExampleData] = useState<NLIDataArray>();
-    const [count, setCount] = useState(0);
-    const [totalCount, setTotalCount] = useState(0);
-    const [value, setValue] = React.useState('1');
-    const [Embeddings, setEmbeddings] = useState<NLIEmbeddingArray>();
+
+const [exampleData, setExampleData] = useState<NLIDataArray>();
+const [count, setCount] = useState(0);
+const [totalCount, setTotalCount] = useState(0);
+const [value, setValue] = React.useState('1');
+const [Embeddings, setEmbeddings] = useState<NLIEmbeddingArray>();
+
+useEffect(() => {
+    queryBackendInt(`data-count`).then((maxCount) => {
+        setTotalCount(maxCount);
+    });
+    queryBackendEmbedding('upload-embeddings-plot').then((response) => {
+        setEmbeddings(response);
+    });
+}, []);
+
+useEffect(() => {
+    queryBackendData(`upload-data?count=${count}`).then((exampleData) => {
+        setExampleData(exampleData);
+    });
+}, [count]);
 
 
-    useEffect(() => {
-        queryBackendInt(`data-count`).then((maxCount) => {
-            setTotalCount(maxCount);
-        });
-        queryBackendEmbedding('upload-embeddings-plot').then((response) => {
-            setEmbeddings(response);
-        });
-    }, []);
+const incrCount = () => {
+    console.log(totalCount)
+    if (count < totalCount - 1) {
+        console.log("here?")
+        setCount(count + 1)
+    }
+};
 
-    useEffect(() => {
-        queryBackendData(`upload-data?count=${count}`).then((exampleData) => {
-            setExampleData(exampleData);
-        });
-    }, [count]);
+const decrCount = () => {
+    if (count > 0) {
+        setCount(count - 1)
+    }
+};
 
+const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+};
 
-    const incrCount = () => {
-        console.log(totalCount)
-        if (count < totalCount - 1) {
-            console.log("here?")
-            setCount(count + 1)
-        }
-    };
-
-    const decrCount = () => {
-        if (count > 0) {
-            setCount(count - 1)
-        }
-    };
-
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        setValue(newValue);
-    };
-
-
-    return (
-        <ThemeProvider theme={theme}>
+return (
+    <ThemeProvider theme={theme}>
             <Box sx={{width: '100%', typography: 'body1'}}>
                 <TabContext value={value}>
                     <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
-                            <Tab label="Dashboard" value="1"/>
-                            <Tab label="Visualizations" value="2"/>
+                                <Tab label="Dashboard" value="1"/>
+                                <Tab label="Visualizations" value="2"/>
                         </TabList>
                     </Box>
                     <TabPanel value="1">{exampleData && <Visualization
@@ -101,14 +102,8 @@ function App() {
                     </TabPanel>
                 </TabContext>
             </Box>
-            <Box>
-
-                <div>
-
-                </div>
-            </Box>
-        </ThemeProvider>
-    )
+    </ThemeProvider>
+)   
 }
 
 export default App;

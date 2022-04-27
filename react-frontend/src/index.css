@@ -28,3 +28,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.demo_box_sentencepair {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.demo_box_polyjuice{
+  position: relative;
+  width: 100%;
+  text-align: center;
+  bottom: 10px;
+}
+
+.demo_box_labeledtable{
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.demo_box_CF{
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
