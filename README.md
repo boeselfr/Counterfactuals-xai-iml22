@@ -263,13 +263,18 @@ your progress.
 
 ## Weekly summary
 
-Week 6: The progress this week included assessing the feasibility of using polyjuice in
+**Week 6**: The progress this week included assessing the feasibility of using polyjuice in
 real-time and accelerating it. For a good user-expericence few seconds of loading time would
 be required, which is likely only possible if polyjuice is run on a GPU. Further changes
 included improvements to the interactive components of the frontend components (such as
 scrollable tables and improving button functionalities). Finally, we continued work on the
 high-dimensional umap visualization of the pre-activations, which we are still unsure about
 how to include in the dashboard to aid the user.
+
+**Week 8**: The progress this week included creating a first set of polyjuice automatically generated counterfactuals
+(and included them into the dashboard) as well as looking into fine-tuning a roBERTa classifier, which will
+ultimately . Further, we constructed lay-user-friendly walkthrough instructions to the dashboard. 
+Finally, we defined a roadmap of upcoming tasks, which were discussed with the Professor. 
 
 ## Versioning
 
@@ -283,5 +288,5 @@ Tags:
   5: [Week 5 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week3)
 - Week
   6: [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
-
+- Week 6: [Week 8 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week8)
 

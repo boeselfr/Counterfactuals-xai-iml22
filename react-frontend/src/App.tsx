@@ -11,13 +11,9 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 
 import {ThemeProvider, createTheme} from '@mui/material/styles';
-import {Typography} from "@mui/material";
+// import {Typography} from "@mui/material";
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
-
-import ReactJoyride from 'react-joyride';
-import { Step } from "react-joyride";
-import useTour from "./useTour";
 
 const theme = createTheme({
     palette: {
@@ -46,6 +42,7 @@ const [count, setCount] = useState(0);
 const [totalCount, setTotalCount] = useState(0);
 const [value, setValue] = React.useState('1');
 const [Embeddings, setEmbeddings] = useState<NLIEmbeddingArray>();
+
 
 useEffect(() => {
     queryBackendInt(`data-count`).then((maxCount) => {

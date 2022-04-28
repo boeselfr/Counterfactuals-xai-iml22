@@ -14,7 +14,6 @@ import Button from "@mui/material/Button";
 
 import Grid from '@mui/material/Grid';
 
-import ReactJoyride from 'react-joyride';
 import { Step } from "react-joyride";
 import useTour from "./useTour";
 
@@ -167,8 +166,6 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     return  (
         <div className='demo-wrapper'>
             {tour}
-            {/* <Button variant={"contained"} onClick={useTour(STEPS, "LS_KEY")}> Activate Lasers </Button> */}
-            {/* <button onClick={() => setRun(false)}>Click me! </button> */}
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item xs={6}>
                 <div className="demo_box_sentencepair">
