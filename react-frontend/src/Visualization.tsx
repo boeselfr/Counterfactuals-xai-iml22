@@ -25,6 +25,7 @@ interface Props {
     decrCount: any;
 }
 
+// for the counterfatcual examples: probably need to make sure they cover all codes and possible changes in the labels
 const STEPS: Step[] = [
     {
         content: <h2>Welcome. Let us guide you through the process of generating counterfactuals!</h2>,
@@ -92,9 +93,68 @@ const STEPS: Step[] = [
         placement: "top",
         target: ".demo_box_sentencepair",
         title: (<div> <h3>SENTENCE PAIR EXAMPLES</h3> </div>)
+    },{
+        content: (<small> Your task is to help us generate a <strong>Counterfactual Dataset</strong> by creating
+            counterfactual examples. The idea of a counterfactual example is to be <strong>similar</strong> to the originally presented
+            sentence pair, yet <strong>different in meaning</strong>. The new counterfactual sentence pair can have a different label
+            than the original pair. For now we will focus on changing the hypothesis.
+            Let's have a look at some examples:
+        </small>),
+        placement: "top",
+        target: ".demo_box_sentencepair",
+        title: (<div> <h3>THE TASK</h3> </div>)
     },
     {
-        content: (<small> Draw inspiration from the polyjuice automatically generated coutnerfactuals. 
+        content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> A soccer game with multiple males playing.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> Some men are playing a <del>sport</del> <ins>instrument</ins>.
+            </div>
+            <div>
+                <strong> Label: </strong> <del>Entailment</del> <ins>Contradiction</ins>
+            </div>
+        </small>),
+        placement: "top",
+        target: ".demo_box_sentencepair",
+        title: (<div> <h3>COUNTERFACTUAL EXAMPLES</h3> </div>)
+    },{
+        content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> A soccer game with multiple males playing.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> Some men are playing a sport <ins>for the first time</ins>.
+            </div>
+            <div>
+                <strong> Label: </strong> <del>Entailment</del> Neutral
+            </div>
+        </small>),
+        placement: "top",
+        target: ".demo_box_sentencepair",
+        title: (<div> <h3>COUNTERFACTUAL EXAMPLES</h3> </div>)
+    },{
+        content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> A soccer game with multiple males playing.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> Some men are <del>playing</del> <ins>watching</ins> a sport.
+            </div>
+            <div>
+                <strong> Label: </strong> <del>Entailment</del> <ins>Contradiction</ins>
+            </div>
+        </small>),
+        placement: "top",
+        target: ".demo_box_sentencepair",
+        title: (<div> <h3>COUNTERFACTUAL EXAMPLES</h3> </div>)
+    },
+    {
+        content: (<small> Draw inspiration from the polyjuice automatically generated counterfactuals.
                             You can either: <div>(a) copy them directly below.</div>
                             <div>(b) in case the sentences are semantically or gramatically incorrect or incomplete, copy and correct them below.</div>
                             <div>(c) insert novel counterfactuals, independent of the suggestion. </div>
@@ -116,7 +176,7 @@ const STEPS: Step[] = [
     },
     {
         content: (<small> In this box, you can submit new counterfactuals by manually improving/extending polyjuice suggested counterfactuals,
-                        labeling them and finally giving them a diversity score. </small>),
+                        labeling them and finally giving them a similarity score. </small>),
         placement: "top",
         target: ".demo_box_CF",
         title: (<div> <h3>SUBMIT COUNTERFACTUALS</h3> </div>)
