@@ -272,8 +272,8 @@ high-dimensional umap visualization of the pre-activations, which we are still u
 how to include in the dashboard to aid the user.
 
 **Week 8**: The progress this week included creating a first set of polyjuice automatically generated counterfactuals
-(and included them into the dashboard) as well as looking into fine-tuning a roBERTa classifier, which will
-ultimately . Further, we constructed lay-user-friendly walkthrough instructions to the dashboard. 
+(and included them into the dashboard) as well as fine-tuning a roBERTa classifier to reproduce some of the results from the Polyjuice paper, where they showed that using counterfactual examples generated from their dashboard improved the classifier's performance on "challenge" datasets, while not hurting performance on the original dataset.
+Further, we constructed lay-user-friendly walkthrough instructions to the dashboard. 
 Finally, we defined a roadmap of upcoming tasks, which were discussed with the Professor. 
 
 ## Versioning
