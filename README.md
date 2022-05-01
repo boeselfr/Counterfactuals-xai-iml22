@@ -236,7 +236,7 @@ Document here the major milestones of your code and future planned steps.\
       completed but not merged with the main since the generation takes considerable amount of
       time on CPU.
 
-- [x] Week 7
+- [x] Week 7 (Spring Break)
     - [x] Front-end incremental improvements
     - [x] Integrate umap visualization
     - [x] Generate counterfactuals for the whole dataset using
@@ -278,6 +278,8 @@ Finally, we defined a roadmap of upcoming tasks, which were discussed with the P
 
 ## Versioning
 
+Reference. XaIML Schedule: https://docs.google.com/document/d/1qqaE6IMD2ETs0gxD21lwyvIUxh-3oSkGHbISOIWtPVQ/edit
+
 Tags:
 
 - Week
@@ -287,6 +289,6 @@ Tags:
 - Week
   5: [Week 5 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week3)
 - Week
-  6: [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
-- Week 8: [Week 8 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week8)
+  6 (April 14): [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
+- Week 8 (April 28): [Week 8 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week8)
 
