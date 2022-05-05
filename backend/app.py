@@ -12,6 +12,7 @@ from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDat
     NLISubmissionDisplay, NLIEmbeddingResponse
 from typing import Callable
 import pickle
+from collatex import *
 
 app = FastAPI(
     title="Interactive Counterfactual Generation",
@@ -66,6 +67,21 @@ def upload_submitted_data(sentence1: str, sentence2: str):
     displayed_table["id"] = displayed_table.index + 1
 
     return displayed_table.to_dict(orient="records")
+
+@app.get("/upload-submitted-graph")
+def upload_submitted_graph(sentence1: str, sentence2: str):
+    collation = Collation()
+    data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
+    # filter for lines with sentence1, sentence2 matching:
+    print(data)
+    matching_data = data[(data['sentence1'] == sentence1) & (data['sentence2'] == sentence2)]
+    for i,line in enumerate(matching_data['suggestionRH']):
+        collation.add_plain_witness(str(i), line)
+
+    alignment_table = collate(collation)
+    print(alignment_table)
+
+
 
 
 @app.get("/upload-embeddings-plot", response_model=NLIEmbeddingResponse)
