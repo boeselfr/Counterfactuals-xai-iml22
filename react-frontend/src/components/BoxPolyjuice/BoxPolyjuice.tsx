@@ -1,7 +1,14 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useRef, useState} from 'react';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import {CardActions, CardContent, CardHeader, Typography} from "@mui/material";
+import {
+    CardActions,
+    CardContent,
+    CardHeader, FilledInput,
+    FormControl, InputLabel,
+    TextField,
+    Typography
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
@@ -25,6 +32,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                                                       }: Props) => {
 
 
+
     const incrSuggestion = () => {
         if (count < suggestion.length - 1) {
             setCount(count + 1)
@@ -40,17 +48,21 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
         UpdateLabeled()
     };
 
+
     return (
         <Container fixed>
             <Card elevation={3}>
                 <CardContent>
-                    <Typography variant="h4" component="div"> <strong>Step 2: </strong> find and copy a new hypothesis as a base for the counterfactual </Typography>
-                    <Divider />
-                    <Box sx={{ my: 3, mx: 2 }}>
-                    <Typography variant="body1">
-                        <strong>New {mode}:</strong> {suggestion[count]}
+                    <Typography variant="h4" component="div"> <strong>Step 2: </strong> find
+                        and copy a new hypothesis as a base for the counterfactual
                     </Typography>
-                        </Box>
+                    <Divider/>
+                    <Box sx={{my: 3, mx: 2}}>
+                        <Typography variant="body1">
+                            <strong>New {mode}:</strong> {suggestion[count]}
+                        </Typography>
+
+                    </Box>
                 </CardContent>
 
                 <CardActions>

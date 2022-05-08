@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import Visualization from "../../Visualization";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import Container from '@mui/material/Container';
-import {CardActions, CardContent, Typography} from "@mui/material";
+import {CardActions, CardContent, FormGroup, Switch, Typography} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -14,6 +14,9 @@ import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Slider from '@mui/material/Slider';
 import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import {queryBackendStr} from "../../backend/BackendQueryEngine";
+import {JsonDecoder} from "ts.data.json";
 
 interface Props {
     sentence1: string;
@@ -49,16 +52,45 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                                    gold_label,
                                                    suggestion,
                                                    count,
-                                                   cflist,
-                                                   cflabellist,
-                                                   cfsimilaritylist,
                                                    mode,
                                                    UpdateLabeled
                                                }: Props) => {
-    const [cf, setCF] = useState('')
+    const [cf, setCF] = useState(suggestion[count])
     const [cflabel, setcflabel] = useState('Neutral')
     const [similarity, setsimilarity] = useState(50)
-    const [buttonState, setButtonState] = useState(['buttonCF', 'buttonCF', 'buttonCF'])
+    const [selectSpan, setSpan] = useState([0, 0]);
+    const [codes, setCodes] = React.useState({
+        negation: false,
+        quantifier: false,
+        lexical: false,
+        resemantic: false,
+        insert: false,
+        // restructure: false,
+        shuffle: false
+    });
+
+    const textArea = useRef<any>(null);
+
+    const handleSelect = () => {
+        console.log(textArea.current);
+        let textVal = textArea.current;
+        if (textVal) {
+            let cursorStart = textVal.selectionStart;
+            let cursorEnd = textVal.selectionEnd;
+            console.log(cursorStart);
+            console.log(cursorEnd);
+            setSpan([cursorStart, cursorEnd]);
+        }
+    }
+
+    const handleSuggest = () => {
+        console.log(JSON.stringify(codes))
+
+        let predicted = queryBackendStr(`ask-poly?sentence1=${sentence1}&sentence2=${cf}&codes=${JSON.stringify(codes)}&start_idx=${selectSpan[0]}&end_idx=${selectSpan[1]}`).then((response) => {
+            setCF(response);
+        });
+        console.log(predicted)
+    }
 
     const handleSubmit = () => {
         const input_cf = cf;
@@ -123,14 +155,33 @@ const BoxCF: React.FunctionComponent<Props> = ({
         setsimilarity(newValue as number);
     };
 
+    const handleCode = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCodes({
+            ...codes,
+            [event.target.name]: event.target.checked,
+        });
+    };
+
+    const codesItems = []
+    for (const [key, value] of Object.entries(codes)) {
+        codesItems.push(<FormControlLabel
+            control={
+                <Switch checked={value} onChange={handleCode}
+                        name={key}/>
+            }
+            label={key}
+        />)
+    }
+
 
     return (
         <Container fixed>
             <Card elevation={3}>
                 <CardContent>
-                    <Typography variant="h4" component="div"> <strong>Step 4: </strong> submit the new counterfactual
-                        </Typography>
-                    <Divider />
+                    <Typography variant="h4" component="div"> <strong>Step 4: </strong> submit
+                        the new counterfactual
+                    </Typography>
+                    <Divider/>
                     <Box
                         component="form"
                         sx={{
@@ -140,37 +191,58 @@ const BoxCF: React.FunctionComponent<Props> = ({
                         autoComplete="on"
                     >
                         <div>
-                            <TextField
-                                fullWidth
-                                required
-                                id="counterfactual"
-                                label="Required"
-                                defaultValue={suggestion[count]}
-                                onChange={(e) => setCF(e.target.value)}
+                            <TextField fullWidth id="counterfactual" inputRef={textArea}
+                                       label="New Hypothesis"
+                                       defaultValue={suggestion[count]}
+                                       onSelect={handleSelect}
+                                       value={cf}
+                                       onChange={(e) => setCF(e.target.value)}
                             />
                         </div>
-                        <div>
-                            <Typography variant="body1" component="div"> What label would you
-                                give to this counterfactual? </Typography>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                            >
-                                <FormControlLabel value="Neutral" control={<Radio/>}
-                                                  label="Neutral" onClick={(e) => {
-                                    setcflabel('Neutral');
-                                }}/>
-                                <FormControlLabel value="Entailment" control={<Radio/>}
-                                                  label="Entailment" onClick={(e) => {
-                                    setcflabel('Entailment');
-                                }}/>
-                                <FormControlLabel value="Contradiction" control={<Radio/>}
-                                                  label="Contradiction" onClick={(e) => {
-                                    setcflabel('Contradiction');
-                                }}/>
-                            </RadioGroup>
-                        </div>
+                        <Grid
+                            container
+                            spacing={0}
+                            direction="column"
+                            alignItems="center"
+                            justifyContent="center"
+
+                        >
+
+                            <FormGroup row>
+                                {codesItems}
+                            </FormGroup>
+                            <Button variant={"contained"} onClick={handleSuggest}>
+                                Suggest
+                            </Button>
+                            <br/>
+
+
+                            <div>
+                                <Typography variant="body1" component="div"> What label would
+                                    you
+                                    give to this counterfactual? </Typography>
+
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                >
+                                    <FormControlLabel value="Neutral" control={<Radio/>}
+                                                      label="Neutral" onClick={(e) => {
+                                        setcflabel('Neutral');
+                                    }}/>
+                                    <FormControlLabel value="Entailment" control={<Radio/>}
+                                                      label="Entailment" onClick={(e) => {
+                                        setcflabel('Entailment');
+                                    }}/>
+                                    <FormControlLabel value="Contradiction" control={<Radio/>}
+                                                      label="Contradiction" onClick={(e) => {
+                                        setcflabel('Contradiction');
+                                    }}/>
+                                </RadioGroup>
+
+                            </div>
+                        </Grid>
                         <div>
                             <Typography variant="body1" component="div"> How similar is this
                                 counterfactual to the previous ones? </Typography>

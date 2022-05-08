@@ -63,7 +63,6 @@ useEffect(() => {
 const incrCount = () => {
     console.log(totalCount)
     if (count < totalCount - 1) {
-        console.log("here?")
         setCount(count + 1)
     }
 };

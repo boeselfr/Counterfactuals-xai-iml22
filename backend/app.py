@@ -1,3 +1,5 @@
+import json
+
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +10,8 @@ import os
 import csv
 import codecs
 from io import StringIO
+
+from easy_polyjuice import DynamicPolyjuice
 from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, \
     NLISubmissionDisplay, NLIEmbeddingResponse
 from typing import Callable
@@ -29,12 +33,25 @@ app.add_middleware(
 
 data = pd.read_csv(f"data/NLI/poly_cfs/train_cf.csv")
 grouped_data = data.groupby(["sentence1", "sentence2"])[["gold_label"]].count()
+poly = DynamicPolyjuice()
+poly.suggest_single_sentence("", "", ["lexical"], 0, 0)
 
 
 @app.get("/data-count")
 def get_data_length() -> int:
     max_count = len(grouped_data)
     return max_count
+
+
+@app.get("/ask-poly")
+def get_data_length(sentence1: str, sentence2: str, codes: str, start_idx: str, end_idx: str) -> int:
+    codes = json.loads(codes)
+    q_codes = []
+    for k, v in codes.items():
+        if v:
+            q_codes.append(k)
+    print(q_codes)
+    return poly.suggest_single_sentence(sentence1, sentence2, q_codes, int(start_idx), int(end_idx))
 
 
 @app.get("/upload-data", response_model=NLIDataResponse)
