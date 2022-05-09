@@ -42,6 +42,23 @@ counterfactually augmented dataset. The rough individual tasks involved are:
 - Add realtime counterfactual generation by wiring things up in our backend.
 - Finetune roBERTa model by feeding in counterfactually augmented dataset.
 
+## Docker images
+
+For now our Docker setup only seems to be compatible with Linux, because we don't know how to
+set up container networking on MacOS yet.
+
+You can launch the front and backend docker images on Ubuntu via
+```
+docker run -d --rm -it --net=host springulum/frontend  # Listens on port 8000, connects to backend port 3000
+docker run -d --rm -it --net=host springulum/backend  # Listens on port 3000
+```
+
+You can then use the app by loading http://localhost:8000 in your web browser.
+
+Using --net=host, a *Linux-only option*, will automatically bind containers ports 3000 and 8000 to localhost.
+
+We haven't yet figured out how to bind these same container ports on MacOS (perhaps via Docker compose).
+
 - - -
 
 ## Folder Structure
