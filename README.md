@@ -180,9 +180,10 @@ python = ">=3.9,<3.11"
     ```bash
     pip install -e .
     ```
-4. Navigate into backend folder, start backend
+4. Launch the backend by running `./launch_backend.sh` OR navigate into backend folder and start backend
 
     ```bash
+    cd backend
     uvicorn app:app --reload
     ```
 
