@@ -11,11 +11,11 @@ import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 
 import Button from "@mui/material/Button";
-
 import Grid from '@mui/material/Grid';
 
 import { Step } from "react-joyride";
-import useTour from "./useTour";
+// import useTour from "./useTour"; # old tour method
+import  useTour from "./useTour_button";
 
 
 interface Props {
@@ -189,6 +189,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
     const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplay>();
 
+    const [resetJoyride, setResetJoyride] = useState(false);
+
     // adding a mode of what we are changing. Hidden to the user for now but we can integrate this at some point
     const mode = 'Hypothesis'
     const sentence1 = data.map((d) => d.sentence1)[0];
@@ -216,16 +218,15 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     })
     };
     useEffect(handleUpdateLabeled, [data])
+    // const tour = useTour(STEPS, "LS_KEY");
+    const tour = useTour(STEPS);
 
-    const tour = useTour(STEPS, "LS_KEY");
-
- //<LabeledTable CFLabeled={CFLabeled} mode={mode}/>
-    // all const above are lists ( with only one entry )
-    // to display the first nli entry we access the first element in each list below
-    ///className="Vis"
     return  (
         <div className='demo-wrapper'>
-            {tour}
+            <div className='demo_box_tour_button'>
+                {tour}
+            </div>
+
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item xs={6}>
                 <div className="demo_box_sentencepair">

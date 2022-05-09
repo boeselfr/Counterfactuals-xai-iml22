@@ -6,3 +6,5 @@ Unnamed: 0	sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	sugges
 	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was on spending their week with a musical tour group	Neutral	50.0
 	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour group	Neutral	50.0
 	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour groupdfdsfd	Neutral	50.0
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			hiwhi	Neutral	50.0
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			hiwhi	Neutral	40.0

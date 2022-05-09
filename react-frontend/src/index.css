@@ -29,6 +29,13 @@ code {
     monospace;
 }
 
+.demo_box_tour_button{
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 1cm;
+}
+
 .demo_box_sentencepair {
   position: relative;
   width: 100%;

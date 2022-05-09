@@ -1,6 +1,6 @@
+
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import Joyride, { CallBackProps, STATUS, Step } from "react-joyride";
-
 const joyrideStyles = {
   options: {
     zIndex: 10000,
@@ -8,13 +8,11 @@ const joyrideStyles = {
     textColor: 'rgb(0,0,0)',
   },
 };
-
 export default function useTour(
   steps: Step[],
   localStorageKey: string | null
 ): ReactNode {
   const [run, setRun] = useState(false);
-
   useEffect(
     function () {
       if (!localStorageKey) {
@@ -30,16 +28,13 @@ export default function useTour(
     },
     [localStorageKey]
   );
-
   const handleJoyrideCallback = useCallback(function (data: CallBackProps) {
     const { status } = data;
     const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
-
     if (finishedStatuses.includes(status)) {
       // alert("Tour finalizado!");
     }
   }, []);
-
   const tour = useMemo<ReactNode>(
     () => (
       <Joyride
@@ -55,6 +50,5 @@ export default function useTour(
     ),
     [steps, handleJoyrideCallback, run]
   );
-
   return tour;
 }
