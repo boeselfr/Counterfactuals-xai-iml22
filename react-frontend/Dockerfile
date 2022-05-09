@@ -1,7 +1,13 @@
 # Base layer for the image
-FROM node:lts-alpine
+# FROM node:lts-alpine
+from ubuntu:20.04
 
 # ENV NODE_ENV=production
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y software-properties.common
+RUN apt-get install -y curl build-essential
+RUN apt-get install -y git
 
 # Copy the rest of the files over
 COPY . /usr/src/app
@@ -15,15 +21,10 @@ WORKDIR /usr/src/app
 
 # Install dependencies in image
 # RUN npm install && mv node_modules ../
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt install -y nodejs
 RUN npm install
-RUN npm install -g serve
 
-# Determine connection port 
-# EXPOSE 3000
-# 
-# RUN chown -R node /usr/src/app
-# USER node
-RUN npm run build
-
-# CMD ["npm", "list"]
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Determine connection port
+EXPOSE 3000
+CMD ["npm", "start"]
