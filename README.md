@@ -270,6 +270,7 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Create walkthrough instructions for users through the dashboard [#85d52b18](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/85d52b18036faffdbbdbd2988bd1c916a268b306)
 - [ ] Week 9 & 10
   - [x] Dockerized the front- and backends: !12
+  - [x] Created a graph-display of the created counterfactuals: [#20](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commits/20-VarianceGraph)
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
