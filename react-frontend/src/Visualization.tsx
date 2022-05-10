@@ -188,7 +188,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     const [cflabellist, setCFLabelList] = useState([]);
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
     const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplay>();
-
+    const [robertaLabel, setRobertaLabel] = useState('-');
+ 
     // adding a mode of what we are changing. Hidden to the user for now but we can integrate this at some point
     const mode = 'Hypothesis'
     const sentence1 = data.map((d) => d.sentence1)[0];
@@ -261,6 +262,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
                         setCFLabelList={setCFLabelList}
                         cfsimilaritylist={cfsimilaritylist}
                         setCFSimilarityList={setCFSimilarityList}
+                        robertaLabel={robertaLabel}
+                        setRobertaLabel={setRobertaLabel}
                         mode={mode} UpdateLabeled={handleUpdateLabeled}
                         />
                     </div>

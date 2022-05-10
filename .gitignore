@@ -1,6 +1,7 @@
 react-frontend/node_modules/*
 .venv
 .vscode
+polyjuice/
 
 README_old.md
 

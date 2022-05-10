@@ -13,6 +13,9 @@ from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDat
 from typing import Callable
 import pickle
 
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from roberta_inference import roberta_inference
+
 app = FastAPI(
     title="Interactive Counterfactual Generation",
     description="""This is a dashboard for counterfactual generation tailored for NLI task.""",
@@ -29,12 +32,19 @@ app.add_middleware(
 
 data = pd.read_csv(f"data/NLI/poly_cfs/train_cf.csv")
 grouped_data = data.groupby(["sentence1", "sentence2"])[["gold_label"]].count()
+roberta_tokenizer = AutoTokenizer.from_pretrained('roberta-large-mnli')
+roberta_model = AutoModelForSequenceClassification.from_pretrained('roberta-large-mnli', num_labels=3)
 
 
 @app.get("/data-count")
 def get_data_length() -> int:
     max_count = len(grouped_data)
     return max_count
+
+
+@app.get("/roberta-label")
+def get_roberta_label(sentence1: str, sentence2: str) -> str:
+    return roberta_inference(sentence1, sentence2, roberta_tokenizer, roberta_model)
 
 
 @app.get("/upload-data", response_model=NLIDataResponse)
