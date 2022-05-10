@@ -1,131 +1,17 @@
+.link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 0.5px;
+    stroke-length: 1px;
+  }
 
-.cb {
-	position: absolute;
+  .node circle {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 0.5px;
+
+  }
+
+  .node text {
+  font: 8px sans-serif;
 }
-
-.coverbutton {
-	position: absolute;
-	border: 2px solid #333;
-	background-color: #DDD;
-	color: #333;
-	cursor: pointer;
-	opacity: 0;
-	padding: 10px;
-}
-
-.styled-select option {
-	color: #555;
-}
-
-.bibleBg {
-	position: absolute;
-	width: 100%;
-}
-
-.icon {
-	display: inline-block;
-	width: 14px;
-	height: 14px;
-	padding: 3px;
-	vertical-align: middle;
-	cursor: pointer;
-}
-
-.iconLabel {
-	display: inline-block;
-	height: 14px;
-	color: #555;
-	vertical-align: middle;
-	padding: 0px 15px 0px 5px;
-	cursor: pointer;
-}
-
-table {
-	border-spacing:0px;
-	border-collapse:collapse;
-}
-
-td {
-    border: 0px solid gray;
-    padding: 0px;
-}
-
-#Pagination {
-	margin-top: 20px;
-}
-
-.header {
-	padding-top: 60px;
-	padding-bottom: 20px;
-	font-size: 18px;
-	font-weight: bold;
-}
-
-#textfacet {
-	text-align: center;
-}
-
-.copyright {
-	text-align: center;
-	padding-top: 20px;
-	color: #EEE;
-}
-
-.algorithm {
-	position: absolute;
-	right: 10px;
-	top: 10px;
-}
-
-.container {
-	text-align: center;
-	position: relative;
-}
-
-.menu {
-	z-index: 1;
-	height: 55px;
-	text-align: center;
-}
-
-.tab {
-	display: inline-block;
-	width: 190px;
-	height: 70px;
-	cursor: pointer;
-}
-
-.title {
-	color: #3E576F;
-	font-size: 16px;
-}
-
-.contentpanel {
-	table-layout: fixed;
-	width: 100%;
-	border-spacing:0;
-	border-collapse:collapse;
-}
-
-#build {
-	position: absolute;
-}
-
-.tagcloudTag {
-	cursor: pointer;
-}
-
-.biblePos {
-	font-size: 14px;
-	margin-left: auto;
-	margin-right: auto;
-	border-spacing: 0px;
-	margin-top: 3px;
-}
-
-.biblePos td {
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-

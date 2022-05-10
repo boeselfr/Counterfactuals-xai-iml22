@@ -1,6 +1,7 @@
 import { NLIDataArray } from "../types/NLIDataArray";
 import {NLISubmissionDisplay} from "../types/NLISubmissionDisplay";
 import {NLIEmbeddingArray} from "../types/NLIEmbeddingArray";
+import {NLISubmissionDisplayGraph} from "../types/NLISubmissionDisplayGraph";
 
 export interface queryBackendProps {
     route: string;
@@ -36,6 +37,17 @@ export const queryBackendDisplayData = async (route: string): Promise<NLISubmiss
             method: 'GET'
         }
     ).then(response => response.json()).then(d => d as NLISubmissionDisplay);
+    return data;
+}
+
+
+export const queryBackendDisplayDataGraph = async (route:string): Promise<NLISubmissionDisplayGraph> => {
+    const requestURL = `${BASE_URL}/${route}`;
+    const data = await fetch(requestURL,
+        {
+            method: 'GET'
+        }
+    ).then(response => response.json()).then(d => d as NLISubmissionDisplayGraph);
     return data;
 }
 
