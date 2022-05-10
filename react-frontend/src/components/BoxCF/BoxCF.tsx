@@ -14,6 +14,10 @@ import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Slider from '@mui/material/Slider';
 import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+
+import {queryBackendStr} from "../../backend/BackendQueryEngine";
+
 
 interface Props {
     sentence1: string;
@@ -28,6 +32,8 @@ interface Props {
     setCFLabelList: any;
     cfsimilaritylist: string[];
     setCFSimilarityList: any;
+    robertaLabel: string;
+    setRobertaLabel: any;
     mode: string;
     UpdateLabeled: any;
 }
@@ -42,7 +48,6 @@ interface YourFormElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-
 const BoxCF: React.FunctionComponent<Props> = ({
                                                    sentence1,
                                                    sentence2,
@@ -52,13 +57,16 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                                    cflist,
                                                    cflabellist,
                                                    cfsimilaritylist,
+                                                   robertaLabel,
+                                                   setRobertaLabel,
                                                    mode,
-                                                   UpdateLabeled
+                                                   UpdateLabeled,
                                                }: Props) => {
-    const [cf, setCF] = useState('')
+    const [cf, setCF] = useState(suggestion[count]) // use current suggestion per default to enable directly passing default sentences
     const [cflabel, setcflabel] = useState('Neutral')
     const [similarity, setsimilarity] = useState(50)
-    const [buttonState, setButtonState] = useState(['buttonCF', 'buttonCF', 'buttonCF'])
+
+    const[defaultVal, setDefaultVal] = useState('hi')
 
     const handleSubmit = () => {
         const input_cf = cf;
@@ -123,6 +131,12 @@ const BoxCF: React.FunctionComponent<Props> = ({
         setsimilarity(newValue as number);
     };
 
+    const handleRobertaQuery = () => {
+        queryBackendStr(`roberta-label?sentence1=${sentence1}&sentence2=${cf}`).then((response) => {
+            setRobertaLabel(response)
+        });
+    };
+
 
     return (
         <Container fixed>
@@ -146,10 +160,11 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                 id="counterfactual"
                                 label="Required"
                                 defaultValue={suggestion[count]}
-                                onChange={(e) => setCF(e.target.value)}
+                                key={suggestion[count]} // very hacky way to re-render default value
+                                onChange={(e) => {setCF(e.target.value); setRobertaLabel('-');}}
                             />
                         </div>
-                        <div>
+                        <Box sx={{ border: 1 , borderRadius: '4px', padding: 3, borderColor: 'grey.500' }}>
                             <Typography variant="body1" component="div"> What label would you
                                 give to this counterfactual? </Typography>
                             <RadioGroup
@@ -170,8 +185,18 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                     setcflabel('Contradiction');
                                 }}/>
                             </RadioGroup>
-                        </div>
-                        <div>
+                            <Grid container columnSpacing={10}  alignItems="center">
+                                <Grid item>
+                                    <Button variant={"contained"} onClick={handleRobertaQuery}>
+                                        See roBERTa Suggestion: 
+                                    </Button> 
+                                </Grid>
+                                <Grid item>
+                                    {robertaLabel}
+                                </Grid>
+                            </Grid>
+                        </Box>
+                        <Box sx={{ border: 1 , borderRadius: '4px', padding: 3, borderColor: 'grey.500'}}>
                             <Typography variant="body1" component="div"> How similar is this
                                 counterfactual to the previous ones? </Typography>
                             <Box m="auto" display="flex" alignItems="center"
@@ -187,7 +212,7 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                     onChange={handleChange}
                                 />
                             </Box>
-                        </div>
+                        </Box>
                         <Button variant={"contained"} onClick={handleSubmit}>
                             Submit
                         </Button>

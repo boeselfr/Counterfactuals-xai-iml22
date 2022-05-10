@@ -1,6 +1,11 @@
 react-frontend/node_modules/*
 .venv
 .vscode
+<<<<<<< HEAD
+=======
+polyjuice/
+
+>>>>>>> 22-display-roberta-classification-suggestion-to-frontend
 README_old.md
 
 *.pyc
