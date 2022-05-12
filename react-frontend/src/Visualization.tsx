@@ -4,9 +4,11 @@ import BoxSentencePair from "./components/BoxSentencePair/BoxSentencePair";
 import BoxPolyjuice from "./components/BoxPolyjuice/BoxPolyjuice";
 import LabeledTable from "./components/BoxTable/BoxTable";
 import BoxCF from "./components/BoxCF/BoxCF";
-import {queryBackendDisplayData, queryBackendEmbedding} from "./backend/BackendQueryEngine";
+import {queryBackendDisplayData, queryBackendEmbedding, queryBackendDisplayDataGraph} from "./backend/BackendQueryEngine";
 import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
+import VarianceGraph from "./components/VarianceGraph/VarianceGraph";
+import VarianceGraph2 from "./components/VarianceGraph/VarianceGraph2";
 // import Image from 'react-native-image-resizer';
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 
@@ -16,6 +18,7 @@ import Grid from '@mui/material/Grid';
 
 import { Step } from "react-joyride";
 import useTour from "./useTour";
+import {NLISubmissionDisplayGraph} from "./types/NLISubmissionDisplayGraph";
 
 
 interface Props {
@@ -187,7 +190,7 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     const [cflist, setCFList] = useState([]);
     const [cflabellist, setCFLabelList] = useState([]);
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
-    const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplay>();
+    const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplayGraph>([]);
 
     // adding a mode of what we are changing. Hidden to the user for now but we can integrate this at some point
     const mode = 'Hypothesis'
@@ -210,7 +213,7 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     // initiate the labeled list of counterfactuals:
     const handleUpdateLabeled = () => {
         // update the counterfactual table
-        queryBackendDisplayData(`upload-submitted-data?sentence1=` + sentence1 + '&sentence2=' + sentence2).then((response) => {
+        queryBackendDisplayDataGraph(`upload-submitted-graph?sentence1=` + sentence1 + '&sentence2=' + sentence2).then((response) => {
       setCFLabeled(response);
         // update the embeddings of the counterfactuals
     })
@@ -223,6 +226,12 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     // all const above are lists ( with only one entry )
     // to display the first nli entry we access the first element in each list below
     ///className="Vis"
+
+    //<!--  <Grid item xs={6}>
+    //                     <div className="demo_box_labeledtable">
+    //                         {CFLabeled && <LabeledTable CFLabeled={CFLabeled} mode={mode}/>}
+    //                     </div>
+    //                 </Grid> -->
     return  (
         <div className='demo-wrapper'>
             {tour}
@@ -242,9 +251,10 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
                         <BoxPolyjuice suggestion={suggestion} setCount={setCfCount} count={cfCount} mode={mode} UpdateLabeled={handleUpdateLabeled}/>
                     </div>
                 </Grid>
+
                 <Grid item xs={6}>
                     <div className="demo_box_labeledtable">
-                        {CFLabeled && <LabeledTable CFLabeled={CFLabeled} mode={mode}/>}
+                        {CFLabeled && <VarianceGraph2 data={CFLabeled}/>}
                     </div>
                 </Grid>
                 <Grid item xs={6}>

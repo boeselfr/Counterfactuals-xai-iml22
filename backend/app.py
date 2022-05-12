@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from AlignmentGraph import AlignmentGraph
 import uvicorn
 import pandas as pd
 import numpy as np
@@ -9,9 +10,10 @@ import csv
 import codecs
 from io import StringIO
 from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, \
-    NLISubmissionDisplay, NLIEmbeddingResponse
+    NLISubmissionDisplay, NLIEmbeddingResponse, NLISubmissionDisplayGraph
 from typing import Callable
 import pickle
+import collatex
 
 app = FastAPI(
     title="Interactive Counterfactual Generation",
@@ -66,6 +68,31 @@ def upload_submitted_data(sentence1: str, sentence2: str):
     displayed_table["id"] = displayed_table.index + 1
 
     return displayed_table.to_dict(orient="records")
+
+
+@app.get("/upload-submitted-graph", response_model=NLISubmissionDisplayGraph)
+def upload_submitted_graph(sentence1: str, sentence2: str):
+    collation = collatex.core_classes.Collation()
+    data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
+    # filter for lines with sentence1, sentence2 matching:
+    matching_data = data[(data['sentence1'] == sentence1) & (data['sentence2'] == sentence2)]
+
+    # add original as id = 0
+    collation.add_plain_witness(str(0), sentence2)
+    # add all matching counterfactuals
+    for i,line in enumerate(matching_data['suggestionRH']):
+        collation.add_plain_witness(str(i+1), line)
+
+    # collate to find matching parts
+    alignment_table = collatex.core_functions.collate(collation, near_match=True, segmentation=False, output="table")
+
+    # return a tangled tree:
+    # e.g. ordered list of lists one list is a column from the collation table
+    graph = AlignmentGraph(alignment_table)
+
+    return graph.levels_string
+
+
 
 
 @app.get("/upload-embeddings-plot", response_model=NLIEmbeddingResponse)
@@ -150,6 +177,9 @@ def update_schema_name(app: FastAPI, function: Callable, name: str) -> None:
         if route.endpoint is function:
             route.body_field.type_.__name__ = name
             break
+
+
+
 
 
 update_schema_name(app, create_file, "CreateFileSchema")
