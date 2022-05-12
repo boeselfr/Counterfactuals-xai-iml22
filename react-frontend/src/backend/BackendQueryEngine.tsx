@@ -20,6 +20,17 @@ export const queryBackendData = async (route: string): Promise<NLIDataArray> => 
     return data;
 }
 
+export const queryBackendStr = async (route: string) => {
+    const requestURL = `${BASE_URL}/${route}`;
+    const data = await fetch(requestURL,
+        {
+            method: 'GET'
+        }
+    ).then(response => response.json()).then(d => d as string);
+    return data;
+}
+
+
 export const queryBackendInt = async (route: string) => {
     const requestURL = `${BASE_URL}/${route}`;
     const data = await fetch(requestURL,

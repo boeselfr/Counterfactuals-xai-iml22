@@ -82,12 +82,12 @@ return (
     <ThemeProvider theme={theme}>
             <Box sx={{width: '100%', typography: 'body1'}}>
                 <TabContext value={value}>
-                    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                    {/* <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Dashboard" value="1"/>
                                 <Tab label="Visualizations" value="2"/>
                         </TabList>
-                    </Box>
+                    </Box> */}
                     <TabPanel value="1">{exampleData && <Visualization
                         data={exampleData}
                         incrCount={incrCount}

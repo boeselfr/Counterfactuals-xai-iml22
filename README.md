@@ -42,6 +42,23 @@ counterfactually augmented dataset. The rough individual tasks involved are:
 - Add realtime counterfactual generation by wiring things up in our backend.
 - Finetune roBERTa model by feeding in counterfactually augmented dataset.
 
+## Docker images
+
+For now our Docker setup only seems to be compatible with Linux, because we don't know how to
+set up container networking on MacOS yet.
+
+You can launch the front and backend docker images on Ubuntu via
+```
+docker run -d --rm -it --net=host springulum/frontend  # Listens on port 8000, connects to backend port 3000
+docker run -d --rm -it --net=host springulum/backend  # Listens on port 3000
+```
+
+You can then use the app by loading http://localhost:8000 in your web browser.
+
+Using --net=host, a *Linux-only option*, will automatically bind containers ports 3000 and 8000 to localhost.
+
+We haven't yet figured out how to bind these same container ports on MacOS (perhaps via Docker compose).
+
 - - -
 
 ## Folder Structure
@@ -180,9 +197,10 @@ python = ">=3.9,<3.11"
     ```bash
     pip install -e .
     ```
-4. Navigate into backend folder, start backend
+4. Launch the backend by running `./launch_backend.sh` OR navigate into backend folder and start backend
 
     ```bash
+    cd backend
     uvicorn app:app --reload
     ```
 
@@ -245,11 +263,17 @@ Document here the major milestones of your code and future planned steps.\
       correspondingly [#fb309384](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/merge_requests/8)
     - [x] Script for replicating polyjuice classifer fine-tuning
       results [#10](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/10)
-- [ ] Week 8
+- [x] Week 8
   - [x] Heavy refactor with material-ui [#16](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/16)
   - [x] Make project roadmap and slides for presentation to professor [#17](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/17).
   - [ ] Time and document CPU and GPU polyjuice generation times [#15](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/15).
   - [x] Create walkthrough instructions for users through the dashboard [#85d52b18](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/85d52b18036faffdbbdbd2988bd1c916a268b306)
+- [ ] Week 9 & 10
+  - [x] Dockerized the front- and backends: [#4c3f5685](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/4c3f568594980056a2fdff9f9251e48cb32813a7)
+  - [x] Created a graph-display of the created counterfactuals: [#20](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commits/20-VarianceGraph)
+  - [x] Extend walkthough and add manual toggle: [da5e6d5f](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/da5e6d5fefac39e9e32f85c93466b189b82134de), [#cf9b26f7](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/cf9b26f787fd71f651745d1b191f9747108bcc4b)
+  - [x] Add roBERTa suggested labels: [#bfbc35d8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/bfbc35d849d71a04c6c610eaefba0240a9d03a42)
+  - [ ] Interactive blank selection for polyjuice selection: [#8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/8)
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
@@ -275,6 +299,8 @@ how to include in the dashboard to aid the user.
 (and included them into the dashboard) as well as fine-tuning a roBERTa classifier to reproduce some of the results from the Polyjuice paper, where they showed that using counterfactual examples generated from their dashboard improved the classifier's performance on "challenge" datasets, while not hurting performance on the original dataset.
 Further, we constructed lay-user-friendly walkthrough instructions to the dashboard. 
 Finally, we defined a roadmap of upcoming tasks, which were discussed with the Professor. 
+
+**Week 10**: The progress this week included first making the dashboard walkthough more lay-user friendly by adding some more instructions and adding the option to manually toggle a walkthrough. Further, we added features to make developing counterfactuals more easy to the lay user, namely: automatically alter a user-selected part of the suggestion based on user-input keyword, add some text visualizations of the generated counterfactuals and finally add a roBERTa suggested label. Finally, we dockerized our application (see instructions below).
 
 ## Versioning
 

@@ -13,12 +13,12 @@ import VarianceGraph2 from "./components/VarianceGraph/VarianceGraph2";
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 
 import Button from "@mui/material/Button";
-
 import Grid from '@mui/material/Grid';
 
 import { Step } from "react-joyride";
-import useTour from "./useTour";
 import {NLISubmissionDisplayGraph} from "./types/NLISubmissionDisplayGraph";
+// import useTour from "./useTour"; # old tour method
+import  useTour from "./useTour_button";
 
 
 interface Props {
@@ -192,6 +192,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
     const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplayGraph>([]);
 
+    const [robertaLabel, setRobertaLabel] = useState('-');
+ 
     // adding a mode of what we are changing. Hidden to the user for now but we can integrate this at some point
     const mode = 'Hypothesis'
     const sentence1 = data.map((d) => d.sentence1)[0];
@@ -219,22 +221,15 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
     })
     };
     useEffect(handleUpdateLabeled, [data])
+    // const tour = useTour(STEPS, "LS_KEY");
+    const tour = useTour(STEPS);
 
-    const tour = useTour(STEPS, "LS_KEY");
-
- //<LabeledTable CFLabeled={CFLabeled} mode={mode}/>
-    // all const above are lists ( with only one entry )
-    // to display the first nli entry we access the first element in each list below
-    ///className="Vis"
-
-    //<!--  <Grid item xs={6}>
-    //                     <div className="demo_box_labeledtable">
-    //                         {CFLabeled && <LabeledTable CFLabeled={CFLabeled} mode={mode}/>}
-    //                     </div>
-    //                 </Grid> -->
     return  (
         <div className='demo-wrapper'>
-            {tour}
+            <div className='demo_box_tour_button'>
+                {tour}
+            </div>
+
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item xs={6}>
                 <div className="demo_box_sentencepair">
@@ -271,6 +266,8 @@ const Visualization: React.FunctionComponent<Props> = ({ data, incrCount, decrCo
                         setCFLabelList={setCFLabelList}
                         cfsimilaritylist={cfsimilaritylist}
                         setCFSimilarityList={setCFSimilarityList}
+                        robertaLabel={robertaLabel}
+                        setRobertaLabel={setRobertaLabel}
                         mode={mode} UpdateLabeled={handleUpdateLabeled}
                         />
                     </div>
