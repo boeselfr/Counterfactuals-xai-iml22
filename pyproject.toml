@@ -102,15 +102,7 @@ watchgod = "0.7"
 wcwidth = "0.2.5"
 webencodings = "0.5.1"
 websockets = "10.1"
-<<<<<<< HEAD
-torch = [
-  {url = "https://download.pytorch.org/whl/cpu/torch-1.10.0%2Bcpu-cp39-cp39-linux_x86_64.whl", markers = "sys_platform == 'linux'"},
-  {url = "https://download.pytorch.org/whl/cpu/torch-1.10.0%2Bcpu-cp39-cp39-win_amd64.whl", markers = "sys_platform == 'win32'"}
-]
-spacy = "^3.2.3"
-=======
 torch = "1.11.0"
->>>>>>> 22-display-roberta-classification-suggestion-to-frontend
 black = "^22.1.0"
 transformers = "4.18.0"
 tokenizers = "^0.11.6"

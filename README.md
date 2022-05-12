@@ -263,14 +263,17 @@ Document here the major milestones of your code and future planned steps.\
       correspondingly [#fb309384](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/merge_requests/8)
     - [x] Script for replicating polyjuice classifer fine-tuning
       results [#10](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/10)
-- [ ] Week 8
+- [x] Week 8
   - [x] Heavy refactor with material-ui [#16](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/16)
   - [x] Make project roadmap and slides for presentation to professor [#17](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/17).
   - [ ] Time and document CPU and GPU polyjuice generation times [#15](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/15).
   - [x] Create walkthrough instructions for users through the dashboard [#85d52b18](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/85d52b18036faffdbbdbd2988bd1c916a268b306)
 - [ ] Week 9 & 10
-  - [x] Dockerized the front- and backends: !12
+  - [x] Dockerized the front- and backends: [#4c3f5685](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/4c3f568594980056a2fdff9f9251e48cb32813a7)
   - [x] Created a graph-display of the created counterfactuals: [#20](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commits/20-VarianceGraph)
+  - [x] Extend walkthough and add manual toggle: [da5e6d5f](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/da5e6d5fefac39e9e32f85c93466b189b82134de), [#cf9b26f7](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/cf9b26f787fd71f651745d1b191f9747108bcc4b)
+  - [x] Add roBERTa suggested labels: [#bfbc35d8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/bfbc35d849d71a04c6c610eaefba0240a9d03a42)
+  - [ ] Interactive blank selection for polyjuice selection: [#8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/8)
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
@@ -297,7 +300,7 @@ how to include in the dashboard to aid the user.
 Further, we constructed lay-user-friendly walkthrough instructions to the dashboard. 
 Finally, we defined a roadmap of upcoming tasks, which were discussed with the Professor. 
 
-**Week 10**:
+**Week 10**: The progress this week included first making the dashboard walkthough more lay-user friendly by adding some more instructions and adding the option to manually toggle a walkthrough. Further, we added features to make developing counterfactuals more easy to the lay user, namely: automatically alter a user-selected part of the suggestion based on user-input keyword, add some text visualizations of the generated counterfactuals and finally add a roBERTa suggested label. Finally, we dockerized our application (see instructions below).
 
 ## Versioning
 
