@@ -2,8 +2,6 @@ react-frontend/node_modules/*
 .venv
 .vscode
 
-polyjuice/
-
 *.pyc
 *.DS_Store
 
