@@ -47,6 +47,9 @@ counterfactually augmented dataset. The rough individual tasks involved are:
 For now our Docker setup only seems to be compatible with Linux, because we don't know how to
 set up container networking on MacOS yet.
 
+TEMPORARY: This setup seems to be shaky -- we've gotten it to work sometimes. Sorry, we will debug this issue!
+Namely, we currently experience a problem where frontend isn't talking to backend for some reason.
+
 You can launch the front and backend docker images on Ubuntu via
 ```
 docker run -d --rm -it --net=host springulum/frontend  # Listens on port 8000, connects to backend port 3000
@@ -346,4 +349,5 @@ Tags:
   6 (April 14): [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
 - Week 8 (April 28): [Week 8 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week8)
 - Week 10 (May 12): [Week 10 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week10)
+  - Use `springulum/frontend:week10` and `springulum/fronend:week10` Docker images.
 

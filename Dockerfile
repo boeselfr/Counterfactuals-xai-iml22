@@ -25,4 +25,4 @@ RUN CRYPTOGRAPHY_DONT_BUILD_RUST=1 poetry install
 
 ADD backend backend
 ADD backend_launch.sh .
-RUN ./backend_launch.sh
+CMD ./backend_launch.sh
