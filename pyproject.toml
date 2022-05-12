@@ -110,6 +110,8 @@ setuptools = "^62.1.0"
 wheel = "^0.37.1"
 spacy = "^3.3.0"
 benepar = "^0.2.0"
+collatex = "^2.2"
+Levenshtein = "^0.18.1"
 
 [tool.poetry.dev-dependencies]
 
