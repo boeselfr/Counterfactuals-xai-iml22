@@ -67,21 +67,28 @@ Specify here the structure of you code and comment what the most important files
 
 ``` bash
 .
+├── Dockerfile
 ├── README.md
 ├── backend
+│   ├── AlignmentGraph.py
+│   ├── __pycache__
+│   │   └── app.cpython-310.pyc
 │   ├── app.py
 │   ├── data
-│   │   ├── NLI
+│   │   ├── NLI # nli dataset, partially used
 │   │   │   ├── all_combined
 │   │   │   │   ├── dev.tsv
 │   │   │   │   ├── test.tsv
 │   │   │   │   └── train.tsv
 │   │   │   ├── original
-│   │   │   │   ├── cfs_example.tsv # static data used for testing
+│   │   │   │   ├── cfs_example.tsv
 │   │   │   │   ├── dev.tsv
 │   │   │   │   ├── snli_1.0_test.txt
 │   │   │   │   ├── test.tsv
 │   │   │   │   └── train.tsv
+│   │   │   ├── poly_cfs
+│   │   │   │   ├── train_cf.csv
+│   │   │   │   └── train_cf3.csv
 │   │   │   ├── revised_combined
 │   │   │   │   ├── dev.tsv
 │   │   │   │   ├── test.tsv
@@ -97,8 +104,10 @@ Specify here the structure of you code and comment what the most important files
 │   │   │   └── submitted
 │   │   │       └── cfs_example_submitted.tsv
 │   │   ├── generate_data.py
-│   │   └── umap_all_edited.png
-│   ├── easy_polyjuice.py
+│   │   ├── hidden_states.npz
+│   │   ├── umap_all_edited.png
+│   │   └── umap_mapper.pkl
+│   ├── easy_polyjuice.py # functions for polyjuice functionalities
 │   ├── pydantic_models
 │   │   ├── __pycache__
 │   │   │   ├── example_data_points.cpython-310.pyc
@@ -106,12 +115,20 @@ Specify here the structure of you code and comment what the most important files
 │   │   │   └── nli_data_point.cpython-310.pyc
 │   │   ├── example_data_points.py
 │   │   └── nli_data_point.py
-│   └── umap_visualization.py # create umap visualizations
+│   ├── roberta_inference.py # function for roberta counterfactual labeling
+│   └── umap_visualization.py # functions for a umap activation visualization
+├── backend_launch.sh
+├── classifiers
+│   ├── README.md
+│   ├── data.py
+│   ├── tune.py
+│   └── utils.py
 ├── exploratory_notebooks
 │   └── polyjuice.ipynb
-├── poetry.lock
-├── pyproject.toml
+├── poetry.lock 
+├── pyproject.toml # important poetry file containing poetry dependencies
 ├── react-frontend
+│   ├── Dockerfile
 │   ├── README.md
 │   ├── package-lock.json
 │   ├── package.json
@@ -122,7 +139,7 @@ Specify here the structure of you code and comment what the most important files
 │   │   ├── logo512.png
 │   │   ├── manifest.json
 │   │   └── robots.txt
-│   ├── src
+│   ├── src # app and typescript components
 │   │   ├── App.css
 │   │   ├── App.test.tsx
 │   │   ├── App.tsx
@@ -130,46 +147,56 @@ Specify here the structure of you code and comment what the most important files
 │   │   ├── backend
 │   │   │   ├── BackendQueryEngine.tsx
 │   │   │   └── json-decoder.ts
-│   │   ├── components # individual boxes in app.tsx
+│   │   ├── components
 │   │   │   ├── BasicLineChart
 │   │   │   │   ├── BasicLineChart.scss
 │   │   │   │   ├── BasicLineChart.tsx
 │   │   │   │   └── types.ts
 │   │   │   ├── BoxCF
-│   │   │   │   ├── BoxCF.tsx
-│   │   │   │   └── boxcf.css
+│   │   │   │   └── BoxCF.tsx
 │   │   │   ├── BoxPolyjuice
-│   │   │   │   ├── BoxPolyjuice.tsx
-│   │   │   │   └── boxpolyjuice.css
+│   │   │   │   └── BoxPolyjuice.tsx
 │   │   │   ├── BoxSentencePair
-│   │   │   │   ├── BoxSentencePair.tsx
-│   │   │   │   └── boxsentencepair.css
+│   │   │   │   └── BoxSentencePair.tsx
 │   │   │   ├── BoxTable
-│   │   │   │   ├── BoxTable.tsx
-│   │   │   │   └── boxtable.css
+│   │   │   │   └── BoxTable.tsx
 │   │   │   ├── DataPointComponent.tsx
-│   │   │   └── ScatterPlot
-│   │   │       ├── ScatterPlot.scss
-│   │   │       ├── ScatterPlot.tsx
-│   │   │       └── types.ts
+│   │   │   ├── EmbeddingPlot
+│   │   │   │   ├── EmbeddingPlot.css
+│   │   │   │   └── EmbeddingPlot.tsx
+│   │   │   ├── ScatterPlot
+│   │   │   │   ├── ScatterPlot.scss
+│   │   │   │   ├── ScatterPlot.tsx
+│   │   │   │   └── types.ts
+│   │   │   └── VarianceGraph
+│   │   │       ├── VarianceGraph.css
+│   │   │       ├── VarianceGraph.js
+│   │   │       └── VarianceGraph2.js
 │   │   ├── index.css
 │   │   ├── index.tsx
+│   │   ├── logo copy.svg
 │   │   ├── logo.svg
 │   │   ├── react-app-env.d.ts
 │   │   ├── reportWebVitals.ts
 │   │   ├── setupTests.ts
 │   │   ├── system.js
-│   │   ├── types
+│   │   ├── types # datatypes
 │   │   │   ├── DataArray.ts
 │   │   │   ├── DataPoint.ts
 │   │   │   ├── Margins.ts
 │   │   │   ├── NLIDataArray.ts
 │   │   │   ├── NLIDataPoint.ts
+│   │   │   ├── NLIEmbeddingArray.ts
+│   │   │   ├── NLIEmbeddingPoint.ts
 │   │   │   ├── NLISubmissionDisplay.ts
+│   │   │   ├── NLISubmissionDisplayGraph.ts
+│   │   │   ├── NLISubmissionDisplayLevel.ts
+│   │   │   ├── NLISubmissionDisplayNode.ts
 │   │   │   └── NLISubmissionDisplayPoint.ts
-│   │   └── umap_all.png
+│   │   ├── umap_all.png
+│   │   ├── useTour.tsx 
+│   │   └── useTour_button.tsx # typescript function for guided walkthough
 │   └── tsconfig.json
-├── requirements.txt # implicitely used by poetry to setup venv
 └── umap_all.png
 ```
 
@@ -189,12 +216,13 @@ python = ">=3.9,<3.11"
 
     ```bash
     poetry install
+    poetry shell
     ```
 
-3. Install Polyjuice from source: clone
-   repo [from here](https://github.com/tongshuangwu/polyjuice). Then navigate to polyjuice
-   folder and run:
+3. Install Polyjuice from source: 
     ```bash
+    git clone git@github.com:tongshuangwu/polyjuice.git
+    cd polyjuice
     pip install -e .
     ```
 4. Launch the backend by running `./launch_backend.sh` OR navigate into backend folder and start backend
@@ -271,9 +299,9 @@ Document here the major milestones of your code and future planned steps.\
 - [ ] Week 9 & 10
   - [x] Dockerized the front- and backends: [#4c3f5685](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/4c3f568594980056a2fdff9f9251e48cb32813a7)
   - [x] Created a graph-display of the created counterfactuals: [#20](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commits/20-VarianceGraph)
-  - [x] Extend walkthough and add manual toggle: [da5e6d5f](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/da5e6d5fefac39e9e32f85c93466b189b82134de), [#cf9b26f7](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/cf9b26f787fd71f651745d1b191f9747108bcc4b)
+  - [x] Extend walkthough and add manual toggle: [#da5e6d5f](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/da5e6d5fefac39e9e32f85c93466b189b82134de), [#cf9b26f7](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/cf9b26f787fd71f651745d1b191f9747108bcc4b)
   - [x] Add roBERTa suggested labels: [#bfbc35d8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/bfbc35d849d71a04c6c610eaefba0240a9d03a42)
-  - [ ] Interactive blank selection for polyjuice selection: [#8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/8)
+  - [ ] Interactive blank selection for polyjuice selection: [#8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/8), currently still on a separate branch due to dependency issues [#e888fadf](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/e888fadf154ca21777825aeab8988237d77189ce)
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
