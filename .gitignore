@@ -1,13 +1,8 @@
 react-frontend/node_modules/*
 .venv
 .vscode
-<<<<<<< HEAD
 
 polyjuice/
-=======
-polyjuice/
-README_old.md
->>>>>>> 7be3f409df189e2345be6d27ff21639bdf29bf78
 
 *.pyc
 *.DS_Store
