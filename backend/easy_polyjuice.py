@@ -10,12 +10,15 @@ import torch
 from nltk import ParentedTree, Tree
 from polyjuice import generations
 from polyjuice.generations import special_tokens
+from polyjuice.generations.special_tokens import BLANK_TOK
 from tqdm import tqdm as tq
 from random import sample
+from polyjuice.generations import get_prompts
 
-nlp = spacy.load("en_core_web_sm")
-benepar.download('benepar_en3')
-nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
+
+# nlp = spacy.load("en_core_web_sm")
+# benepar.download('benepar_en3')
+# nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
 
 
 def add_indices_to_terminals(treestring):
@@ -136,19 +139,19 @@ class PolyBetter(polyjuice.Polyjuice):
         else:
             ctrl_codes = generations.RANDOM_CTRL_CODES
 
-        prompts = get_prompts_v2(
+        prompts = get_prompts(
             doc=orig_doc,
             ctrl_codes=ctrl_codes,
             blanked_sents=blanked_sents,
-            model_predict_blanks=model_predict_blanks,
         )
+        print(prompts)
 
         results = set()
         for _ in range(100):
             generated = generations.generate_on_prompts(
                 generator=self.generator,
                 prompts=prompts,
-                n=10,
+                n=n_results,
                 **kwargs,
             )
             merged = list(np.concatenate(generated))
@@ -255,30 +258,6 @@ def main():
     print(perturbations)
 
 
-def main_v2():
-    pj = PolyBetter(
-        model_path="uw-hai/polyjuice",
-        is_cuda=False,
-    )
-    text = "It is great for kids."
-    n_requests = 30
-    perturbations = pj.perturb_better(text, n_results=n_requests)
-    print(
-        f"Requested {n_requests} counterfactual candidates. Got {len(perturbations)} candidates.")
-    print(perturbations)
-
-
-def main_v3():
-    premise = "The time for action is now."
-    hypothesis = "It is never too late to do anything."
-    n_requests = 30
-    perturbations = generate_nli_perturbations(premise, hypothesis,
-                                               n_results=n_requests)
-    print(
-        f"Requested {n_requests} counterfactual candidates. Got {len(perturbations)} candidates.")
-    print(perturbations)
-
-
 def add_row(premise, hypo, label, cf):
     empty_row = {"sentence1": premise, "sentence2": hypo, "gold_label": label,
                  "suggestionRP": "-", "suggestionRP_label": "-", "suggestionRH": cf,
@@ -305,6 +284,38 @@ def generate_cf_for_corpus():
     cf_df.to_csv("train_cf.csv")
 
 
+class DynamicPolyjuice(object):
+    def __init__(self):
+        self.poly = get_pj()
+
+    def suggest_single_sentence(self, premise, hypothesis, codes, start_idx, end_idx):
+        orig_sent = f"{premise} {hypothesis}"
+        blanked_hypo = hypothesis[:start_idx] + " " + BLANK_TOK + " " + hypothesis[end_idx:]
+        blanked_hypo = " ".join(blanked_hypo.split())
+        print(blanked_hypo)
+        blanked = f"{premise} {blanked_hypo}"
+        pj = self.poly
+
+        if len(codes) == 1:
+            codes = [codes[0], codes[0]]
+
+        perturbations = pj.perturb_better(
+            orig_sent=orig_sent,
+            blanked_sent=blanked,
+            ctrl_code=codes,
+            n_results=1
+        )
+
+        print(perturbations[0].split(".")[1].strip())
+        return perturbations[0].split(".")[1].strip()
+
+
 if __name__ == "__main__":
     # main_v3()
-    generate_cf_for_corpus()
+    # generate_cf_for_corpus()
+    oracle = DynamicPolyjuice()
+    oracle.suggest_single_sentence(
+        "1 man singing and 1 man playing a saxophone in a concert.",
+        "The 2 men are spending their week with a musical tour group.",
+        ['lexical'],
+        23, 33)

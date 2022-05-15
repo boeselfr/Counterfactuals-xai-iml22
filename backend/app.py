@@ -1,3 +1,5 @@
+import json
+
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +11,8 @@ import os
 import csv
 import codecs
 from io import StringIO
+
+from easy_polyjuice import DynamicPolyjuice
 from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, \
     NLISubmissionDisplay, NLIEmbeddingResponse, NLISubmissionDisplayGraph
 from typing import Callable
@@ -35,7 +39,10 @@ app.add_middleware(
 data = pd.read_csv(f"data/NLI/poly_cfs/train_cf.csv")
 grouped_data = data.groupby(["sentence1", "sentence2"])[["gold_label"]].count()
 roberta_tokenizer = AutoTokenizer.from_pretrained('roberta-large-mnli')
-roberta_model = AutoModelForSequenceClassification.from_pretrained('roberta-large-mnli', num_labels=3)
+roberta_model = AutoModelForSequenceClassification.from_pretrained('roberta-large-mnli',
+                                                                   num_labels=3)
+poly = DynamicPolyjuice()
+poly.suggest_single_sentence("start.", "end.", ["lexical"], 0, 0)
 
 
 @app.get("/data-count")
@@ -47,6 +54,14 @@ def get_data_length() -> int:
 @app.get("/roberta-label")
 def get_roberta_label(sentence1: str, sentence2: str) -> str:
     return roberta_inference(sentence1, sentence2, roberta_tokenizer, roberta_model)
+
+
+@app.get("/ask-poly")
+def get_data_length(sentence1: str, sentence2: str, code: str, start_idx: str,
+                    end_idx: str) -> int:
+    q_codes = [code]
+    return poly.suggest_single_sentence(sentence1, sentence2, q_codes, int(start_idx),
+                                        int(end_idx))
 
 
 @app.get("/upload-data", response_model=NLIDataResponse)
@@ -90,19 +105,18 @@ def upload_submitted_graph(sentence1: str, sentence2: str):
     # add original as id = 0
     collation.add_plain_witness(str(0), sentence2)
     # add all matching counterfactuals
-    for i,line in enumerate(matching_data['suggestionRH']):
-        collation.add_plain_witness(str(i+1), line)
+    for i, line in enumerate(matching_data['suggestionRH']):
+        collation.add_plain_witness(str(i + 1), line)
 
     # collate to find matching parts
-    alignment_table = collatex.core_functions.collate(collation, near_match=True, segmentation=False, output="table")
+    alignment_table = collatex.core_functions.collate(collation, near_match=True,
+                                                      segmentation=False, output="table")
 
     # return a tangled tree:
     # e.g. ordered list of lists one list is a column from the collation table
     graph = AlignmentGraph(alignment_table)
 
     return graph.levels_string
-
-
 
 
 @app.get("/upload-embeddings-plot", response_model=NLIEmbeddingResponse)
@@ -118,7 +132,6 @@ def upload_embeddings():
     # join the two dataframes
     response = records_df.join(embeddings_df, on=None).reset_index(drop=True).drop(
         columns=['i'])
-    print(response)
     return response.to_dict(orient="records")
 
 
@@ -187,9 +200,6 @@ def update_schema_name(app: FastAPI, function: Callable, name: str) -> None:
         if route.endpoint is function:
             route.body_field.type_.__name__ = name
             break
-
-
-
 
 
 update_schema_name(app, create_file, "CreateFileSchema")

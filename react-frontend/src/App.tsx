@@ -48,9 +48,9 @@ useEffect(() => {
     queryBackendInt(`data-count`).then((maxCount) => {
         setTotalCount(maxCount);
     });
-    queryBackendEmbedding('upload-embeddings-plot').then((response) => {
-        setEmbeddings(response);
-    });
+    // queryBackendEmbedding('upload-embeddings-plot').then((response) => {
+    //     setEmbeddings(response);
+    // });
 }, []);
 
 useEffect(() => {
@@ -63,7 +63,6 @@ useEffect(() => {
 const incrCount = () => {
     console.log(totalCount)
     if (count < totalCount - 1) {
-        console.log("here?")
         setCount(count + 1)
     }
 };
@@ -85,18 +84,18 @@ return (
                     {/* <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                                 <Tab label="Dashboard" value="1"/>
-                                <Tab label="Visualizations" value="2"/>
-                        </TabList>
-                    </Box> */}
+                                {/*<Tab label="Visualizations" value="2"/>*/}
+                        {/*</TabList>*/}
+                    {/*</Box> */}
                     <TabPanel value="1">{exampleData && <Visualization
                         data={exampleData}
                         incrCount={incrCount}
                         decrCount={decrCount}/>}</TabPanel>
-                    <TabPanel value="2">
-                        <div className='titleUMAP'>
-                            {Embeddings && <EmbeddingPlot data={Embeddings}/>}
-                        </div>
-                    </TabPanel>
+                    {/*<TabPanel value="2">*/}
+                    {/*    <div className='titleUMAP'>*/}
+                    {/*        {Embeddings && <EmbeddingPlot data={Embeddings}/>}*/}
+                    {/*    </div>*/}
+                    {/*</TabPanel>*/}
                 </TabContext>
             </Box>
     </ThemeProvider>

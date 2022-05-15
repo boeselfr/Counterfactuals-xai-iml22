@@ -1,11 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import Visualization from "../../Visualization";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import Container from '@mui/material/Container';
-import {CardActions, CardContent, Typography} from "@mui/material";
+import {
+    CardActions,
+    CardContent, Chip,
+    FormGroup, InputLabel,
+    MenuItem,
+    Switch,
+    Typography
+} from "@mui/material";
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -15,58 +23,37 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Slider from '@mui/material/Slider';
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
+import CheckIcon from '@mui/icons-material/Check';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 import {queryBackendStr} from "../../backend/BackendQueryEngine";
-
+import {JsonDecoder} from "ts.data.json";
 
 interface Props {
     sentence1: string;
     sentence2: string;
+    cf: string;
     gold_label: string;
-    suggestion: string[];
-    count: number;
-    setCount: any;
-    cflist: string[];
-    setCFList: any;
-    cflabellist: string[];
-    setCFLabelList: any;
-    cfsimilaritylist: string[];
-    setCFSimilarityList: any;
     robertaLabel: string;
     setRobertaLabel: any;
     mode: string;
     UpdateLabeled: any;
 }
 
-interface FormElements extends HTMLFormControlsCollection {
-    counterfactual: HTMLInputElement
-    cf_label: HTMLInputElement
-    similarity: HTMLInputElement
-}
-
-interface YourFormElement extends HTMLFormElement {
-    readonly elements: FormElements
-}
 
 const BoxCF: React.FunctionComponent<Props> = ({
                                                    sentence1,
                                                    sentence2,
+                                                   cf,
                                                    gold_label,
-                                                   suggestion,
-                                                   count,
-                                                   cflist,
-                                                   cflabellist,
-                                                   cfsimilaritylist,
                                                    robertaLabel,
                                                    setRobertaLabel,
                                                    mode,
-                                                   UpdateLabeled,
+                                                   UpdateLabeled
                                                }: Props) => {
-    const [cf, setCF] = useState(suggestion[count]) // use current suggestion per default to enable directly passing default sentences
     const [cflabel, setcflabel] = useState('Neutral')
     const [similarity, setsimilarity] = useState(50)
 
-    const[defaultVal, setDefaultVal] = useState('hi')
 
     const handleSubmit = () => {
         const input_cf = cf;
@@ -108,7 +95,6 @@ const BoxCF: React.FunctionComponent<Props> = ({
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
         }).then(UpdateLabeled())
-        // trigger an update of the labeled list as there is a new entry now:
 
     }
 
@@ -142,9 +128,9 @@ const BoxCF: React.FunctionComponent<Props> = ({
         <Container fixed>
             <Card elevation={3}>
                 <CardContent>
-                    <Typography variant="h4" component="div"> <strong>Step 4: </strong> submit the new counterfactual
-                        </Typography>
-                    <Divider />
+                    <Typography variant="h4" component="div"> <strong>Step 4: </strong> label and submit the hypothesis
+                    </Typography>
+                    <Divider/>
                     <Box
                         component="form"
                         sx={{
@@ -153,66 +139,90 @@ const BoxCF: React.FunctionComponent<Props> = ({
                         noValidate
                         autoComplete="on"
                     >
-                        <div>
-                            <TextField
-                                fullWidth
-                                required
-                                id="counterfactual"
-                                label="Required"
-                                defaultValue={suggestion[count]}
-                                key={suggestion[count]} // very hacky way to re-render default value
-                                onChange={(e) => {setCF(e.target.value); setRobertaLabel('-');}}
-                            />
-                        </div>
-                        <Box sx={{ border: 1 , borderRadius: '4px', padding: 3, borderColor: 'grey.500' }}>
-                            <Typography variant="body1" component="div"> What label would you
-                                give to this counterfactual? </Typography>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
+                        <Stack spacing={2}>
+
+                            <Chip icon={<CheckIcon />} label={"Premise: " + sentence1} />
+                            <Chip icon={<QuestionMarkIcon />} label={"Hypothesis: " + cf} color="secondary"/>
+                        </Stack>
+                            {/*<TextField*/}
+                            {/*    fullWidth*/}
+                            {/*    required*/}
+                            {/*    id="counterfactual"*/}
+                            {/*    label="Required"*/}
+                            {/*    defaultValue={cf}*/}
+                            {/*    key={cf} // very hacky way to re-render default value*/}
+                            {/*/>*/}
+
+                        <Box sx={{
+                            border: 1,
+                            borderRadius: '4px',
+                            padding: 3,
+                            borderColor: 'grey.500'
+                        }}>
+                            <Grid
+                                container
+                                spacing={0}
+                                direction="column"
+                                alignItems="center"
+                                justifyContent="center"
+
                             >
-                                <FormControlLabel value="Neutral" control={<Radio/>}
-                                                  label="Neutral" onClick={(e) => {
-                                    setcflabel('Neutral');
-                                }}/>
-                                <FormControlLabel value="Entailment" control={<Radio/>}
-                                                  label="Entailment" onClick={(e) => {
-                                    setcflabel('Entailment');
-                                }}/>
-                                <FormControlLabel value="Contradiction" control={<Radio/>}
-                                                  label="Contradiction" onClick={(e) => {
-                                    setcflabel('Contradiction');
-                                }}/>
-                            </RadioGroup>
-                            <Grid container columnSpacing={10}  alignItems="center">
-                                <Grid item>
-                                    <Button variant={"contained"} onClick={handleRobertaQuery}>
-                                        See roBERTa Suggestion: 
-                                    </Button> 
+                                <Typography variant="body1" component="div"> What label would
+                                    you
+                                    give to this counterfactual? </Typography>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                >
+                                    <FormControlLabel value="Neutral" control={<Radio/>}
+                                                      label="Neutral" onClick={(e) => {
+                                        setcflabel('Neutral');
+                                    }}/>
+                                    <FormControlLabel value="Entailment" control={<Radio/>}
+                                                      label="Entailment" onClick={(e) => {
+                                        setcflabel('Entailment');
+                                    }}/>
+                                    <FormControlLabel value="Contradiction" control={<Radio/>}
+                                                      label="Contradiction" onClick={(e) => {
+                                        setcflabel('Contradiction');
+                                    }}/>
+                                </RadioGroup>
+                                <Grid container columnSpacing={0} alignItems="center">
+                                    <Grid item xs={2}>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Button variant={"contained"}
+                                                onClick={handleRobertaQuery}>
+                                            See The Suggested Label
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        {robertaLabel}
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                    </Grid>
                                 </Grid>
-                                <Grid item>
-                                    {robertaLabel}
-                                </Grid>
+                                <br/>
+                                <Typography variant="body1" component="div"> How similar is
+                                    this
+                                    counterfactual to the previous ones? </Typography>
+                                <Box m="auto" display="flex" alignItems="center"
+                                     justifyContent="center" sx={{width: 300}}>
+                                    <Slider
+                                        aria-label="Custom marks"
+                                        defaultValue={20}
+                                        getAriaValueText={valuetext}
+                                        step={10}
+                                        valueLabelDisplay="auto"
+                                        marks={marks}
+                                        onChange={handleChange}
+                                    />
+                                </Box>
                             </Grid>
                         </Box>
-                        <Box sx={{ border: 1 , borderRadius: '4px', padding: 3, borderColor: 'grey.500'}}>
-                            <Typography variant="body1" component="div"> How similar is this
-                                counterfactual to the previous ones? </Typography>
-                            <Box m="auto" display="flex" alignItems="center"
-                                 justifyContent="center" sx={{width: 300}}>
-                                <Slider
-                                    aria-label="Custom marks"
-                                    defaultValue={20}
-                                    getAriaValueText={valuetext}
-                                    step={10}
-                                    value={similarity}
-                                    valueLabelDisplay="auto"
-                                    marks={marks}
-                                    onChange={handleChange}
-                                />
-                            </Box>
-                        </Box>
+
+
                         <Button variant={"contained"} onClick={handleSubmit}>
                             Submit
                         </Button>
