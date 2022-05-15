@@ -34,7 +34,7 @@ app.add_middleware(
 data = pd.read_csv(f"data/NLI/poly_cfs/train_cf.csv")
 grouped_data = data.groupby(["sentence1", "sentence2"])[["gold_label"]].count()
 poly = DynamicPolyjuice()
-poly.suggest_single_sentence("", "", ["lexical"], 0, 0)
+poly.suggest_single_sentence("start.", "end.", ["lexical"], 0, 0)
 
 
 @app.get("/data-count")
@@ -44,13 +44,8 @@ def get_data_length() -> int:
 
 
 @app.get("/ask-poly")
-def get_data_length(sentence1: str, sentence2: str, codes: str, start_idx: str, end_idx: str) -> int:
-    codes = json.loads(codes)
-    q_codes = []
-    for k, v in codes.items():
-        if v:
-            q_codes.append(k)
-    print(q_codes)
+def get_data_length(sentence1: str, sentence2: str, code: str, start_idx: str, end_idx: str) -> int:
+    q_codes = [code]
     return poly.suggest_single_sentence(sentence1, sentence2, q_codes, int(start_idx), int(end_idx))
 
 
@@ -98,7 +93,6 @@ def upload_embeddings():
     # join the two dataframes
     response = records_df.join(embeddings_df, on=None).reset_index(drop=True).drop(
         columns=['i'])
-    print(response)
     return response.to_dict(orient="records")
 
 

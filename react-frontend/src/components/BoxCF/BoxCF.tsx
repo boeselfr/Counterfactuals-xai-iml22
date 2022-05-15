@@ -5,7 +5,15 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Card from "@mui/material/Card";
 import Container from '@mui/material/Container';
-import {CardActions, CardContent, FormGroup, Switch, Typography} from "@mui/material";
+import {
+    CardActions,
+    CardContent,
+    FormGroup, InputLabel,
+    MenuItem,
+    Switch,
+    Typography
+} from "@mui/material";
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -35,17 +43,6 @@ interface Props {
     UpdateLabeled: any;
 }
 
-interface FormElements extends HTMLFormControlsCollection {
-    counterfactual: HTMLInputElement
-    cf_label: HTMLInputElement
-    similarity: HTMLInputElement
-}
-
-interface YourFormElement extends HTMLFormElement {
-    readonly elements: FormElements
-}
-
-
 const BoxCF: React.FunctionComponent<Props> = ({
                                                    sentence1,
                                                    sentence2,
@@ -59,37 +56,23 @@ const BoxCF: React.FunctionComponent<Props> = ({
     const [cflabel, setcflabel] = useState('Neutral')
     const [similarity, setsimilarity] = useState(50)
     const [selectSpan, setSpan] = useState([0, 0]);
-    const [codes, setCodes] = React.useState({
-        negation: false,
-        quantifier: false,
-        lexical: false,
-        resemantic: false,
-        insert: false,
-        // restructure: false,
-        shuffle: false
-    });
+    const [code, setCode] = useState("negation");
 
     const textArea = useRef<any>(null);
 
     const handleSelect = () => {
-        console.log(textArea.current);
         let textVal = textArea.current;
         if (textVal) {
             let cursorStart = textVal.selectionStart;
             let cursorEnd = textVal.selectionEnd;
-            console.log(cursorStart);
-            console.log(cursorEnd);
             setSpan([cursorStart, cursorEnd]);
         }
     }
 
     const handleSuggest = () => {
-        console.log(JSON.stringify(codes))
-
-        let predicted = queryBackendStr(`ask-poly?sentence1=${sentence1}&sentence2=${cf}&codes=${JSON.stringify(codes)}&start_idx=${selectSpan[0]}&end_idx=${selectSpan[1]}`).then((response) => {
+        queryBackendStr(`ask-poly?sentence1=${sentence1}&sentence2=${cf}&code=${code}&start_idx=${selectSpan[0]}&end_idx=${selectSpan[1]}`).then((response) => {
             setCF(response);
         });
-        console.log(predicted)
     }
 
     const handleSubmit = () => {
@@ -132,7 +115,6 @@ const BoxCF: React.FunctionComponent<Props> = ({
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
         }).then(UpdateLabeled())
-        // trigger an update of the labeled list as there is a new entry now:
 
     }
 
@@ -155,22 +137,14 @@ const BoxCF: React.FunctionComponent<Props> = ({
         setsimilarity(newValue as number);
     };
 
-    const handleCode = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCodes({
-            ...codes,
-            [event.target.name]: event.target.checked,
-        });
+    const handleCode = (event: SelectChangeEvent) => {
+        setCode(event.target.value);
     };
 
     const codesItems = []
-    for (const [key, value] of Object.entries(codes)) {
-        codesItems.push(<FormControlLabel
-            control={
-                <Switch checked={value} onChange={handleCode}
-                        name={key}/>
-            }
-            label={key}
-        />)
+    const codeOptions = ["negation", "quantifier", "lexical", "resemantic", "insert", "shuffle", "restructure"]
+    for (const c of codeOptions) {
+        codesItems.push(<MenuItem value={c} key={c}>{c}</MenuItem>)
     }
 
 
@@ -190,15 +164,31 @@ const BoxCF: React.FunctionComponent<Props> = ({
                         noValidate
                         autoComplete="on"
                     >
-                        <div>
-                            <TextField fullWidth id="counterfactual" inputRef={textArea}
+                        <Grid container>
+                            <Grid item xs={10}>
+                                <TextField fullWidth id="counterfactual" inputRef={textArea}
                                        label="New Hypothesis"
-                                       defaultValue={suggestion[count]}
+                                       // defaultValue={suggestion[count]}
                                        onSelect={handleSelect}
                                        value={cf}
                                        onChange={(e) => setCF(e.target.value)}
                             />
-                        </div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <Select
+                                labelId="demo-simple-select-autowidth-label"
+                                id="demo-simple-select-autowidth"
+                                value={code}
+                                onChange={handleCode}
+                                autoWidth
+                                label="Manipulate"
+                            >
+                                {codesItems}
+                            </Select>
+                            </Grid>
+
+                        </Grid>
+
                         <Grid
                             container
                             spacing={0}
@@ -207,12 +197,8 @@ const BoxCF: React.FunctionComponent<Props> = ({
                             justifyContent="center"
 
                         >
-
-                            <FormGroup row>
-                                {codesItems}
-                            </FormGroup>
                             <Button variant={"contained"} onClick={handleSuggest}>
-                                Suggest
+                                Modify
                             </Button>
                             <br/>
 
@@ -253,7 +239,6 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                     defaultValue={20}
                                     getAriaValueText={valuetext}
                                     step={10}
-                                    value={similarity}
                                     valueLabelDisplay="auto"
                                     marks={marks}
                                     onChange={handleChange}
