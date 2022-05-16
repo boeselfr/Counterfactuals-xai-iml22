@@ -1,11 +1,9 @@
 import itertools
 from typing import List, Optional, Sequence, Union
 
-import benepar
 import numpy as np
 import pandas as pd
 import polyjuice
-import spacy
 import torch
 from nltk import ParentedTree, Tree
 from polyjuice import generations
