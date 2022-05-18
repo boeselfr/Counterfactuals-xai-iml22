@@ -180,7 +180,7 @@ def get_pj() -> PolyBetter:
     return _pj_cached
 
 
-def _replace_word_with_blank2(sentence: str, n_results: int) -> [str]:
+def _replace_word_with_blank2(sentence: str, n_results: int):
     """
     Blank constituents in a sentence. If the number of constituents * contorl codes is
     larger than number of desired results (n_results) sample the blanked sentences.
