@@ -6,9 +6,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y software-properties.common
 RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt-get install -y curl build-essential python3.9-dev python3.9-venv software-properties-common
-RUN ln -s /usr/bin/python3.9 /usr/bin/python
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.9 -
+RUN apt-get install -y curl build-essential python3.8-dev python3.8-venv software-properties-common
+RUN ln -s /usr/bin/python3.8 /usr/bin/python
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.8 -
 ENV PATH="${PATH}:/root/.poetry/bin"
 
 # RUN apt-get install -y git mysql mysql-client
@@ -22,6 +22,9 @@ ADD poetry.lock .
 RUN apt-get install -y libmysqlclient-dev
 RUN apt-get install -y git
 RUN CRYPTOGRAPHY_DONT_BUILD_RUST=1 poetry install
+
+ADD install_polyjuice.sh .
+RUN poetry run ./install_polyjuice.sh
 
 ADD backend backend
 ADD backend_launch.sh .
