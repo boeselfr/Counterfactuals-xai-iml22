@@ -21,7 +21,7 @@ dataset. Scores will be compared to baselines defined in the polyjuice paper.
 
 ### Users
 
-The users of this dashboard are lablers of counterfactuals, fluent english speakers, i.e. lay
+The users of this dashboard are labelers of counterfactuals, fluent english speakers, i.e. lay
 users.
 
 ### Datasets
@@ -41,26 +41,6 @@ counterfactually augmented dataset. The rough individual tasks involved are:
 - Implement reliable counterfactual generation with Polyjuice (and potentially using GPT-3).
 - Add realtime counterfactual generation by wiring things up in our backend.
 - Finetune roBERTa model by feeding in counterfactually augmented dataset.
-
-## Docker images
-
-For now our Docker setup only seems to be compatible with Linux, because we don't know how to
-set up container networking on MacOS yet.
-
-TEMPORARY: This setup seems to be shaky -- we've gotten it to work sometimes. Sorry, we will debug this issue!
-Namely, we currently experience a problem where frontend isn't talking to backend for some reason.
-
-You can launch the front and backend docker images on Ubuntu via
-```
-docker run -d --rm -it --net=host springulum/frontend  # Listens on port 8000, connects to backend port 3000
-docker run -d --rm -it --net=host springulum/backend  # Listens on port 3000
-```
-
-You can then use the app by loading http://localhost:8000 in your web browser.
-
-Using --net=host, a *Linux-only option*, will automatically bind containers ports 3000 and 8000 to localhost.
-
-We haven't yet figured out how to bind these same container ports on MacOS (perhaps via Docker compose).
 
 - - -
 
@@ -135,53 +115,8 @@ Specify here the structure of you code and comment what the most important files
 │   ├── README.md
 │   ├── package-lock.json
 │   ├── package.json
-│   ├── public
-│   │   ├── favicon.ico
-│   │   ├── index.html
-│   │   ├── logo192.png
-│   │   ├── logo512.png
-│   │   ├── manifest.json
-│   │   └── robots.txt
 │   ├── src # app and typescript components
-│   │   ├── App.css
-│   │   ├── App.test.tsx
-│   │   ├── App.tsx
-│   │   ├── Visualization.tsx
-│   │   ├── backend
-│   │   │   ├── BackendQueryEngine.tsx
-│   │   │   └── json-decoder.ts
-│   │   ├── components
-│   │   │   ├── BasicLineChart
-│   │   │   │   ├── BasicLineChart.scss
-│   │   │   │   ├── BasicLineChart.tsx
-│   │   │   │   └── types.ts
-│   │   │   ├── BoxCF
-│   │   │   │   └── BoxCF.tsx
-│   │   │   ├── BoxPolyjuice
-│   │   │   │   └── BoxPolyjuice.tsx
-│   │   │   ├── BoxSentencePair
-│   │   │   │   └── BoxSentencePair.tsx
-│   │   │   ├── BoxTable
-│   │   │   │   └── BoxTable.tsx
-│   │   │   ├── DataPointComponent.tsx
-│   │   │   ├── EmbeddingPlot
-│   │   │   │   ├── EmbeddingPlot.css
-│   │   │   │   └── EmbeddingPlot.tsx
-│   │   │   ├── ScatterPlot
-│   │   │   │   ├── ScatterPlot.scss
-│   │   │   │   ├── ScatterPlot.tsx
-│   │   │   │   └── types.ts
-│   │   │   └── VarianceGraph
-│   │   │       ├── VarianceGraph.css
-│   │   │       ├── VarianceGraph.js
-│   │   │       └── VarianceGraph2.js
-│   │   ├── index.css
-│   │   ├── index.tsx
-│   │   ├── logo copy.svg
-│   │   ├── logo.svg
-│   │   ├── react-app-env.d.ts
-│   │   ├── reportWebVitals.ts
-│   │   ├── setupTests.ts
+|   |   ...
 │   │   ├── system.js
 │   │   ├── types # datatypes
 │   │   │   ├── DataArray.ts
@@ -207,7 +142,7 @@ Specify here the structure of you code and comment what the most important files
 
 python = ">=3.9,<3.11"
 
-## How to Run
+## How to Run Manually (see **Docker instructions** at bottom of README)
 
 1. Install poetry, a dependency management tool for Python, via the following command
 
@@ -224,9 +159,7 @@ python = ">=3.9,<3.11"
 
 3. Install Polyjuice from source: 
     ```bash
-    git clone git@github.com:tongshuangwu/polyjuice.git
-    cd polyjuice
-    pip install -e .
+    ./install_polyjuice.sh
     ```
 4. Launch the backend by running `./launch_backend.sh` OR navigate into backend folder and start backend
 
@@ -305,6 +238,9 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Extend walkthough and add manual toggle: [#da5e6d5f](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/da5e6d5fefac39e9e32f85c93466b189b82134de), [#cf9b26f7](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/cf9b26f787fd71f651745d1b191f9747108bcc4b)
   - [x] Add roBERTa suggested labels: [#bfbc35d8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/bfbc35d849d71a04c6c610eaefba0240a9d03a42)
   - [ ] Interactive blank selection for polyjuice selection: [#8](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/issues/8), currently still on a separate branch due to dependency issues [#e888fadf](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/commit/e888fadf154ca21777825aeab8988237d77189ce)
+- [ ] Week 11 & 12
+  - [x] Revamp docker containers, add better install instructions for polyjuice: !15
+  - [ ] Use different visual channels and modes of feedback for word tree visualization. (color, thickness, etc.)
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
@@ -349,5 +285,17 @@ Tags:
   6 (April 14): [Week 6 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week6)
 - Week 8 (April 28): [Week 8 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week8)
 - Week 10 (May 12): [Week 10 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week10)
-  - Use `springulum/frontend:week10` and `springulum/fronend:week10` Docker images.
+  - Use `springulum/frontend:week10` and `springulum/backend:week10` Docker images.
 
+## Launching the app with Docker
+
+For now our Docker setup is only compatible with Linux, because we don't know how to set up container networking on MacOS yet.
+
+You can launch the front and backend docker images on Ubuntu via
+```
+docker run -d --rm -it --net=host springulum/frontend:week10  # Listens on port 8000, connects to backend port 3000
+docker run -d --rm -it --net=host springulum/backend:week10  # Listens on port 3000
+```
+
+You can then use the app by loading http://localhost:8000 in your web browser.
+Using --net=host, a *Linux-only option*, will automatically bind containers ports 3000 and 8000 to localhost.
