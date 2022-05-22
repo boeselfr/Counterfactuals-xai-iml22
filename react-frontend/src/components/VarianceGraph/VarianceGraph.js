@@ -29,6 +29,21 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
 
+    const handleContradiction = (e) => {
+        setContradictionChecked(e.target.checked);
+        handleGraphLabels()
+    }
+
+    const handleEntailment = (e) => {
+        setEntailmentChecked(e.target.checked);
+        handleGraphLabels()
+    }
+
+    const handleNeutral = (e) => {
+        setNeutralChecked(e.target.checked);
+        handleGraphLabels()
+    }
+
     const handleGraphLabels = () => {
         var l = []
         // dirty
@@ -235,11 +250,11 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                 .join("circle")
                 .attr("cx", d => d.target.x)
                 .attr("cy", d => d.target.y)
-                .attr("fill", "#000000")
+                .attr("fill", "#521135")
                 //.attr("stroke", (d) => {
                 //    return '#' + Math.floor(16777215 * Math.sin(3 * Math.PI / (5 * (parseInt(d.target.level) + 1)))).toString(16);}
-                .attr('stroke', '#000000')
-                .attr("r", 2);
+                .attr('stroke', '#521135')
+                .attr("r", 1);
 
             let nodeG11 = svg.append("g")
                 .selectAll("circle")
@@ -247,9 +262,22 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                 .join("circle")
                 .attr("cx", d => d.source.x)
                 .attr("cy", d => d.source.y)
-                .attr("fill", "#000000")
-                .attr("stroke", '#000000')
-                .attr("r", 2);
+                .attr("fill", "#521135")
+                .attr("stroke", '#521135')
+                .attr("r", 1);
+
+            let nodeG = svg.append('g')
+                .attr('class', 'node')
+                .selectAll("path")
+                .data(linkk)
+                .join('path')
+                .attr("class", "link")
+                .attr("d", d3.linkHorizontal()
+                    .source(d => [d.xs, d.ys])
+                    .target(d => [d.xt, d.yt]))
+                .attr("stroke-width", 1)
+                .attr("opacity", 0.3)
+                .style("stroke", "#7c6daa")
 
 
             let nodeG2 = svg.append("g")
@@ -277,19 +305,8 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                 .text(d => d.source.id )
                 .attr("fill", '#000000');
 
-            let nodeG = svg.append('g')
-                .attr('class', 'node')
-                .selectAll("path")
-                .data(linkk)
-                .join('path')
-                .attr("class", "link")
-                .attr("d", d3.linkHorizontal()
-                    .source(d => [d.xs, d.ys])
-                    .target(d => [d.xt, d.yt]))
-                .attr("fill", "none")
-                .attr("stroke-opacity", 0.8)
-                .attr("stroke-width", 1)
-                .attr("stroke", '#000000');
+
+
         });
       }, [data]
   );
@@ -308,19 +325,19 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                     value="Neutral"
                     label="Neutral"
                     labelPlacement="end"
-                    control={<Checkbox checked={NeutralChecked} onChange={(e) => setNeutralChecked(e.target.checked).then(handleGraphLabels)} color="secondary" />
+                    control={<Checkbox checked={NeutralChecked} onChange={handleNeutral} color="secondary" />
                 }/>
                 <FormControlLabel
                     value="Entailment"
                     label="Entailment"
                     labelPlacement="end"
-                    control={<Checkbox checked={EntailmentChecked} onChange={(e) => setEntailmentChecked(e.target.checked).then(handleGraphLabels)} color="secondary" />
+                    control={<Checkbox checked={EntailmentChecked} onChange={handleEntailment} color="secondary" />
                 }/>
                 <FormControlLabel
                     value="Contradiction"
                     label="Contradiction"
                     labelPlacement="end"
-                    control={<Checkbox checked={ContradictionChecked} onChange={(e) => setContradictionChecked(e.target.checked).then(handleGraphLabels)} color="secondary" />
+                    control={<Checkbox checked={ContradictionChecked} onChange={handleContradiction} color="secondary" />
                 }/>
                 </FormGroup>
                 </FormControl>
