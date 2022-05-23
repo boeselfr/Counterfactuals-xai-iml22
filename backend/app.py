@@ -41,6 +41,7 @@ grouped_data = data.groupby(["sentence1", "sentence2"])[["gold_label"]].count()
 roberta_tokenizer = AutoTokenizer.from_pretrained('roberta-large-mnli')
 roberta_model = AutoModelForSequenceClassification.from_pretrained('roberta-large-mnli',
                                                                    num_labels=3)
+
 poly = DynamicPolyjuice()
 poly.suggest_single_sentence("start.", "end.", ["lexical"], 0, 0)
 
@@ -96,17 +97,35 @@ def upload_submitted_data(sentence1: str, sentence2: str):
 
 
 @app.get("/upload-submitted-graph", response_model=NLISubmissionDisplayGraph)
-def upload_submitted_graph(sentence1: str, sentence2: str):
+def upload_submitted_graph(sentence1: str, sentence2: str, labels: str):
     collation = collatex.core_classes.Collation()
     data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
-    # filter for lines with sentence1, sentence2 matching:
+    # filter for lines with sentence1, sentence2 matching: added label checking here
     matching_data = data[(data['sentence1'] == sentence1) & (data['sentence2'] == sentence2)]
+    # get gold label at this point:
+    if not matching_data.empty:
+        gold_label = matching_data['gold_label'].iloc[0]
+    else:
+        gold_label = ""
 
-    # add original as id = 0
-    collation.add_plain_witness(str(0), sentence2)
+    matching_data = matching_data[matching_data['suggestionRH_label'].apply(lambda a: a in labels)]
+
+    # add original as id = 0 only add original if label fits
+    collation_empty = True
+    if gold_label in labels:
+        collation.add_plain_witness(str(0), sentence2)
+        collation_empty = False
     # add all matching counterfactuals
-    for i, line in enumerate(matching_data['suggestionRH']):
-        collation.add_plain_witness(str(i + 1), line)
+    if not matching_data.empty:
+        for i, line in enumerate(matching_data['suggestionRH']):
+            collation.add_plain_witness(str(i + 1), line)
+            collation_empty = False
+
+    if labels == "":
+        collation.add_plain_witness(str(0), "Please select a label!")
+        collation_empty = False
+    elif collation_empty:
+        collation.add_plain_witness(str(0), "Nothing here yet!")
 
     # collate to find matching parts
     alignment_table = collatex.core_functions.collate(collation, near_match=True,
@@ -114,12 +133,12 @@ def upload_submitted_graph(sentence1: str, sentence2: str):
 
     # return a tangled tree:
     # e.g. ordered list of lists one list is a column from the collation table
-    graph = AlignmentGraph(alignment_table)
+    graph = AlignmentGraph(alignment_table, len(collation.witnesses))
 
-    return graph.levels_string
+    return [graph.levels_string, graph.occurrences]
 
 
-@app.get("/upload-embeddings-plot", response_model=NLIEmbeddingResponse)
+@app.get("/upload-embeddings-plot")
 def upload_embeddings():
     # for now just read in the file and create a scatterplot
     records = np.load("data/hidden_states.npz", allow_pickle=True)["records"]

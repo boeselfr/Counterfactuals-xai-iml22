@@ -52,13 +52,13 @@ export const queryBackendDisplayData = async (route: string): Promise<NLISubmiss
 }
 
 
-export const queryBackendDisplayDataGraph = async (route:string): Promise<NLISubmissionDisplayGraph> => {
+export const queryBackendDisplayDataGraph = async (route:string) => {
     const requestURL = `${BASE_URL}/${route}`;
     const data = await fetch(requestURL,
         {
             method: 'GET'
         }
-    ).then(response => response.json()).then(d => d as NLISubmissionDisplayGraph);
+    ).then(response => response.json()).then(d => [d[0] as NLISubmissionDisplayGraph, d[1]]);
     return data;
 }
 

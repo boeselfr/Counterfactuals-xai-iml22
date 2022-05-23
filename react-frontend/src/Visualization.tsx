@@ -225,6 +225,7 @@ const Visualization: React.FunctionComponent<Props> = ({
     const [cflabellist, setCFLabelList] = useState([]);
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
     const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplayGraph>([]);
+    const [CFOccurrences, setCFOccurrences] = useState({});
     const [GraphLabels, setGraphLabels] = useState(["Neutral","Entailment", "Contradiction"]);
 
     const [robertaLabel, setRobertaLabel] = useState('-');
@@ -251,8 +252,8 @@ const Visualization: React.FunctionComponent<Props> = ({
     const handleUpdateLabeled = () => {
         // update the counterfactual table
         queryBackendDisplayDataGraph(`upload-submitted-graph?sentence1=` + sentence1 + '&sentence2=' + sentence2 + '&labels=' + GraphLabels.toString()).then((response) => {
-            setCFLabeled(response);
-            // update the embeddings of the counterfactuals
+            setCFOccurrences(response[1]);
+            setCFLabeled(response[0]);
         })
     };
 
@@ -293,7 +294,7 @@ const Visualization: React.FunctionComponent<Props> = ({
 
                 <Grid item xs={6}>
                     <div className="demo_box_labeledtable">
-                        {CFLabeled && <VarianceGraph data={CFLabeled} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
+                        {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
                     </div>
                 </Grid>
                 <Grid item xs={6}>

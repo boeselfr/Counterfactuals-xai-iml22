@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Dict, Set
 from typing_extensions import TypedDict, NotRequired
 from pydantic import BaseModel
 
@@ -93,7 +93,8 @@ class NLISubmissionDisplayNode(TypedDict):
 class NLISubmissionDisplayLevel(BaseModel):
     __root__: List[NLISubmissionDisplayNode]
 
-
 class NLISubmissionDisplayGraph(BaseModel):
-    __root__: List[NLISubmissionDisplayLevel]
+    __root__: list
+
+
 

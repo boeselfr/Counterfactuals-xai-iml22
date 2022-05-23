@@ -24,7 +24,7 @@ const useD3 = (renderChartFn, dependencies) => {
 }
 
 // not ready to convert this to ts :(
-function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
+function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
     const [NeutralChecked, setNeutralChecked] = React.useState(true)
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
@@ -62,9 +62,8 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
 
     React.useEffect(handleGraphLabels, [NeutralChecked, EntailmentChecked, ContradictionChecked])
 
-
     const ref = useD3((svg) => {
-        console.log(data)
+
 
         svg.selectAll("*").remove();
         var levels = [[]]
@@ -258,7 +257,6 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
 
         linkks = new_linkks
 
-
         linkks.forEach((linkk) => {
             let nodeG1 = svg.append("g")
                 .selectAll("circle")
@@ -292,7 +290,9 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                     .source(d => [d.xs, d.ys])
                     .target(d => [d.xt, d.yt]))
                 .attr("stroke-width", 1)
-                .attr("opacity", 0.5)
+                //source is child here target is parent...
+                .attr("opacity", 0.1)
+                .style("opacity", d => occurrences[d.target.id.trim() + '_' + d.source.id.trim()]/occurrences['ALL_SENTENCES'])
                 .style("stroke", "#7c6daa")
 
 
@@ -305,8 +305,9 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                 .attr("class", "text")
                 .attr("x", d => d.target.x)
                 .attr("y", d => d.target.y - padding)
-                .text(d => d.target.id )
-                .attr("fill", '#000000');
+                .text(d => d.target.id.trim() )
+                .attr("fill", '#000000')
+                //.style("font-size", d => occurrences[d.target.id.trim()])
 
             // otherwise the last one gets remove as it is no source just a target
             let nodeG22 = svg.append("g")
@@ -318,11 +319,9 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                 .attr("class", "text")
                 .attr("x", d => d.source.x)
                 .attr("y", d => d.source.y - padding)
-                .text(d => d.source.id )
-                .attr("fill", '#000000');
-
-
-
+                .text(d => d.source.id.trim() )
+                .attr("fill", '#000000')
+                //.style("font-size", d => occurrences[d.target.id.trim()])
         });
       }, [data]
   );
