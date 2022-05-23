@@ -182,23 +182,24 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
         const padding = 3
         const node_height = 10
         const node_width = 5
-        const bundle_width = 5
+        const bundle_width = 10
         const level_y_padding = 3
-        const metro_d = 0
+        const metro_d = -1
         const c = 0
         const min_family_height = 0
 
+        // is zero
         nodes.forEach(n => n.height = (Math.max(1, n.bundles.length) - 1) * metro_d)
 
-        var x_offset = padding
+        var x_offset = 0
         var y_offset = padding
         levels.forEach(l => {
-            x_offset += l.bundles.length * bundle_width
+            //x_offset += l.bundles.length * bundle_width
+            x_offset += bundle_width
             y_offset += level_y_padding
             l.forEach((n, i) => {
                 n.x = n.level * node_width + x_offset
                 n.y = node_height + y_offset + n.height / 2
-
                 y_offset += node_height + n.height
             })
         })
@@ -235,6 +236,7 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
             l.c2 = c
         })
 
+
         const cluster = d3.cluster()
             .size([width, height]);
 
@@ -242,6 +244,20 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
         cluster(root);
         let oValues = Object.values(root)[0];
         let linkks = oValues.map(x => x.bundle.links);
+
+
+        //linkks has three times the same bundle for a bundle of three for example
+        // get unique links:
+        let new_linkks = [];
+        // go through and take unique ones:
+        linkks.forEach((linkk) => {
+            if (!new_linkks.includes(linkk)) {
+                new_linkks.push(linkk)
+            }
+        })
+
+        linkks = new_linkks
+
 
         linkks.forEach((linkk) => {
             let nodeG1 = svg.append("g")
@@ -276,7 +292,7 @@ function VarianceGraph ({data, setGraphLabels, UpdateLabeled})  {
                     .source(d => [d.xs, d.ys])
                     .target(d => [d.xt, d.yt]))
                 .attr("stroke-width", 1)
-                .attr("opacity", 0.3)
+                .attr("opacity", 0.5)
                 .style("stroke", "#7c6daa")
 
 
