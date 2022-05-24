@@ -277,6 +277,8 @@ const Visualization: React.FunctionComponent<Props> = ({
                                          gold_label={gold_label}
                                          incrCount={incrCount}
                                          decrCount={decrCount}
+                                         robertaLabel={robertaLabel}
+                                         setRobertaLabel={setRobertaLabel}
                         />
                     </div>
                 </Grid>
@@ -284,18 +286,20 @@ const Visualization: React.FunctionComponent<Props> = ({
                     <div className="demo_box_polyjuice">
                         <BoxPolyjuice suggestion={suggestion} setCount={setCfCount}
                                       count={cfCount}
-                                      sentence1={sentence1} sentence2={sentence2}
-                                      cf={cf} setCF={setCF}
+                                      sentence1={sentence1} sentence2={sentence2} gold_label={gold_label}
+                                      cf={cf} setCF={setCF} robertaLabel={robertaLabel}
+                                      setRobertaLabel={setRobertaLabel}
                                       mode={mode} UpdateLabeled={handleUpdateLabeled}/>
                     </div>
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                     <div className="demo_box_labeledtable">
                         {CFLabeled && <VarianceGraph2 data={CFLabeled}/>}
                     </div>
                 </Grid>
-                <Grid item xs={6}>
+
+                {/* <Grid item xs={6}>
                     <div className="demo_box_CF">
                         <BoxCF sentence1={sentence1}
                                sentence2={sentence2}
@@ -306,7 +310,7 @@ const Visualization: React.FunctionComponent<Props> = ({
                                mode={mode} UpdateLabeled={handleUpdateLabeled}
                         />
                     </div>
-                </Grid>
+                </Grid>  */}
             </Grid>
         </div>
     )

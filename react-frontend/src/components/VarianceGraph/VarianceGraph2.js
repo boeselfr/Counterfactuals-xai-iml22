@@ -267,8 +267,7 @@ function VarianceGraph2 ({data})  {
         <Container fixed>
           <Card elevation={3}>
             <CardContent>
-              <Typography variant="h4" component="div"> <strong>Step 3: </strong>
-                take a look at existing counterfactuals </Typography>
+              <Typography variant="h4" component="div"> Tree of Existing Hypotheses </Typography>
               <Divider/>
               <Box sx={{my: 3, mx: 2}}>
                 <div style={{height: 400, width: '100%'}}>
