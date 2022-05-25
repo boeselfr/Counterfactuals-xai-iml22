@@ -36,7 +36,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-data = pd.read_csv(f"data/NLI/poly_cfs/train_cf.csv")
+data = pd.read_csv(f"data/NLI/poly_cfs/train_cf4.csv")
+
 grouped_data = data.groupby(["sentence1", "sentence2"])[["gold_label"]].count()
 roberta_tokenizer = AutoTokenizer.from_pretrained('roberta-large-mnli')
 roberta_model = AutoModelForSequenceClassification.from_pretrained('roberta-large-mnli',

@@ -50,6 +50,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
 
     const handleUpdateSentence = () => {
         setCF(sentence2)
+        setCount(1)
     }
 
     useEffect(handleUpdateSentence, [sentence1])
@@ -90,7 +91,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
     };
 
     const decrSuggestion = () => {
-        if (count >= 1) {
+        if (count > 1) {
             setCount(count - 1)
         }
         UpdateLabeled()
