@@ -2,12 +2,16 @@ import collatex
 
 
 class AlignmentGraph:
-    def __init__(self, alignment_table: collatex.core_classes.AlignmentTable):
-        # initiates the graph from the tabl instance
+    def __init__(self, alignment_table: collatex.core_classes.AlignmentTable, n_sentences):
+        # initiates the graph from the table instance
+        self.sentences = n_sentences
         self.alignment_table = alignment_table
+        self.occurrences = dict()
+        self.occurrences["ALL_SENTENCES"] = self.sentences
         self.levels, self.levels_string = self.build_levels()
         # as d3 has problem with the same node name on different levels we add an index if a word occurs again
         self.levels, self.levels_string = self.remove_duplicate_names()
+
 
     def __getworddict(self, word, list):
         # find dict in list with id == word
@@ -40,7 +44,20 @@ class AlignmentGraph:
 
                     level.add_word(word)
 
-                    if parent is not None:
+                    if parent not in [None, '-', '', ' ']:
+                        # add an occurrence
+                        if parent + '_' + word in self.occurrences.keys():
+                            self.occurrences[parent + '_' + word] += 1
+                            self.occurrences[parent] += 1
+                        # create mapping but not parent
+                        elif parent in self.occurrences.keys():
+                            self.occurrences[parent + '_' + word] = 1
+                            self.occurrences[parent] += 1
+                        # need to add mapping and parent
+                        else:
+                            self.occurrences[parent + '_' + word] = 1
+                            self.occurrences[parent] = 1
+
                         level.add_parent(word, parent)
 
             if level.get_list() != []:

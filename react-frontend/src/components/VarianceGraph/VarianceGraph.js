@@ -6,6 +6,12 @@ import Box from "@mui/material/Box";
 import Container from '@mui/material/Container';
 import {CardActions, CardContent, CardHeader, Typography} from "@mui/material";
 import Card from "@mui/material/Card";
+import './VarianceGraph.css'
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormLabel from "@mui/material/FormLabel";
 
 const useD3 = (renderChartFn, dependencies) => {
     const ref = React.useRef();
@@ -18,9 +24,46 @@ const useD3 = (renderChartFn, dependencies) => {
 }
 
 // not ready to convert this to ts :(
-function VarianceGraph ({data})  {
-  const ref = useD3((svg) => {
-        console.log(data)
+function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
+    const [NeutralChecked, setNeutralChecked] = React.useState(true)
+    const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
+    const [ContradictionChecked, setContradictionChecked] = React.useState(true)
+
+    const handleContradiction = (e) => {
+        setContradictionChecked(e.target.checked);
+        handleGraphLabels()
+    }
+
+    const handleEntailment = (e) => {
+        setEntailmentChecked(e.target.checked);
+        handleGraphLabels()
+    }
+
+    const handleNeutral = (e) => {
+        setNeutralChecked(e.target.checked);
+        handleGraphLabels()
+    }
+
+    const handleGraphLabels = () => {
+        var l = []
+        // dirty
+        if (NeutralChecked) {
+            l.push("Neutral")
+        }
+        if (EntailmentChecked) {
+            l.push("Entailment")
+        }
+        if (ContradictionChecked) {
+            l.push("Contradiction")
+        }
+        setGraphLabels(l)
+        UpdateLabeled()
+    }
+
+    React.useEffect(handleGraphLabels, [NeutralChecked, EntailmentChecked, ContradictionChecked])
+
+    const ref = useD3((svg) => {
+
 
         svg.selectAll("*").remove();
         var levels = [[]]
@@ -37,258 +80,249 @@ function VarianceGraph ({data})  {
         }
 
 
-        const margins = {
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
+        var margins = {
+            top: 100,
+            bottom: 30,
+            left: 30,
+            right: 30
         };
 
         var height = 400;
-        var width = 200;
+        var width = 1000;
 
-        const totalWidth = width + margins.left + margins.right;
-        const totalHeight = height + margins.top + margins.bottom;
+        var totalWidth = width + margins.left + margins.right;
+        var totalHeight = height + margins.top + margins.bottom;
 
-        //let svg;
-        //svg = d3.select('body')
-        svg.append('svg')
+        svg
+            .append('svg')
             .attr('width', totalWidth)
             .attr('height', totalHeight);
 
-        const graphGroup = svg.append('g')
+        var graphGroup = svg.append('g')
             .attr('transform', "translate(" + margins.left + "," + margins.top + ")");
 
-        levels.unshift([]);
+        // precompute level depth
+        levels.forEach((l, i) => l.forEach(n => n.level = i));
 
-// We add one pseudo node to every level to deal with parentless nodes
+        var nodes = levels.reduce(((a, x) => a.concat(x)), []);
+        var nodes_index = {};
+        nodes.forEach(d => nodes_index[d.id] = d);
+
+        // objectification
+        nodes.forEach(d => {
+            d.parents = (d.parents === undefined ? [] : d.parents).map(p => nodes_index[p])
+        })
+
+        // precompute bundles
         levels.forEach((l, i) => {
-          l.forEach((n, j) => {
-            n.level = i;
-            if (n.parents !== undefined) {
-              n.parent = n.parents[0];
-            } else {
-              n.parent = `pseudo-${i - 1}`;
-            }
-          });
-          l.unshift({
-            id: `pseudo-${i}`,
-            parent: i > 0 ? `pseudo-${i - 1}` : "",
-            level: i
-          });
-        });
+            var index = {}
+            l.forEach(n => {
+                if (n.parents.length == 0) {
+                    return
+                }
 
-        const nodes = levels.flat();
-
-        const colours = d3.scaleOrdinal()
-            .domain(nodes.filter(n => n.parents)
-                .map(n => n.parents.sort()
-                    .join("-")))
-            .range(d3.schemePaired);
-
-        function getLinks(nodes) {
-          return nodes
-              .filter(n => n.data.parents !== undefined)
-              .map(n => n.data.parents.map(p => ({
-                source: nodes.find(n => n.id === p),
-                target: n
-              })))
-              .flat();
-        }
-
-        function getPartners(nodes) {
-          return nodes
-              .filter(n => n.data.partners !== undefined)
-              .map(n => n.data.partners.map(p => ({
-                source: nodes.find(n => n.id === p),
-                target: n
-              })))
-              .flat();
-        }
-
-        const offsetPerPartner = 5;
-        const drawNodePath = d => {
-          const radius = 3;
-// The number of partners determines the node height
-// But when a node has only one partner,
-// treat it the same as when it has zero
-          const nPartners = (d.data.partners && d.data.partners.length > 1)
-              ? d.data.partners.length
-              : 0;
-
-// We want to centre each node
-          const straightLineOffset = (nPartners * offsetPerPartner) / 2;
-
-          const context = d3.path();
-          context.moveTo(-radius, 0);
-          context.lineTo(-radius, -straightLineOffset);
-          context.arc(0, -straightLineOffset, radius, -Math.PI, 0);
-          context.lineTo(radius, straightLineOffset);
-          context.arc(0, straightLineOffset, radius, 0, Math.PI);
-          context.closePath();
-
-          return context + "";
-        };
-
-        const drawLinkCurve = (x0, y0, x1, y1, offset, radius) => {
-          const context = d3.path();
-          context.moveTo(x0, y0);
-          context.lineTo(x1 - 2 * radius - offset, y0);
-
-// If there is not enough space to draw two corners, reduce the corner radius
-          if (Math.abs(y0 - y1) < 2 * radius) {
-            radius = Math.abs(y0 - y1) / 2;
-          }
-
-          if (y0 < y1) {
-            context.arcTo(x1 - offset - radius, y0, x1 - offset - radius, y0 + radius, radius);
-            context.lineTo(x1 - offset - radius, y1 - radius);
-            context.arcTo(x1 - offset - radius, y1, x1 - offset, y1, radius);
-          } else if (y0 > y1) {
-            context.arcTo(x1 - offset - radius, y0, x1 - offset - radius, y0 - radius, radius);
-            context.lineTo(x1 - offset - radius, y1 + radius);
-            context.arcTo(x1 - offset - radius, y1, x1 - offset, y1, radius);
-          }
-          context.lineTo(x1, y1);
-          return context + "";
-        };
-
-        const partnershipsPerLevel = {};
-        const getPartnershipOffset = (parent, partner) => {
-          let partnershipId, level;
-          if (partner !== undefined) {
-            // On every level, every relationship gets its own offset. If a relationship
-            // spans multiple levels, the furthest level is chosen
-            level = Math.max(parent.depth, partner.level);
-            if (!partnershipsPerLevel[level]) {
-              partnershipsPerLevel[level] = [];
-            }
-            partnershipId = [parent.id, partner.id].sort().join("-");
-          } else {
-            level = parent.depth;
-            if (!partnershipsPerLevel[level]) {
-              partnershipsPerLevel[level] = [];
-            }
-            partnershipId = parent.id;
-          }
-
-// Assume that the partnership already has a slot assigned
-          const partnershipOffset = partnershipsPerLevel[level].indexOf(partnershipId);
-          if (partnershipOffset === -1) {
-            // Apparently not
-            return partnershipsPerLevel[level].push(partnershipId) - 1;
-          }
-          return partnershipOffset;
-        }
-
-        const lineRadius = 10;
-        const offsetStep = 10;
-        const linkFn = link => {
-          const thisParent = link.source;
-          const partnerId = link.target.data.parents.find(p => p !== thisParent.id);
-          const partners = thisParent.data.partners || [];
-
-// Let the first link start with this negative offset
-// But when a node has only one partner,
-// treat it the same as when it has zero
-          const startOffset = (partners.length > 1)
-              ? -(partners.length * offsetPerPartner) / 2
-              : 0;
-
-          const partner = partners.find(p => p.id === partnerId);
-
-
-          const nthPartner = partner !== undefined
-              ? partners.indexOf(partner)
-              : (partners || []).length;
-          const partnershipOffset = getPartnershipOffset(thisParent, partner);
-
-          return drawLinkCurve(
-              thisParent.y,
-              thisParent.x + startOffset + offsetPerPartner * nthPartner,
-              link.target.y,
-              link.target.x,
-              offsetStep * partnershipOffset,
-              lineRadius
-          );
-        };
-
-        function draw(root) {
-// Now every node has had it's position set, we can draw them now
-          const nodes = root.descendants()
-              .filter(n => !n.id.startsWith("pseudo-"));
-          const links = getLinks(nodes)
-              .filter(l => !l.source.id.startsWith("pseudo-"));
-
-          const link = graphGroup.selectAll(".link")
-              .data(links);
-          link.exit().remove();
-          link.enter()
-              .append("path")
-              .attr("class", "link")
-              .merge(link)
-              .attr("stroke", d => colours(d.target.data.parents.sort().join("-")))
-              .attr("d", linkFn);
-
-          const node = graphGroup.selectAll(".node")
-              .data(nodes);
-          node.exit().remove();
-          const newNode = node.enter()
-              .append("g")
-              .attr("class", "node");
-
-          newNode.append("path")
-              .attr("d", drawNodePath);
-          newNode.append("text")
-              .attr("dy", -3)
-              .attr("x", 6);
-
-          newNode.merge(node)
-              .attr("transform", d => `translate(${d.y},${d.x})`)
-              .selectAll("text")
-              .text(d => d.id);
-        }
-
-        const root = d3.stratify()
-            .parentId(d => d.parent)
-            (nodes);
-
-// Map the different sets of parents,
-// assigning each parent an array of partners
-        getLinks(root.descendants())
-            .filter(l => l.target.data.parents)
-            .forEach(l => {
-              const parentNames = l.target.data.parents;
-              if (parentNames.length > 1) {
-                const parentNodes = parentNames.map(p => nodes.find(n => n.id === p));
-
-                parentNodes.forEach(p => {
-                  if (!p.partners) {
-                    p.partners = [];
-                  }
-                  parentNodes
-                      .filter(n => n !== p && !p.partners.includes(n))
-                      .forEach(n => {
-                        p.partners.push(n);
-                      });
-                });
-              }
-            });
-
-// Take nodes with more partners first,
-// also counting the partners of the children
-        root
-            .sum(d => (d.value || 0) + (d.partners || []).length)
-            .sort((a, b) => b.value - a.value);
-
-        const tree = d3.tree()
-            .size([height, width])
-            .separation((a, b) => {
-              // More separation between nodes with many children
-              const totalPartners = (a.data.partners || []).length + (b.data.partners || []).length;
-              return 1 + (totalPartners / 8);
+                var id = n.parents.map(d => d.id).sort().join('--')
+                if (id in index) {
+                    index[id].parents = index[id].parents.concat(n.parents)
+                } else {
+                    index[id] = {
+                        id: id,
+                        parents: n.parents.slice(),
+                        level: i
+                    }
+                }
+                n.bundle = index[id]
             })
-        draw(tree(root))
+            l.bundles = Object.keys(index).map(k => index[k])
+            l.bundles.forEach((b, i) => b.i = i)
+        })
+
+        var links = []
+        nodes.forEach(d => {
+            d.parents.forEach(p => links.push({
+                source: d,
+                bundle: d.bundle,
+                target: p
+            }))
+        })
+
+        var bundles = levels.reduce(((a, x) => a.concat(x.bundles)), [])
+
+        // reverse pointer from parent to bundles
+        bundles.forEach(b => b.parents.forEach(p => {
+            if (p.bundles_index === undefined) {
+                p.bundles_index = {}
+            }
+            if (!(b.id in p.bundles_index)) {
+                p.bundles_index[b.id] = []
+            }
+            p.bundles_index[b.id].push(b)
+        }))
+
+        nodes.forEach(n => {
+            if (n.bundles_index !== undefined) {
+                n.bundles = Object.keys(n.bundles_index).map(k => n.bundles_index[k])
+            } else {
+                n.bundles_index = {}
+                n.bundles = []
+            }
+            n.bundles.forEach((b, i) => b.i = i)
+        })
+
+        links.forEach(l => {
+            if (l.bundle.links === undefined) {
+                l.bundle.links = []
+            }
+            l.bundle.links.push(l)
+        })
+
+        // layout
+        // TODO set
+        const padding = 3
+        const node_height = 10
+        const node_width = 5
+        const bundle_width = 10
+        const level_y_padding = 3
+        const metro_d = -1
+        const c = 0
+        const min_family_height = 0
+
+        // is zero
+        nodes.forEach(n => n.height = (Math.max(1, n.bundles.length) - 1) * metro_d)
+
+        var x_offset = 0
+        var y_offset = padding
+        levels.forEach(l => {
+            //x_offset += l.bundles.length * bundle_width
+            x_offset += bundle_width
+            y_offset += level_y_padding
+            l.forEach((n, i) => {
+                n.x = n.level * node_width + x_offset
+                n.y = node_height + y_offset + n.height / 2
+                y_offset += node_height + n.height
+            })
+        })
+
+        var i = 0
+        levels.forEach(l => {
+            l.bundles.forEach(b => {
+                b.x = b.parents[0].x + node_width + (l.bundles.length - 1 - b.i) * bundle_width
+                b.y = i * node_height
+            })
+            i += l.length
+        })
+
+        links.forEach(l => {
+            l.xt = l.target.x
+            l.yt = l.target.y + l.target.bundles_index[l.bundle.id].i * metro_d - l.target.bundles.length * metro_d / 2 + metro_d / 2
+            l.xb = l.bundle.x
+            l.xs = l.source.x
+            l.ys = l.source.y
+        })
+
+        // compress vertical space
+        var y_negative_offset = 0
+        levels.forEach(l => {
+            y_negative_offset += -min_family_height + d3.min(l.bundles, b => d3.min(b.links, link => (link.ys - c) - (link.yt + c))) || 0
+            l.forEach(n => n.y -= y_negative_offset)
+        })
+
+        // very ugly, I know
+        links.forEach(l => {
+            l.yt = l.target.y + l.target.bundles_index[l.bundle.id].i * metro_d - l.target.bundles.length * metro_d / 2 + metro_d / 2
+            l.ys = l.source.y
+            l.c1 = l.source.level - l.target.level > 1 ? node_width + c : c
+            l.c2 = c
+        })
+
+
+        const cluster = d3.cluster()
+            .size([width, height]);
+
+        const root = d3.hierarchy(links);
+        cluster(root);
+        let oValues = Object.values(root)[0];
+        let linkks = oValues.map(x => x.bundle.links);
+
+
+        //linkks has three times the same bundle for a bundle of three for example
+        // get unique links:
+        let new_linkks = [];
+        // go through and take unique ones:
+        linkks.forEach((linkk) => {
+            if (!new_linkks.includes(linkk)) {
+                new_linkks.push(linkk)
+            }
+        })
+
+        linkks = new_linkks
+
+        linkks.forEach((linkk) => {
+            let nodeG1 = svg.append("g")
+                .selectAll("circle")
+                .data(linkk)
+                .join("circle")
+                .attr("cx", d => d.target.x)
+                .attr("cy", d => d.target.y)
+                .attr("fill", "#521135")
+                //.attr("stroke", (d) => {
+                //    return '#' + Math.floor(16777215 * Math.sin(3 * Math.PI / (5 * (parseInt(d.target.level) + 1)))).toString(16);}
+                .attr('stroke', '#521135')
+                .attr("r", 1);
+
+            let nodeG11 = svg.append("g")
+                .selectAll("circle")
+                .data(linkk)
+                .join("circle")
+                .attr("cx", d => d.source.x)
+                .attr("cy", d => d.source.y)
+                .attr("fill", "#521135")
+                .attr("stroke", '#521135')
+                .attr("r", 1);
+
+            let nodeG = svg.append('g')
+                .attr('class', 'node')
+                .selectAll("path")
+                .data(linkk)
+                .join('path')
+                .attr("class", "link")
+                .attr("d", d3.linkHorizontal()
+                    .source(d => [d.xs, d.ys])
+                    .target(d => [d.xt, d.yt]))
+                .attr("stroke-width", 1)
+                //source is child here target is parent...
+                .attr("opacity", 0.1)
+                .style("opacity", d => occurrences[d.target.id.trim() + '_' + d.source.id.trim()]/occurrences['ALL_SENTENCES'])
+                .style("stroke", "#7c6daa")
+
+
+            let nodeG2 = svg.append("g")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", 2.5)
+                .selectAll("text")
+                .data(linkk)
+                .join("text")
+                .attr("class", "text")
+                .attr("x", d => d.target.x)
+                .attr("y", d => d.target.y - padding)
+                .text(d => d.target.id.trim() )
+                .attr("fill", '#000000')
+                //.style("font-size", d => occurrences[d.target.id.trim()])
+
+            // otherwise the last one gets remove as it is no source just a target
+            let nodeG22 = svg.append("g")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", 2.5)
+                .selectAll("text")
+                .data(linkk)
+                .join("text")
+                .attr("class", "text")
+                .attr("x", d => d.source.x)
+                .attr("y", d => d.source.y - padding)
+                .text(d => d.source.id.trim() )
+                .attr("fill", '#000000')
+                //.style("font-size", d => occurrences[d.target.id.trim()])
+        });
       }, [data]
   );
 
@@ -297,12 +331,36 @@ function VarianceGraph ({data})  {
           <Card elevation={3}>
             <CardContent>
               <Typography variant="h4" component="div"> <strong>Step 3: </strong>
-                take a look at existing counterfactuals </Typography>
+                take a look at existing hypotheses </Typography>
               <Divider/>
-              <Box sx={{my: 3, mx: 2}}>
-                <div style={{height: 400, width: '100%'}}>
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">Select the Hypotheses to display</FormLabel>
+                <FormGroup row>
+                <FormControlLabel
+                    value="Neutral"
+                    label="Neutral"
+                    labelPlacement="end"
+                    control={<Checkbox checked={NeutralChecked} onChange={handleNeutral} color="secondary" />
+                }/>
+                <FormControlLabel
+                    value="Entailment"
+                    label="Entailment"
+                    labelPlacement="end"
+                    control={<Checkbox checked={EntailmentChecked} onChange={handleEntailment} color="secondary" />
+                }/>
+                <FormControlLabel
+                    value="Contradiction"
+                    label="Contradiction"
+                    labelPlacement="end"
+                    control={<Checkbox checked={ContradictionChecked} onChange={handleContradiction} color="secondary" />
+                }/>
+                </FormGroup>
+                </FormControl>
+                <Divider/>
+              <Box sx={{my: 3, mx: 4, overflow:'auto'}}>
+                <div style={{height: 400, width: 2000}}>
                   <script src="https://d3js.org/d3.v5.js" charSet="utf-8"></script>
-                  <svg viewBox="0 0 400 400" ref={ref}/>
+                  <svg viewBox="0 0 400 2000" ref={ref}/>
                 </div>
               </Box>
             </CardContent>

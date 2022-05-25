@@ -12,7 +12,6 @@ import {
 import {NLISubmissionDisplay} from "./types/NLISubmissionDisplay";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
 import VarianceGraph from "./components/VarianceGraph/VarianceGraph";
-import VarianceGraph2 from "./components/VarianceGraph/VarianceGraph2";
 // import Image from 'react-native-image-resizer';
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 
@@ -226,6 +225,8 @@ const Visualization: React.FunctionComponent<Props> = ({
     const [cflabellist, setCFLabelList] = useState([]);
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
     const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplayGraph>([]);
+    const [CFOccurrences, setCFOccurrences] = useState({});
+    const [GraphLabels, setGraphLabels] = useState(["Neutral","Entailment", "Contradiction"]);
 
     const [robertaLabel, setRobertaLabel] = useState('-');
 
@@ -250,15 +251,16 @@ const Visualization: React.FunctionComponent<Props> = ({
     // initiate the labeled list of counterfactuals:
     const handleUpdateLabeled = () => {
         // update the counterfactual table
-        queryBackendDisplayDataGraph(`upload-submitted-graph?sentence1=` + sentence1 + '&sentence2=' + sentence2).then((response) => {
-            setCFLabeled(response);
-            // update the embeddings of the counterfactuals
+        queryBackendDisplayDataGraph(`upload-submitted-graph?sentence1=` + sentence1 + '&sentence2=' + sentence2 + '&labels=' + GraphLabels.toString()).then((response) => {
+            setCFOccurrences(response[1]);
+            setCFLabeled(response[0]);
         })
     };
+
     const initializeCF = () => {
         setCF(sentence2);
     }
-    useEffect(handleUpdateLabeled, [data])
+    useEffect(handleUpdateLabeled, [data, GraphLabels])
     useEffect(initializeCF, [sentence1])
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
@@ -292,7 +294,7 @@ const Visualization: React.FunctionComponent<Props> = ({
 
                 <Grid item xs={6}>
                     <div className="demo_box_labeledtable">
-                        {CFLabeled && <VarianceGraph2 data={CFLabeled}/>}
+                        {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
                     </div>
                 </Grid>
                 <Grid item xs={6}>
