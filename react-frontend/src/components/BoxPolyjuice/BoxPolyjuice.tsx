@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useRef, useState} from 'react';
+import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import {
@@ -46,6 +46,14 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
     const textArea = useRef<any>(null);
     const [selectSpan, setSpan] = useState([0, 0]);
     const [code, setCode] = useState("negation");
+
+
+    const handleUpdateSentence = () => {
+        setCF(sentence2)
+    }
+
+    useEffect(handleUpdateSentence, [sentence1])
+
 
     const handleSelect = () => {
         let textVal = textArea.current;
@@ -137,10 +145,8 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                             <Grid item xs={10}>
                                 <TextField fullWidth id="counterfactual" inputRef={textArea}
                                            label="New Hypothesis"
-                                           defaultValue={cf}
-                                           key={cf}
+                                           value={cf}
                                            onSelect={handleSelect}
-                                    // value={cf}
                                            onChange={(e) => setCF(e.target.value)}
                                 />
                             </Grid>
