@@ -242,6 +242,7 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Revamp docker containers, add better install instructions for polyjuice: !15
   - [ ] Use different visual channels and modes of feedback for word tree visualization. (color, thickness, etc.)
   - [x] Experiment with OpenAI GPT queries: !20
+  - [x] Re-do interaction workflow: !27
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
@@ -271,7 +272,7 @@ Finally, we defined a roadmap of upcoming tasks, which were discussed with the P
 **Week 10**: The progress this week included first making the dashboard walkthough more lay-user friendly by adding some more instructions and adding the option to manually toggle a walkthrough. Further, we added features to make developing counterfactuals more easy to the lay user, namely: automatically alter a user-selected part of the suggestion based on user-input keyword, add some text visualizations of the generated counterfactuals and finally add a roBERTa suggested label. Finally, we dockerized our application (see instructions below).
 
 **Week 12**: We added a new sentence tree visualization, replacing the old table of user submitted counterfactuals.
-We experimented with OpenAI counterfactual suggestions and improve the Polyjuice counterfactual suggestions.
+We experimented with OpenAI counterfactual suggestions and improve the Polyjuice counterfactual suggestions. Further, we reworked the visual interaction workflow of the UI to make the interaction more intuitive.
 
 ## Versioning
 
