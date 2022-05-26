@@ -19,6 +19,7 @@ const theme = createTheme({
     palette: {
         primary: {
             main: '#7c6daa',
+            light: '#e5e2ee'
         },
         secondary: {
             main: '#7f2c56',
@@ -81,21 +82,10 @@ return (
     <ThemeProvider theme={theme}>
             <Box sx={{width: '100%', typography: 'body1'}}>
                 <TabContext value={value}>
-                    {/* <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                        <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Dashboard" value="1"/>
-                                {/*<Tab label="Visualizations" value="2"/>*/}
-                        {/*</TabList>*/}
-                    {/*</Box> */}
                     <TabPanel value="1">{exampleData && <Visualization
                         data={exampleData}
                         incrCount={incrCount}
                         decrCount={decrCount}/>}</TabPanel>
-                    {/*<TabPanel value="2">*/}
-                    {/*    <div className='titleUMAP'>*/}
-                    {/*        {Embeddings && <EmbeddingPlot data={Embeddings}/>}*/}
-                    {/*    </div>*/}
-                    {/*</TabPanel>*/}
                 </TabContext>
             </Box>
     </ThemeProvider>

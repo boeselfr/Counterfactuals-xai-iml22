@@ -204,7 +204,7 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                     </Grid>
                                 </Grid>
                                 <br/>
-                                <Typography variant="body1" component="div"> How similar is
+                                {/* <Typography variant="body1" component="div"> How similar is
                                     this
                                     counterfactual to the previous ones? </Typography>
                                 <Box m="auto" display="flex" alignItems="center"
@@ -218,7 +218,7 @@ const BoxCF: React.FunctionComponent<Props> = ({
                                         marks={marks}
                                         onChange={handleChange}
                                     />
-                                </Box>
+                                </Box> */}
                             </Grid>
                         </Box>
 
