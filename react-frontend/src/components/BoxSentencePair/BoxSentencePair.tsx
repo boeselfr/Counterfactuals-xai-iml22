@@ -93,13 +93,17 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
                                 <Stack alignItems={"center"} justifyContent={"center"} direction="row" sx={{p: 1}}>
                                     <Box> <strong>Label</strong></Box>
                                         <Stack direction="row" spacing={3} sx={{p: 2}}>
-                                            <Box sx={{backgroundColor: cmap[0], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>  
+                                            {/* <Box sx={{backgroundColor: cmap[0], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>   */}
+                                            <Box sx={{backgroundColor: 'grey.500', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
                                                 Neutral
                                             </Box>
-                                            <Box sx={{backgroundColor: cmap[1], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                                            {/* <Box sx={{backgroundColor: cmap[1], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}> */}
+                                            <Box sx={{backgroundColor: 'grey.500', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+
                                                 Entailment  
                                             </Box>
-                                            <Box sx={{backgroundColor: cmap[2], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                                            {/* <Box sx={{backgroundColor: cmap[2], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}> */}
+                                            <Box sx={{backgroundColor: 'grey.500', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
                                                 Contradiction
                                             </Box>
                                         </Stack>
@@ -108,10 +112,6 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
 
                         </Stack>
 
-                        {/* <Stack spacing={2}>
-                            <Chip icon={<CheckIcon />} label={"Premise: " + sentence1} color="success"/>
-                            <Chip icon={<QuestionMarkIcon />} label={"Hypothesis: " + sentence2} color="secondary"/>
-                        </Stack> */}
                             <Button variant="contained" onClick={(e) => {incrCount(); getcmap(gold_label); setRobertaLabel('-')}}><ArrowForwardIosIcon/></Button>
                     </Stack>
                     </Box>
