@@ -13,6 +13,7 @@ uvicorn = "^0.17.6"
 collatex = "^2.2"
 Levenshtein = "^0.18.1"
 python-multipart = "^0.0.5"
+openai = "^0.19.0"
 
 [tool.poetry.dev-dependencies]
 jupyter = "^1.0.0"
