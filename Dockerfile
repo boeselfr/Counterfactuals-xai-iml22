@@ -6,6 +6,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
 RUN apt-get install -y software-properties.common
 RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get update
 RUN apt-get install -y curl build-essential python3.8-dev python3.8-venv software-properties-common
 RUN ln -s /usr/bin/python3.8 /usr/bin/python
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.8 -

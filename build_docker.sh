@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
-tag=test
-sudo docker build -t springulum/backend:$tag .
+no_cache="--no-cache"
+tag=week12
+sudo docker build $no_cache -t springulum/backend:$tag .
 cd react-frontend
-sudo docker build -t springulum/frontend:$tag .
-
+sudo docker build $no_cache -t springulum/frontend:$tag .
