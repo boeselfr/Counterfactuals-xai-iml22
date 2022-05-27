@@ -28,15 +28,15 @@ interface Props {
     setRobertaLabel: any;
 }
 
-const get_initial_cmap = (label: string) => {
+const get_cmap = (label: string) => {
     console.log(label)
-    if (label == 'Neutral'){
+    if (label == 'neutral'){
         return ['#bfdbc6', 'grey.200', 'grey.200']
     }
-    if (label == 'Entailment'){
+    if (label == 'entailment'){
         return ['grey.200', '#bfdbc6','grey.200']
     }
-    if (label == 'Contradiction'){
+    if (label == 'contradiction'){
         return ['grey.200', 'grey.200', '#bfdbc6']
     }
 }
@@ -51,36 +51,16 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
                                                              setRobertaLabel,
                                                          }: Props) => {
 
-
-    const [cmap, setcmap] = useState<string[]>(get_initial_cmap(gold_label) as string[])
-
-    function getcmap(label: string) {
-        console.log(label)
-        if (label == 'Neutral'){
-            setcmap(['#bfdbc6', 'grey.200', 'grey.200'])
-        }
-        if (label == 'Entailment'){
-            setcmap(['grey.200', '#bfdbc6','grey.200'])
-        }
-        if (label  == 'Contradiction'){
-            setcmap(['grey.200', 'grey.200', '#bfdbc6'])
-        }
-    }
-    // getcmap(gold_label)
-
     return (
         <Container fixed>
             <Card elevation={3}>
                 <CardContent>
                     <Typography variant="h4"> Original Sentence Pairs </Typography>
                     <Divider />
-                        {/* <Stack alignItems="center" justifyContent="center" spacing={2} direction="row" sx={{ p: 2, my: 2}}>
-                            <Button variant="contained" onClick={decrCount}>Previous Sentence Pair</Button>
-                            <Button variant="contained" onClick={incrCount}>Next Sentence Pair</Button>
-                        </Stack> */}
+
                     <Box sx={{ my: 4, mx: 2 }}>
                     <Stack alignItems="center" justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
-                        <Button variant="contained"  onClick={(e) => {decrCount(); getcmap(gold_label); setRobertaLabel('-')}}> <ArrowBackIosNewIcon /> </Button>
+                        <Button variant="contained"  onClick={(e) => {decrCount(); setRobertaLabel('-')}}> <ArrowBackIosNewIcon /> </Button>
                         <Stack alignItems={"flex"} justifyContent={"flex"} spacing={1} sx={{ my: 3, mx: 2, width: "80%"}}>
 
                             <Box sx={{backgroundColor: 'grey.200', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
@@ -93,17 +73,14 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
                                 <Stack alignItems={"center"} justifyContent={"center"} direction="row" sx={{p: 1}}>
                                     <Box> <strong>Label</strong></Box>
                                         <Stack direction="row" spacing={3} sx={{p: 2}}>
-                                            {/* <Box sx={{backgroundColor: cmap[0], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>   */}
-                                            <Box sx={{backgroundColor: 'grey.500', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                                            <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[0], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>  
                                                 Neutral
                                             </Box>
-                                            {/* <Box sx={{backgroundColor: cmap[1], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}> */}
-                                            <Box sx={{backgroundColor: 'grey.500', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                                            <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[1], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
 
                                                 Entailment  
                                             </Box>
-                                            {/* <Box sx={{backgroundColor: cmap[2], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}> */}
-                                            <Box sx={{backgroundColor: 'grey.500', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                                            <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[2], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
                                                 Contradiction
                                             </Box>
                                         </Stack>
@@ -112,7 +89,7 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
 
                         </Stack>
 
-                            <Button variant="contained" onClick={(e) => {incrCount(); getcmap(gold_label); setRobertaLabel('-')}}><ArrowForwardIosIcon/></Button>
+                            <Button variant="contained" onClick={(e) => {incrCount(); setRobertaLabel('-')}}><ArrowForwardIosIcon/></Button>
                     </Stack>
                     </Box>
                 </CardContent>

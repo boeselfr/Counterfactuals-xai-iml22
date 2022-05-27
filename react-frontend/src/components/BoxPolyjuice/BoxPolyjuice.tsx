@@ -190,9 +190,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                             <Grid item xs={10}>
                                 <TextField fullWidth id="counterfactual" inputRef={textArea}
                                         label="New Hypothesis"
-                                        defaultValue={cf}
-                                        // key={suggestion[count]}
-                                        key={cf}
+                                        value={cf}
                                         onSelect={handleSelect}
                                         onChange={(e) => {setCF(e.target.value); setRobertaLabel('-');}}
                                 />
