@@ -242,7 +242,7 @@ Document here the major milestones of your code and future planned steps.\
   - [x] Revamp docker containers, add better install instructions for polyjuice: !15
   - [ ] Use different visual channels and modes of feedback for word tree visualization. (color, thickness, etc.)
   - [x] Experiment with OpenAI GPT queries: !20
-  - [x] Re-do interaction workflow: !27
+  - [x] Re-do interaction workflow: !19
 
 Create a list subtask.\
 Open an issue for each subtask. Once you create a subtask, link the corresponding issue.\
@@ -291,7 +291,7 @@ Tags:
 - Week 8 (April 28): [Week 8 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week8)
 - Week 10 (May 12): [Week 10 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week10)
   - Use `springulum/frontend:week10` and `springulum/backend:week10` Docker images.
-- Week 12 (May 26):
+- Week 12 (May 26): [Week 12 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week12)
     - Use `springulum/frontend:week12` and `springulum/backend:week12` Docker images.  (TODO(steven): push to docker hub)
 
 ## Launching the app with Docker
