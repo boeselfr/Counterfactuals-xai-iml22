@@ -96,7 +96,7 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
         svg
             .append('svg')
             .attr('width', totalWidth)
-            .attr('height', totalHeight);
+            .attr('height', totalHeight)
 
         var graphGroup = svg.append('g')
             .attr('transform', "translate(" + margins.left + "," + margins.top + ")");
@@ -323,6 +323,23 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .attr("fill", '#000000')
                 //.style("font-size", d => occurrences[d.target.id.trim()])
         });
+
+
+        function handleZoom(e) {
+            d3.selectAll("svg g")
+                .attr("transform", e.transform)
+        }
+
+        let zoom = d3.zoom()
+            .scaleExtent([0.5, 6])
+            .on('zoom', handleZoom);
+        
+        function initZoom() {
+            d3.selectAll("svg")
+                .call(zoom)
+        }
+
+        initZoom()
       }, [data]
   );
 
@@ -357,7 +374,7 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 </FormGroup>
                 </FormControl>
                 <Divider/>
-              <Box sx={{my: 3, mx: 4, overflow:'auto'}}>
+              <Box sx={{my: 3, mx: 4}}>
                 <div style={{height: 400, width: 2000}}>
                   <script src="https://d3js.org/d3.v5.js" charSet="utf-8"></script>
                   <svg viewBox="0 0 400 2000" ref={ref}/>
