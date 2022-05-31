@@ -1,10 +1,8 @@
-Unnamed: 0	sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	suggestionRH	suggestionRH_label	estimated_similarity
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Neutral	50.0
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			You don't need to take any actions at the moment	Neutral	50.0
-	2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	Neutral			 The people are near a laptop	Entailment	50.0
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Entailment	50.0
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was on spending their week with a musical tour group	Neutral	50.0
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour group	Neutral	50.0
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour groupdfdsfd	Neutral	50.0
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			hiwhi	Neutral	50.0
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			hiwhi	Neutral	40.0
+Unnamed: 0	sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	suggestionRH	suggestionRH_label
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Neutral
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			You don't need to take any actions at the moment	Neutral
+	2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	Neutral			 The people are near a laptop	Entailment
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Entailment
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was on spending their week with a musical tour group	Neutral
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour group	Neutral
+	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour groupdfdsfd	Neutral

@@ -39,8 +39,7 @@ class NLIDataSubmission(TypedDict):
     suggestionRP_label: str
     suggestionRH: str
     suggestionRH_label: str
-    estimated_similarity: float
-
+    
 
 class NLISubmissionDisplayPoint(TypedDict):
     Neutral: str
