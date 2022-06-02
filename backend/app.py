@@ -20,7 +20,7 @@ import pickle
 import collatex
 
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-from roberta_inference import roberta_inference
+from roberta_inference  import roberta_inference, roberta_probability
 
 app = FastAPI(
     title="Interactive Counterfactual Generation",
@@ -160,11 +160,19 @@ async def submit_data(data_row: NLIDataSubmission):
     """
     Function receives a new submitted counterfactual and updates it in the submitted tsv file to store.
     """
-
+    print(data_row)
+    prob_dict = roberta_probability(data_row["sentence1"], data_row["suggestionRH"], roberta_tokenizer, roberta_model)
+    print(prob_dict)
     # read in the current tsv as well to remove if duplicated
     old_data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
 
     new_data = pd.DataFrame.from_dict([data_row])
+
+    new_data['Neutral'] = [prob_dict['NEUTRAL']]
+    new_data['Entailment'] = [prob_dict['ENTAILMENT']]
+    new_data['Contradiction'] = [prob_dict['CONTRADICTION']]
+
+    print(new_data)
     # we handle the duplicates here:
     data = pd.concat([old_data, new_data], ignore_index=True).replace('', np.nan, regex=True,
                                                                       inplace=False)
