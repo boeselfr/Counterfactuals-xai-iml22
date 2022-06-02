@@ -255,8 +255,6 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
         })
 
         linkks = new_linkks
-
-        console.log(svg)
             // create a tooltip
         var current_position = [0,0]
         var tool_tip = d3tip()
@@ -270,7 +268,7 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
           // Offset tooltip left instead of right
           // Input the title, and include the div with an id of #tipDi
             .html(
-                "<p><strong>The man singing was not spending their week with a musical tour group</strong></p><div id='tipDiv'></div>")
+                "<p><strong>The man singing was not spending their week with a musical tour group</strong></p><center><div id='tipDiv'></div></center>")
             .offset([-100, 150])
 
 
@@ -289,13 +287,13 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
             current_position = d3.pointer(this);
             tool_tip.show(d, this);
             var tipSVG = d3.select("#tipDiv")
-             .append("svg")
-             .attr("width", 150)
-             .attr("height", 60);
+                .append("svg")
+                .attr("width", 150)
+                .attr("height", 60);
             data = [{"Label": "Entailment",
                 "Value": 0.7}, {"Label": "Neutral",
                 "Value": 0.1},{"Label": "Contradiction",
-                "Value": 0.2}]
+                "Value": 0.2}];
 
             var x = d3.scaleLinear()
                 .domain([0, 1])
@@ -306,7 +304,8 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .domain(data.map(function(d) { return d.Label; }))
                 .padding(.1);
             const colorpalette =
-                {"Entailment": "green", "Neutral": "blue","Contradiction": "red"}
+                {"Entailment": "#4caf50", "Neutral": "#03a9f4","Contradiction": "#ef5350"}
+
 
             tipSVG.selectAll("myRect")
                 .data(data)
@@ -317,15 +316,16 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .attr("width", function(d) { return x(d.Value); })
                 .attr("height", y.bandwidth() )
                 .attr("fill", function(d) {return colorpalette[d.Label]})
+                .attr("opacity", function(d) {return d.Value})
             // bar chart in the tip
             tipSVG.append("text")
                 .text("Entailment")
                 .attr("x", 5)
-                .attr("y", 15)
+                .attr("y", 16)
             tipSVG.append("text")
                 .text("Neutral")
                 .attr("x", 5)
-                .attr("y", 35)
+                .attr("y", 36)
             tipSVG.append("text")
                 .text("Contradiction")
                 .attr("x", 5)
@@ -364,7 +364,10 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .attr("cy", d => d.source.y)
                 .attr("fill", "#521135")
                 .attr("stroke", 'none')
-                .attr("r", 1.5);
+                .attr("r", 1.5)
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on('mouseleave', mouseleave)
 
             let nodeG = svg.append('g')
                 .attr('class', 'node')
@@ -410,18 +413,6 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .attr("fill", '#000000')
                 //.style("font-size", d => occurrences[d.target.id.trim()])
         });
-
-
-
-        var Tooltip = svg
-            .append("text")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
 
         function handleZoom(e) {
             d3.selectAll("svg g")
