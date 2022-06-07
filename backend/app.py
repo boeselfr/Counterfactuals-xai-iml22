@@ -12,7 +12,6 @@ import csv
 import codecs
 from io import StringIO
 
-from easy_polyjuice import DynamicPolyjuice
 from pydantic_models.nli_data_point import NLIDataResponse, NLIDataPoint, NLIDataSubmission, \
     NLISubmissionDisplay, NLIEmbeddingResponse, NLISubmissionDisplayGraph
 from typing import Callable
@@ -43,8 +42,12 @@ roberta_tokenizer = AutoTokenizer.from_pretrained('roberta-large-mnli')
 roberta_model = AutoModelForSequenceClassification.from_pretrained('roberta-large-mnli',
                                                                    num_labels=3)
 
-poly = DynamicPolyjuice()
-poly.suggest_single_sentence("start.", "end.", ["lexical"], 0, 0)
+DEBUG = True
+
+if not DEBUG:  # Slow imports
+    from easy_polyjuice import DynamicPolyjuice
+    poly = DynamicPolyjuice()
+    poly.suggest_single_sentence("start.", "end.", ["lexical"], 0, 0)
 
 
 @app.get("/data-count")

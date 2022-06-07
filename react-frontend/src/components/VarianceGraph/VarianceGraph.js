@@ -388,9 +388,14 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             })
         }
 
+        const mouseleave = function(d) {
+            tool_tip.hide()
+            d3.select(this)
+                .style("stroke", "none")
+                .style("opacity", 0.8)
+        }
 
-        var mousemoveLink = function(d) {
-
+        const mousemoveLink = function(d) {
             current_position = d3.pointer(this);
             tool_tip.show(d, this);
             var tipSVG = d3.select("#tipDiv")
@@ -504,19 +509,43 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             })
         }
 
+        function drawNodes(linkk) {
+            let nodeG1 = svg.append("g")
+                .selectAll("circle")
+                .data(linkk)
+                .join("circle")
+                .attr("cx", d => d.target.x)
+                .attr("cy", d => d.target.y)
+                .attr("fill", "#521135")
+                //.attr("stroke", (d) => {
+                //    return '#' + Math.floor(16777215 * Math.sin(3 * Math.PI / (5 * (parseInt(d.target.level) + 1)))).toString(16);}
+                .attr('stroke', 'none')
+                .attr("r", 1.5)
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on('mouseleave', mouseleave)
 
-        var mouseleave = function(d) {
+            let nodeG11 = svg.append("g")
+                .selectAll("circle")
+                .data(linkk)
+                .join("circle")
+                .attr("cx", d => d.source.x)
+                .attr("cy", d => d.source.y)
+                .attr("fill", "#521135")
+                .attr("stroke", 'none')
+                .attr("r", 1.5)
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on('mouseleave', mouseleave)
+        }
+
+        linkks.forEach(drawNodes);
+
+        const mouseleaveLink = function(d){
             tool_tip.hide()
             d3.select(this)
-              .style("stroke", "none")
-              .style("opacity", 0.8)
-          }
-
-          var mouseleaveLink = function(d){
-              tool_tip.hide()
-              d3.select(this)
-                  .style("stroke", "#7c6daa")
-          }
+                .style("stroke", "#7c6daa")
+        }
 
         linkks.forEach((linkk) => {
             let nodeG1 = svg.append("g")
@@ -548,7 +577,9 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 .on("mouseover", mouseover)
                 .on("mousemove", mousemove)
                 .on('mouseleave', mouseleave)
+        })
 
+        linkks.forEach((linkk) => {
             let nodeG = svg.append('g')
                 .attr('class', 'node')
                 .selectAll("path")
@@ -615,8 +646,8 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
         <Container fixed>
           <Card elevation={3}>
             <CardContent>
-              <Typography variant="h4" component="div"> <strong>Take a look at existing Hypotheses</strong>
-                </Typography>
+              <Typography variant="h4" component="div">
+                Hypothesis Visualization </Typography>
               <Divider/>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Select the Hypotheses to display</FormLabel>

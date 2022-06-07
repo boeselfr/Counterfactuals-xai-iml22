@@ -75,13 +75,39 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
 
     useEffect(handleUpdateSentence, [sentence1])
 
+    const SNAP_TO_WORD_BOUNDARY = true;
 
     const handleSelect = () => {
-        let textVal = textArea.current;
-        if (textVal) {
-            let cursorStart = textVal.selectionStart;
-            let cursorEnd = textVal.selectionEnd;
+        let textInput = textArea.current;
+        console.log(textInput);
+        if (textInput) {
+            // Snap selections to the word boundary, if this option is enabled.
+            let singletonSelection: boolean = textInput.selectionStart === textInput.selectionEnd;
+            if (SNAP_TO_WORD_BOUNDARY && !singletonSelection) {
+                let value: string = textInput.value;
+                while (textInput.selectionStart > 0) {
+                    let leftNeighbor = value[textInput.selectionStart - 1];
+                    if (leftNeighbor !== ' ') {
+                        textInput.selectionStart -= 1;
+                    } else {
+                        break;
+                    }
+                }
+                while (textInput.selectionEnd < value.length) {
+                    let rightNeighbor = value[textInput.selectionEnd];
+                    if (rightNeighbor !== ' ') {
+                        textInput.selectionEnd += 1;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            let cursorStart = textInput.selectionStart;
+            let cursorEnd = textInput.selectionEnd;
             setSpan([cursorStart, cursorEnd]);
+        } else {
+            setSpan([0, 0]); // IDEA: set to null and disable polyjuice button?
         }
     }
 
@@ -89,7 +115,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
         const input_cf = cf;
         const input_cf_label = cflabel;
 
-        if (input_cf == '') {
+        if (input_cf === '') {
             alert('Please enter a counterfactual')
             return
         }
@@ -163,6 +189,11 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
         UpdateLabeled()
     };
 
+    const onCopyButtonClick = (newHypothesis: string) => {
+        let input = textArea.current;
+        input.value = newHypothesis;
+    }
+
 
     return (
         <Container fixed>
@@ -189,10 +220,29 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                         <Grid container>
                             <Grid item xs={10}>
                                 <TextField fullWidth id="counterfactual" inputRef={textArea}
-                                        label="New Hypothesis"
+                                           variant="standard"
+                                        label={<Typography variant="h4">New Hypothesis</Typography>}
                                         value={cf}
                                         onSelect={handleSelect}
                                         onChange={(e) => {setCF(e.target.value); setRobertaLabel('-');}}
+                                        sx={{
+                                            "& .MuiInputLabel-root": {
+                                                color: "black",
+                                                // "font-size": 10,
+                                            },
+                                            "& label.Mui-focused": {
+                                                // Override default styling,
+                                                // Which change the label to be smaller font
+                                                color: "black",
+                                            },
+                                            "& .MuiOutlinedInput-input": {
+                                              "&::selection": {
+                                                  color: "white",
+                                                  background: "purple",
+                                              }
+                                            }
+                                        }}
+                                        inputProps={{fontSize: 30}}
                                 />
                             </Grid>
                             <Grid item xs={2}>
@@ -218,7 +268,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                             justifyContent="center"
                         >
                             <Button variant={"contained"} onClick={handleSuggest}>
-                                Automatically Modify Selected Area
+                                🤖  Automatically Modify Selected Area
                             </Button>
                         </Grid>
 
@@ -231,7 +281,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                             <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             >
-                            <Typography> <strong>Automatically Generated Suggestions:</strong> </Typography>
+                            <Typography> <strong>🤖    Hypothesis Suggestions</strong> </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                             <Box sx={{
@@ -261,28 +311,33 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                         
                         <Box sx={{backgroundColor: '#e0eaed', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
                         <Stack alignItems={"center"} justifyContent={"flex-start"} direction="row" spacing={4} sx={{p: 1}}>
-                                <Box> <strong>Label</strong> </Box>
+                                <Box> <strong>✍  Label the Hypothesis</strong> </Box>
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
+                                    sx={{}}
                                 >
                                     <FormControlLabel value="Neutral" control={<Radio/>}
-                                                      label="Neutral" onClick={(e) => {
+                                                      label="Neutral"
+                                                      sx={{"& .MuiFormControlLabel-label": {color: "gray"}}}
+                                                      onClick={(e) => {
                                         setcflabel('Neutral');
                                     }}/>
                                     <FormControlLabel value="Entailment" control={<Radio/>}
+                                                      sx={{"& .MuiFormControlLabel-label": {color: "green"}}}
                                                       label="Entailment" onClick={(e) => {
                                         setcflabel('Entailment');
                                     }}/>
                                     <FormControlLabel value="Contradiction" control={<Radio/>}
+                                                      sx={{"& .MuiFormControlLabel-label": {color: "red"}}}
                                                       label="Contradiction" onClick={(e) => {
                                         setcflabel('Contradiction');
                                     }}/>
                                 </RadioGroup>
-                                <Stack width={"10%"} spacing={1} alignItems={'center'}> 
+                                <Stack width={"70%"} spacing={1} alignItems={'center'}>
                                     <Button variant={"contained"} onClick={handleRobertaQuery}> 
-                                            Suggestion
+                                            🤖   Label Suggestion
                                     </Button>
                                     <Typography variant="body1">
                                         {robertaLabel.toLowerCase().charAt(0).toUpperCase() + robertaLabel.toLowerCase().slice(1)}
