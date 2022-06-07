@@ -20,8 +20,13 @@ import Grid from '@mui/material/Grid';
 
 import {Step} from "react-joyride";
 import {NLISubmissionDisplayGraph} from "./types/NLISubmissionDisplayGraph";
-// import useTour from "./useTour"; # old tour method
 import useTour from "./useTour_button";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Typography from "@mui/material/Typography";
+import Container from '@mui/material/Container';
+import Card from "@mui/material/Card";
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
 
 
 interface Props {
@@ -32,187 +37,213 @@ interface Props {
 
 // for the counterfatcual examples: probably need to make sure they cover all codes and possible changes in the labels
 const STEPS: Step[] = [
-    {
-        content: <h2>Welcome. Let us guide you through the process of generating
-            counterfactuals!</h2>,
-        locale: {skip: <strong aria-label="skip">Skip Introduction</strong>},
-        placement: "center",
-        target: "body",
-    },
-    {
-        content: (
+{
+    content: <h2>Welcome. Let us guide you through the process of generating
+        counterfactuals!</h2>,
+    locale: {skip: <strong aria-label="skip">Skip Introduction</strong>},
+    placement: "center",
+    target: "body",
+},
+{
+    content: (
+        <div>
+            <small>The sentence pair is given as a premise and hypothesis. The task of our
+                model is to determine, given a premise sentence,
+                whether a hypothesis sentence is true (entailment), false (contradiction)
+                or neither (neutral). See following examples.</small>
+        </div>),
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3> SELECT THE ORIGINAL SENTENCE PAIR</h3></div>)
+},
+{
+    content: (
+        <small>
             <div>
-                <small>The sentence pair is given as a premise and hypothesis. The task of our
-                    model is to determine, given a premise sentence,
-                    whether a hypothesis sentence is true (entailment), false (contradiction)
-                    or neither (neutral). See following examples.</small>
-            </div>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3> SELECT THE ORIGINAL SENTENCE PAIR</h3></div>)
-    },
-    {
-        content: (
-            <small>
-                <div>
-                    <strong> Premise: </strong> A soccer game with multiple males playing.
-                </div>
-                <div>
-                    <strong> Hypothesis: </strong> Some men are playing a sport.
-                </div>
-                <div>
-                    <strong> Label: </strong> Entailment
-                </div>
-            </small>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
-    },
-    {
-        content: (
-            <small>
-                <div>
-                    <strong> Premise: </strong> A man inspects the uniform of a figure in some
-                    East Asian country.
-                </div>
-                <div>
-                    <strong> Hypothesis: </strong> The man is sleeping.
-                </div>
-                <div>
-                    <strong> Label: </strong> Contradiction
-                </div>
-            </small>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
-    },
-    {
-        content: (
-            <small>
-                <div>
-                    <strong> Premise: </strong> An older and younger man smiling.
-                </div>
-                <div>
-                    <strong> Hypothesis: </strong> Two men are smiling and laughing at the
-                    cats playing on the floor.
-                </div>
-                <div>
-                    <strong> Label: </strong> Neutral
-                </div>
-            </small>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
-    }, {
-        content: (<small> Your task is to help us generate a <strong>Counterfactual
-            Dataset</strong> by creating
-            counterfactual examples. The idea of a counterfactual example is to
-            be <strong>similar</strong> to the originally presented
-            sentence pair, yet <strong>different in meaning</strong>. The new counterfactual
-            sentence pair can have a different label
-            than the original pair. For now we will focus on changing the hypothesis.
-            Let's have a look at some examples:
-        </small>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3>THE TASK</h3></div>)
-    },
-    {
-        content: (
-            <small>
-                <div>
-                    <strong> Premise: </strong> A soccer game with multiple males playing.
-                </div>
-                <div>
-                    <strong> Hypothesis: </strong> Some men are playing a <del>sport</del>
-                    <ins>instrument</ins>
-                    .
-                </div>
-                <div>
-                    <strong> Label: </strong>
-                    <del>Entailment</del>
-                    <ins>Contradiction</ins>
-                </div>
-            </small>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
-    }, {
-        content: (
-            <small>
-                <div>
-                    <strong> Premise: </strong> A soccer game with multiple males playing.
-                </div>
-                <div>
-                    <strong> Hypothesis: </strong> Some men are playing a sport <ins>for the
-                    first time</ins>.
-                </div>
-                <div>
-                    <strong> Label: </strong>
-                    <del>Entailment</del>
-                    Neutral
-                </div>
-            </small>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
-    }, {
-        content: (
-            <small>
-                <div>
-                    <strong> Premise: </strong> A soccer game with multiple males playing.
-                </div>
-                <div>
-                    <strong> Hypothesis: </strong> Some men are <del>playing</del>
-                    <ins>watching</ins>
-                    a sport.
-                </div>
-                <div>
-                    <strong> Label: </strong>
-                    <del>Entailment</del>
-                    <ins>Contradiction</ins>
-                </div>
-            </small>),
-        placement: "top",
-        target: ".demo_box_sentencepair",
-        title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
-    },
-    {
-        content: (<small> Draw inspiration from the polyjuice automatically generated
-            counterfactuals.
-            You can either: <div>(a) copy them directly below.</div>
-            <div>(b) in case the sentences are semantically or gramatically incorrect or
-                incomplete, copy and correct them below.
+                <strong> Premise: </strong> A soccer game with multiple males playing.
             </div>
-            <div>(c) insert novel counterfactuals, independent of the suggestion.</div>
-
+            <div>
+                <strong> Hypothesis: </strong> Some men are playing a sport.
+            </div>
+            <div>
+                <strong> Label: </strong> Entailment
+            </div>
         </small>),
-        placement: "top",
-        target: ".demo_box_polyjuice",
-        title: (<div><h3>POLYJUICE SUGGESTIONS</h3></div>)
-    },
-    {
-        content: (
-            <small> The previously submitted and already existing counterfactuals are listed
-                here as a reference.
-                The aim is to create a <strong>large, diverse set of
-                    counterfactuals</strong> (in terms of labels as well as sentence
-                structure)
-                for the model to get a more general understanding of language.
-                Therefore, aim not to create similar/duplicate hypotheses.
-            </small>),
-        placement: "top",
-        target: ".demo_box_labeledtable",
-        title: (<div><h3>COUNTERFACTUALS TABLE</h3></div>)
-    },
-    {
-        content: (<small> In this box, you can submit new counterfactuals by manually
-            improving/extending polyjuice suggested counterfactuals,
-            labeling them and finally giving them a similarity score. </small>),
-        placement: "top",
-        target: ".demo_box_CF",
-        title: (<div><h3>SUBMIT COUNTERFACTUALS</h3></div>)
-    }
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
+},
+{
+    content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> A man inspects the uniform of a figure in some
+                East Asian country.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> The man is sleeping.
+            </div>
+            <div>
+                <strong> Label: </strong> Contradiction
+            </div>
+        </small>),
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
+},
+{
+    content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> An older and younger man smiling.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> Two men are smiling and laughing at the
+                cats playing on the floor.
+            </div>
+            <div>
+                <strong> Label: </strong> Neutral
+            </div>
+        </small>),
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
+}, {
+    content: (<small> Your task is to help us generate a <strong>Counterfactual
+        Dataset</strong> by creating
+        counterfactual examples. The idea of a counterfactual example is to
+        be <strong>similar</strong> to the originally presented
+        sentence pair, yet <strong>different in meaning</strong>. The new counterfactual
+        sentence pair can have a different label
+        than the original pair. For now we will focus on changing the hypothesis.
+        Let's have a look at some examples:
+    </small>),
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3>THE TASK</h3></div>)
+},
+{
+    content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> A soccer game with multiple males playing.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> Some men are playing a <del>sport</del>
+                <ins>instrument</ins>
+                .
+            </div>
+            <div>
+                <strong> Label: </strong>
+                <del>Entailment</del>
+                <ins>Contradiction</ins>
+            </div>
+        </small>),
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
+}, {
+    content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> A soccer game with multiple males playing.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> Some men are playing a sport <ins>for the
+                first time</ins>.
+            </div>
+            <div>
+                <strong> Label: </strong>
+                <del>Entailment</del>
+                Neutral
+            </div>
+        </small>),
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
+}, {
+    content: (
+        <small>
+            <div>
+                <strong> Premise: </strong> A soccer game with multiple males playing.
+            </div>
+            <div>
+                <strong> Hypothesis: </strong> Some men are <del>playing</del>
+                <ins>watching</ins>
+                a sport.
+            </div>
+            <div>
+                <strong> Label: </strong>
+                <del>Entailment</del>
+                <ins>Contradiction</ins>
+            </div>
+        </small>),
+    placement: "top",
+    target: ".sentencepair_tour",
+    title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
+},
+{
+    content: (<small> Select a subset of the sentence and let Polyjuice change the selected part with one of the following prompts displayed in the following examples: <br/>
+        - <strong>negation</strong>:  A dog is <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>not</Typography> embraced by the woman.<br/>
+        - <strong>quantifier</strong>: <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>A dog is</Typography> 
+        <ArrowForwardIcon sx={{ fontSize: 10 }}/> 
+        <Typography display="inline" fontSize={14} bgcolor='#9cd3b2'>Three dogs are</Typography> embraced by the woman. <br/>
+        - <strong>shuffle</strong>: A <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>dog</Typography> 
+        <ArrowForwardIcon sx={{ fontSize: 10 }}/> 
+        <Typography display="inline" fontSize={14} bgcolor='#9cd3b2'>woman</Typography> is embraced by the <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>woman</Typography> 
+        <ArrowForwardIcon sx={{ fontSize: 10 }}/> 
+        <Typography display="inline" fontSize={14} bgcolor='#9cd3b2'>dog</Typography>. <br/>
+        - <strong>lexical</strong>: A dog is <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>embraced</Typography>
+        <ArrowForwardIcon sx={{ fontSize: 10 }}/> 
+        <Typography display="inline" fontSize={14} bgcolor='#9cd3b2'>attacked</Typography> by the woman. <br/>
+        - <strong>resemantic</strong>: A dog is <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>embraced by the woman</Typography>.
+        <ArrowForwardIcon sx={{ fontSize: 10 }}/> 
+        <Typography display="inline" fontSize={14} bgcolor='#9cd3b2'>wrapped in a blanket</Typography>. <br/>
+        - <strong>insert</strong>: A dog is embraced by the <Typography display="inline" fontSize={14} bgcolor='#9cd3b2'>little woman</Typography>. <br/>
+        - <strong>delete</strong>: A dog is embraced <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>by the woman</Typography>. <br/>
+        - <strong>restructure</strong>: A dog is <Typography display="inline" fontSize={14} bgcolor='#f9cbca'>embraced by</Typography> 
+        <ArrowForwardIcon sx={{ fontSize: 10 }}/> 
+        <Typography display="inline" fontSize={14} bgcolor='#9cd3b2'>hugging </Typography> the woman.
+    </small>),
+    placement: "top",
+    target: ".alter_hypothesis",
+    title: (<div><h3>ALTERING HYPOTHESIS</h3></div>)
+},
+{
+    content: (<small> Draw inspiration from the polyjuice automatically generated
+        counterfactuals.
+        You can either: <div><strong>(a)</strong> copy and paste it directly above.</div>
+        <div><strong>(b)</strong> in case the suggestion is semantically or gramatically incorrect or
+            incomplete, copy and correct it above.
+        </div>
+        <div><strong>(c)</strong> insert a novel hypothesis sentence, independent of the suggestion.</div>
+
+    </small>),
+    placement: "top",
+    target: ".polyjuice_suggestions",
+    title: (<div><h3>POLYJUICE SUGGESTIONS</h3></div>)
+},
+{
+    content: (<small> Here, you can submit a label for the hypothesis with respect to the premise. Even though it is preferred
+        that you enter the label according to your own language understanding, an automatically generated label can be requested for help. </small>),
+    placement: "top",
+    target: ".label_tour",
+    title: (<div><h3>LABEL HYPOTHESIS</h3></div>)
+},
+{
+    content: (
+        <small> The previously submitted and already existing counterfactuals are visualized
+            here as a reference.
+            The aim is to create a <strong>large, diverse set of
+                counterfactuals</strong> (in terms of labels as well as sentence
+            structure)
+            for the model to get a more general understanding of language.
+            Therefore, aim not do create similar/duplicate hypotheses.
+        </small>),
+    placement: "top",
+    target: ".demo_box_labeledtable",
+    title: (<div><h3>PREVIOUS HYPOTHESES VISUALIZATION</h3></div>)
+}
 ];
 
 const Visualization: React.FunctionComponent<Props> = ({
@@ -295,49 +326,38 @@ const Visualization: React.FunctionComponent<Props> = ({
                 {tour}
             </div>
 
-            <Grid container rowSpacing={1} columnSpacing={{xs: 1, sm: 2, md: 3}}>
-                <Grid item xs={6}>
-                    <div className="demo_box_sentencepair">
-                        <BoxSentencePair sentence1={sentence1}
-                                         sentence2={sentence2}
-                                         gold_label={gold_label}
-                                         incrCount={incrCount}
-                                         decrCount={decrCount}
-                                         robertaLabel={robertaLabel}
-                                         setRobertaLabel={setRobertaLabel}
-                        />
-                    </div>
-                </Grid>
-                <Grid item xs={6}>
-                    <div className="demo_box_polyjuice">
-                        <BoxPolyjuice suggestion={suggestion} setCount={setCfCount}
-                                      count={cfCount}
-                                      sentence1={sentence1} sentence2={sentence2} gold_label={gold_label}
-                                      cf={cf} setCF={setCF} robertaLabel={robertaLabel}
-                                      setRobertaLabel={setRobertaLabel}
-                                      mode={mode} UpdateLabeled={handleUpdateLabeled}/>
-                    </div>
-                </Grid>
+            <Container maxWidth={false}>
+                <Stack spacing={3}>
+                    <Card elevation={3}>
+                    <Stack
+                        direction="row"
+                        divider={<Divider orientation="vertical" flexItem/>} p={2} my={2} mx={2}>
+                        <Card className="demo_box_sentencepair" style={{ border: "none", boxShadow: "none" }}>
+                                <BoxSentencePair sentence1={sentence1}
+                                                sentence2={sentence2}
+                                                gold_label={gold_label}
+                                                incrCount={incrCount}
+                                                decrCount={decrCount}
+                                                robertaLabel={robertaLabel}
+                                                setRobertaLabel={setRobertaLabel}
+                                />
+                        </Card>
+                        <Card className="demo_box_polyjuice" style={{ border: "none", boxShadow: "none" }}>
+                                <BoxPolyjuice suggestion={suggestion} setCount={setCfCount}
+                                            count={cfCount}
+                                            sentence1={sentence1} sentence2={sentence2} gold_label={gold_label}
+                                            cf={cf} setCF={setCF} robertaLabel={robertaLabel}
+                                            setRobertaLabel={setRobertaLabel}
+                                            mode={mode} UpdateLabeled={handleUpdateLabeled}/>
+                        </Card>
+                    </Stack>
+                    </Card>
 
-                <Grid item xs={12}>
-                    <div className="demo_box_labeledtable">
-                        {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} probabilities={CFProbabilities} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
-                    </div>
-                </Grid>
-
-                {/* <Grid item xs={6}>
-                    <div className="demo_box_CF">
-                        <BoxCF sentence1={sentence1}
-                               sentence2={sentence2}
-                               cf={cf}
-                               gold_label={gold_label}
-                               robertaLabel={robertaLabel}
-                               setRobertaLabel={setRobertaLabel}
-                               mode={mode} UpdateLabeled={handleUpdateLabeled}
-                        />
-                    </div>
-                </Grid>  */}
-            </Grid>
+            <Card className="demo_box_labeledtable" elevation={3}>
+                {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} probabilities={CFProbabilities} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
+            </Card>
+            </Stack>
+            </Container>
         </div>
     )
 };

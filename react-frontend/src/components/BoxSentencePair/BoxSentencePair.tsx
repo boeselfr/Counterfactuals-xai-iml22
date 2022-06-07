@@ -53,48 +53,44 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
 
     return (
         <Container fixed>
-            <Card elevation={3}>
-                <CardContent>
-                    <Typography variant="h4"> Original Sentence Pairs </Typography>
-                    <Divider />
+            <Typography variant="h4"> Original Sentence Pairs </Typography>
+            <Divider />
+            <Box sx={{ my: 4, mx: 2 }}>
+            <Stack alignItems="center" justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
+                <Button variant="contained"  onClick={(e) => {decrCount(); setRobertaLabel('-')}}> <ArrowBackIosNewIcon /> </Button>
+                <div className="sentencepair_tour">
+                <Stack alignItems={"flex"} justifyContent={"flex"} spacing={1} sx={{ my: 3, mx: 2, width: "93%"}}>
 
-                    <Box sx={{ my: 4, mx: 2 }}>
-                    <Stack alignItems="center" justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
-                        <Button variant="contained"  onClick={(e) => {decrCount(); setRobertaLabel('-')}}> <ArrowBackIosNewIcon /> </Button>
-                        <Stack alignItems={"flex"} justifyContent={"flex"} spacing={1} sx={{ my: 3, mx: 2, width: "80%"}}>
-
-                            <Box sx={{backgroundColor: 'grey.200', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
-                                <Typography variant="body1"> <strong>Premise:</strong> {sentence1} </Typography>
-                            </Box>
-                            <Box sx={{backgroundColor: 'primary.light', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
-                                <Typography variant="body1"> <strong>Hypothesis:</strong> {sentence2} </Typography>
-                            </Box>
-                            <Box sx={{backgroundColor: '#e0eaed', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
-                                <Stack alignItems={"center"} justifyContent={"center"} direction="row" sx={{p: 1}}>
-                                    <Box> <strong>Label</strong></Box>
-                                        <Stack direction="row" spacing={3} sx={{p: 2}}>
-                                            <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[0], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>  
-                                                Neutral
-                                            </Box>
-                                            <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[1], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
-
-                                                Entailment  
-                                            </Box>
-                                            <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[2], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
-                                                Contradiction
-                                            </Box>
-                                        </Stack>
-                                </Stack>
-                                </Box>
-
-                        </Stack>
-
-                            <Button variant="contained" onClick={(e) => {incrCount(); setRobertaLabel('-')}}><ArrowForwardIosIcon/></Button>
-                    </Stack>
+                    <Box sx={{backgroundColor: 'grey.200', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                        <Typography variant="body1"> <strong>Premise:</strong> {sentence1} </Typography>
                     </Box>
-                </CardContent>
+                    <Box sx={{backgroundColor: 'primary.light', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                        <Typography variant="body1"> <strong>Hypothesis:</strong> {sentence2} </Typography>
+                    </Box>
+                    <Box sx={{backgroundColor: '#e0eaed', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                        <Stack alignItems={"center"} justifyContent={"center"} direction="row" sx={{p: 1}}>
+                            <Box> <strong>Label</strong></Box>
+                                <Stack direction="row" spacing={3} sx={{p: 2}}>
+                                    <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[0], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>  
+                                        Neutral
+                                    </Box>
+                                    <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[1], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
 
-            </Card>
+                                        Entailment  
+                                    </Box>
+                                    <Box sx={{backgroundColor: (get_cmap(gold_label) as string[])[2], border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                                        Contradiction
+                                    </Box>
+                                </Stack>
+                            {/* </div> */}
+                        </Stack>
+                        </Box>
+                </Stack>
+                </div>
+
+                    <Button variant="contained" onClick={(e) => {incrCount(); setRobertaLabel('-')}}><ArrowForwardIosIcon/></Button>
+            </Stack>
+            </Box>
         </Container>);
 };
 

@@ -644,7 +644,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
     return (
         <Container fixed>
-          <Card elevation={3}>
+          <Card elevation={0}>
             <CardContent>
               <Typography variant="h4" component="div">
                 Hypothesis Visualization </Typography>
