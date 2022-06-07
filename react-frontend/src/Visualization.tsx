@@ -226,6 +226,7 @@ const Visualization: React.FunctionComponent<Props> = ({
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
     const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplayGraph>([]);
     const [CFOccurrences, setCFOccurrences] = useState({});
+    const [CFProbabilities, setCFProbabilities] = useState({});
     const [GraphLabels, setGraphLabels] = useState(["Neutral","Entailment", "Contradiction"]);
 
     const [robertaLabel, setRobertaLabel] = useState('-');
@@ -239,6 +240,9 @@ const Visualization: React.FunctionComponent<Props> = ({
     const suggestionRP_label = data.map((d) => d.suggestionRP_label);
     const suggestionRH = data.map((d) => d.suggestionRH);
     const suggestionRH_label = data.map((d) => d.suggestionRH_label);
+    console.log("s1,2")
+    console.log(sentence1)
+    console.log(sentence2)
 
     // selecting the suggestion to work with based on the mode:
     let suggestion = [""];
@@ -252,6 +256,7 @@ const Visualization: React.FunctionComponent<Props> = ({
     const handleUpdateLabeled = () => {
         // update the counterfactual table
         queryBackendDisplayDataGraph(`upload-submitted-graph?sentence1=` + sentence1 + '&sentence2=' + sentence2 + '&labels=' + GraphLabels.toString()).then((response) => {
+            setCFProbabilities(response[2]);
             setCFOccurrences(response[1]);
             setCFLabeled(response[0]);
         })
@@ -259,6 +264,24 @@ const Visualization: React.FunctionComponent<Props> = ({
 
     const initializeCF = () => {
         setCF(sentence2);
+        // also submit the originakl sentnce one to the submission to get the roberta output for the visualization
+        // duplicates are getting filtered out in the backend
+        var submitted_label = (' ' + gold_label).slice(1);
+        console.log(submitted_label)
+        // uppercase first letter to be consistent
+        var data = {
+            "sentence1": sentence1,
+            "sentence2": sentence2,
+            "gold_label": gold_label,
+            "suggestionRH": sentence2,
+            "suggestionRH_label": submitted_label.charAt(0).toUpperCase() + submitted_label.slice(1)
+        };
+        console.log(data)
+        fetch("http://127.0.0.1:8000/submit-data", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        })
     }
     useEffect(handleUpdateLabeled, [data, GraphLabels, sentence1, sentence2])
     useEffect(initializeCF, [sentence1, sentence2])
@@ -297,7 +320,7 @@ const Visualization: React.FunctionComponent<Props> = ({
 
                 <Grid item xs={12}>
                     <div className="demo_box_labeledtable">
-                        {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} setGraphLabels={setGraphLabels} />}
+                        {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} probabilities={CFProbabilities} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
                     </div>
                 </Grid>
 

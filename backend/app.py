@@ -110,7 +110,11 @@ def upload_submitted_graph(sentence1: str, sentence2: str, labels: str):
         gold_label = ""
 
     matching_data = matching_data[matching_data['suggestionRH_label'].apply(lambda a: a in labels)]
+    print(f'matching data : '
+          f'{matching_data}')
 
+    print(f'labels: '
+          f'{labels}')
     # add original as id = 0 only add original if label fits
     collation_empty = True
     if gold_label in labels:
@@ -129,6 +133,7 @@ def upload_submitted_graph(sentence1: str, sentence2: str, labels: str):
         collation.add_plain_witness(str(0), "Nothing here yet!")
 
     # collate to find matching parts
+
     alignment_table = collatex.core_functions.collate(collation, near_match=True,
                                                       segmentation=False, output="table")
 
@@ -136,7 +141,27 @@ def upload_submitted_graph(sentence1: str, sentence2: str, labels: str):
     # e.g. ordered list of lists one list is a column from the collation table
     graph = AlignmentGraph(alignment_table, len(collation.witnesses))
 
-    return [graph.levels_string, graph.occurrences]
+    # return probabilities for each sentence as a nested dictionary
+    #list of probs is ["entailment, neutral, contradiction"]
+    probabilities = list()
+    if not matching_data.empty:
+        for index,row in matching_data.iterrows():
+            dic = dict()
+            dic["id"] = row["suggestionRH"]
+            dic["probs"] = [row["Entailment"],row["Neutral"],row["Contradiction"]]
+            probabilities.append(dic)
+            """probabilities[row["suggestionRH"]].append({"Label": "Neutral", "Value": row["Neutral"]})
+            probabilities[row["suggestionRH"]].append({"Label": "Entailment", "Value": row["Entailment"]})
+            probabilities[row["suggestionRH"]].append({"Label": "Contradiction", "Value": row["Contradiction"]})
+            probabilities[row["suggestionRH"]].append(row["Entailment"])
+            probabilities[row["suggestionRH"]].append(row["Neutral"])
+            probabilities[row["suggestionRH"]].append(row["Contradiction"])"""
+
+    print(f'probabilities: '
+          f'{probabilities}')
+
+
+    return [graph.levels_string, graph.occurrences, probabilities]
 
 
 @app.get("/upload-embeddings-plot")
@@ -176,7 +201,7 @@ async def submit_data(data_row: NLIDataSubmission):
     # we handle the duplicates here:
     data = pd.concat([old_data, new_data], ignore_index=True).replace('', np.nan, regex=True,
                                                                       inplace=False)
-    data.drop_duplicates(inplace=True)
+    data.drop_duplicates(["sentence1", "sentence2", "suggestionRH", "suggestionRH_label"],inplace=True, ignore_index=True)
 
     data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True,
                 sep="\t")
