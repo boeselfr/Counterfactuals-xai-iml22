@@ -337,6 +337,38 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
               .style("opacity", 0.8)
           }
 
+          function drawNodes(linkk) {
+              let nodeG1 = svg.append("g")
+                  .selectAll("circle")
+                  .data(linkk)
+                  .join("circle")
+                  .attr("cx", d => d.target.x)
+                  .attr("cy", d => d.target.y)
+                  .attr("fill", "#521135")
+                  //.attr("stroke", (d) => {
+                  //    return '#' + Math.floor(16777215 * Math.sin(3 * Math.PI / (5 * (parseInt(d.target.level) + 1)))).toString(16);}
+                  .attr('stroke', 'none')
+                  .attr("r", 1.5)
+                  .on("mouseover", mouseover)
+                  .on("mousemove", mousemove)
+                  .on('mouseleave', mouseleave)
+
+              let nodeG11 = svg.append("g")
+                  .selectAll("circle")
+                  .data(linkk)
+                  .join("circle")
+                  .attr("cx", d => d.source.x)
+                  .attr("cy", d => d.source.y)
+                  .attr("fill", "#521135")
+                  .attr("stroke", 'none')
+                  .attr("r", 1.5)
+                  .on("mouseover", mouseover)
+                  .on("mousemove", mousemove)
+                  .on('mouseleave', mouseleave)
+          }
+
+        linkks.forEach(drawNodes);
+
         linkks.forEach((linkk) => {
             let nodeG1 = svg.append("g")
                 .selectAll("circle")
@@ -365,7 +397,9 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .on("mouseover", mouseover)
                 .on("mousemove", mousemove)
                 .on('mouseleave', mouseleave)
+        })
 
+        linkks.forEach((linkk) => {
             let nodeG = svg.append('g')
                 .attr('class', 'node')
                 .selectAll("path")
@@ -427,8 +461,8 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
         <Container fixed>
           <Card elevation={3}>
             <CardContent>
-              <Typography variant="h4" component="div"> <strong>Step 3: </strong>
-                take a look at existing hypotheses </Typography>
+              <Typography variant="h4" component="div">
+                Hypothesis Visualization </Typography>
               <Divider/>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Select the Hypotheses to display</FormLabel>

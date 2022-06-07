@@ -199,7 +199,7 @@ const STEPS: Step[] = [
                     counterfactuals</strong> (in terms of labels as well as sentence
                 structure)
                 for the model to get a more general understanding of language.
-                Therefore, aim not do create similar/duplicate hypotheses.
+                Therefore, aim not to create similar/duplicate hypotheses.
             </small>),
         placement: "top",
         target: ".demo_box_labeledtable",
@@ -264,6 +264,7 @@ const Visualization: React.FunctionComponent<Props> = ({
     useEffect(initializeCF, [sentence1])
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
+
 
     return (
         <div className='demo-wrapper'>
