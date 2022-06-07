@@ -1,8 +1,18 @@
-Unnamed: 0	sentence1	sentence2	gold_label	suggestionRP	suggestionRP_label	suggestionRH	suggestionRH_label
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Neutral
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			You don't need to take any actions at the moment	Neutral
-	2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	Neutral			 The people are near a laptop	Entailment
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was spending their week with a musical tour group	Entailment
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was on spending their week with a musical tour group	Neutral
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour group	Neutral
-	1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	Neutral			 The man singing was not spending their week with a musical tour groupdfdsfd	Neutral
+sentence1	sentence2	gold_label	suggestionRH	suggestionRH_label	Neutral	Entailment	Contradiction
+1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	The 2 men are spending their week with a musical tour group.	Neutral	0.9976604	0.0014504628	0.0008890692
+1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	one man are spending their week with a musical tour group.	Entailment	0.9919945001602172	0.0053428490646183	0.0026626370381563
+1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	1 man is singing	Entailment	0.0157078597694635	0.9776066541671752	0.0066855531185865
+2 small children are in boat floating in the water.	Two children are rowing the boat to meet with their dad.	neutral	Two children are in the boat	Entailment	0.006582343019545	0.9916404485702516	0.0017771318089216
+2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	entailment	The people are near the laptop.	Entailment	0.0668005645275116	0.9045119881629944	0.0286874752491712
+2 small children are in boat floating in the water.	Two children are rowing the boat to meet with their dad.	neutral	Two children are rowing the boat to meet with their dad.	Neutral	0.987169623374939	0.0011451361933723	0.0116853015497326
+2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	entailment	The people are near the Asus laptop.	Entailment	0.0453936494886875	0.9336391687393188	0.0209672208875417
+2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	entailment	The people are near the Apple laptop.	Contradiction	0.002868260955438	0.0008885754505172	0.9962432384490968
+2 women are sitting and a man is standing while he eats.	The two women are wondering what the man is eating.	neutral	The two women are wondering what the man is eating.	Neutral	0.9969660639762878	0.0010091773001477	0.0020248412620276
+A BMX biker riding down a muddy trail wearing protective gear.	Biker in a helmet riding a trail	entailment	Biker in a helmet riding a trail	Entailment	0.3701500594615936	0.5961302518844604	0.0337196700274944
+A BMX biker shoots up into the air.	The bike is bright red.	neutral	The bike is bright red.	Neutral	0.9975778460502625	0.0010066985851153	0.0014154795790091
+A Beautiful young lady dancing on a loop	The woman is dancing for her boyfriend.	neutral	The woman is dancing for her boyfriend.	Neutral	0.9976338148117064	0.0010334872640669	0.0013326465850695
+A Chinese farmer is working in a field.	A Chinese farmer is being lazy and sleeping in a field	contradiction	A Chinese farmer is being lazy and sleeping in a field	Contradiction	0.0020772460848093	0.0004212887142784	0.9975014328956604
+A German shepherd biting the protected arm of an attack trainer.	A dog bites an arm.	entailment	A dog bites an arm.	Entailment	0.0113266883417963	0.9867430925369264	0.0019302444998174
+A Girl with long brown hair standing outside.	A girl has long light brown hair.	neutral	A girl has long light brown hair.	Neutral	0.220418781042099	0.7776856422424316	0.0018955809064209
+A Girl with long brown hair standing outside.	A girl has long light brown hair.	neutral	A girl has long brown hair.	Entailment	0.0045624393969774	0.9927343130111694	0.0027031986974179
+A Girl with long brown hair standing outside.	A girl has long light brown hair.	neutral	A girl has short brown hair.	Contradiction	0.0004122609097976	0.0002449394960422	0.9993427395820618

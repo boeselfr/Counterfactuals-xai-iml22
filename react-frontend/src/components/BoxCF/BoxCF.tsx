@@ -58,7 +58,7 @@ const BoxCF: React.FunctionComponent<Props> = ({
     const handleSubmit = () => {
         const input_cf = cf;
         const input_cf_label = cflabel;
-        const input_similarity = similarity;
+        //const input_similarity = similarity;
 
         if (input_cf == '') {
             alert('Please enter a counterfactual')
@@ -67,28 +67,20 @@ const BoxCF: React.FunctionComponent<Props> = ({
 
         console.log(input_cf)
         console.log(input_cf_label)
-        console.log(input_similarity)
+        //console.log(input_similarity)
 
         // create new data submission entry for backend:
-        const data = {
+        var data = {
             "sentence1": sentence1,
             "sentence2": sentence2,
             "gold_label": gold_label,
-            "suggestionRP": "",
-            "suggestionRP_label": "",
-            "suggestionRH": "",
-            "suggestionRH_label": "",
-            "estimated_similarity": similarity
-        }
-
+            "suggestionRH": input_cf,
+            "suggestionRH_label": input_cf_label
+        };
+        console.log('trying to log data')
+        console.log(data)
         // insert suggestion and labels depending on mode:
-        if (mode == "Hypothesis") {
-            data["suggestionRH"] = input_cf
-            data["suggestionRH_label"] = input_cf_label
-        } else if (mode == "Premise") {
-            data["suggestionRP"] = input_cf
-            data["suggestionRP_label"] = input_cf_label
-        }
+
 
         fetch("http://127.0.0.1:8000/submit-data", {
             method: "POST",
@@ -232,7 +224,6 @@ const BoxCF: React.FunctionComponent<Props> = ({
             </Card>
         </Container>
     )
-
 };
 
 export default BoxCF

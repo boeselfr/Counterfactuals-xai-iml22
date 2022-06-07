@@ -58,7 +58,7 @@ export const queryBackendDisplayDataGraph = async (route:string) => {
         {
             method: 'GET'
         }
-    ).then(response => response.json()).then(d => [d[0] as NLISubmissionDisplayGraph, d[1]]);
+    ).then(response => response.json()).then(d => [d[0] as NLISubmissionDisplayGraph, d[1], d[2]]);
     return data;
 }
 

@@ -25,7 +25,7 @@ const useD3 = (renderChartFn, dependencies) => {
 }
 
 // not ready to convert this to ts :(
-function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
+function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, UpdateLabeled})  {
     const [NeutralChecked, setNeutralChecked] = React.useState(true)
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
@@ -66,6 +66,7 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
     const ref = useD3((svg, current) => {
 
         svg.selectAll("*").remove();
+        d3.selectAll("#tipDiv").remove();
         var levels = [[]]
         if (typeof(data) != "undefined") {
           levels = data
@@ -255,26 +256,20 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
         })
 
         linkks = new_linkks
-            // create a tooltip
+        // create a tooltip
         var current_position = [0,0]
         var tool_tip = d3tip()
-            .attr("class", "d3-tip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
-          // If the mouse position is greater beyond ~ Kentucky/Missouri,
-          // Offset tooltip left instead of right
-          // Input the title, and include the div with an id of #tipDi
-            .html(
-                "<p><strong>The man singing was not spending their week with a musical tour group</strong></p><center><div id='tipDiv'></div></center>")
-            .offset([-100, 150])
-
-
-
+                .attr("class", "d3-tip")
+                .style("background-color", "white")
+                .style("border", "solid")
+                .style("border-width", "2px")
+                .style("border-radius", "5px")
+                .style("padding", "5px")
+                .html("<div id='tipDiv'></div>")
+                .offset([-70, 70]);
         // Call it as a function to our app-wide SVG
         svg.call(tool_tip);
+
 
         // Three function that change the tooltip when user hover / move / leave a cell
 
@@ -283,61 +278,251 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
               .style("stroke", "black")
               .style("opacity", 1)
           }
+
+        var mouseoverLink = function(d){
+            d3.select(this)
+              .style("stroke", "black")
+        }
+
         var mousemove = function(d) {
             current_position = d3.pointer(this);
             tool_tip.show(d, this);
             var tipSVG = d3.select("#tipDiv")
                 .append("svg")
-                .attr("width", 150)
-                .attr("height", 60);
-            data = [{"Label": "Entailment",
-                "Value": 0.7}, {"Label": "Neutral",
-                "Value": 0.1},{"Label": "Contradiction",
-                "Value": 0.2}];
+                .attr("width", 200)
+                .attr("height", 100);
+            // get id from circle and filter the dictionary by the id
+            const id = d3.select(this).attr("id")
+            var data = probabilities.map(a => Object.assign({}, a));
+            // copy the probabilities into data and filter
+            var index = data.length - 1;
 
-            var x = d3.scaleLinear()
-                .domain([0, 1])
-                .range([ 0, 150]);
+            while (index >= 0) {
+              if (!data[index]["id"].includes(" " + id) && !data[index]["id"].includes(id + " ")) {
+                data.splice(index, 1);
+              }
+              index -= 1;
+            }
+            if (data.length == 0){
+                tool_tip.hide()
+                return
+            }
 
-            var y = d3.scaleBand()
-                .range([ 0, 60 ])
-                .domain(data.map(function(d) { return d.Label; }))
-                .padding(.1);
+
             const colorpalette =
-                {"Entailment": "#4caf50", "Neutral": "#03a9f4","Contradiction": "#ef5350"}
+                {"Entailment": "#4caf50", "Neutral": "#03a9f4", "Contradiction": "#ef5350"}
 
 
-            tipSVG.selectAll("myRect")
-                .data(data)
-                .enter()
-                .append("rect")
-                .attr("x", x(0) )
-                .attr("y", function(d) { return y(d.Label); })
-                .attr("width", function(d) { return x(d.Value); })
-                .attr("height", y.bandwidth() )
-                .attr("fill", function(d) {return colorpalette[d.Label]})
-                .attr("opacity", function(d) {return d.Value})
-            // bar chart in the tip
-            tipSVG.append("text")
-                .text("Entailment")
-                .attr("x", 5)
-                .attr("y", 16)
-            tipSVG.append("text")
-                .text("Neutral")
-                .attr("x", 5)
-                .attr("y", 36)
-            tipSVG.append("text")
-                .text("Contradiction")
-                .attr("x", 5)
-                .attr("y", 55)
+            data.forEach((entry, index) => {
+                // Add the text to measure it
+                tipSVG.append("text")
+                    .attr("x", 0)
+                    .attr("y", () => {
+                        return 20 + index * 30
+                    })
+                    .text(entry["id"]);
+            })
+
+            // Save the dimensions of the text elements
+            tipSVG.selectAll("text")
+                    .data(data)
+                    .each(function (d) {
+                        d.bbox = this.getBBox();
+                    });
+
+            // Remove the text elements
+            d3.selectAll("tipDiv text").remove();
+
+            var tipWidth = 0
+            var tipHeight = 0
+
+            data.forEach(function (entry) {
+                tipWidth = Math.max(tipWidth, entry["bbox"]["width"]);
+                tipHeight = Math.max(tipHeight, entry["bbox"]["y"] + entry["bbox"]["height"]);
+                });
+
+            // now redo with measurements
+            tipSVG.attr("width", tipWidth + 10)
+                .attr("height", tipHeight + 5)
+
+            const xMargin = 4
+            const yMargin = 2
+            // recompute boxes to match
+
+            data.forEach((entry, index) => {
+                // Add the rect elements, these are placeholders
+                var x = d3.scaleLinear()
+                    .domain([0,1])
+                    .range([0,entry["bbox"]["width"]])
+
+                tipSVG.selectAll("myRect")
+                    .data(entry["probs"])
+                    .enter()
+                    .append("rect")
+                    .attr("x", function (d, i) {
+                        if (i == 0) {
+                            return x(0);
+                        } else if (i == 1) {
+                            return x(entry["probs"][0]);
+                        } else {
+                            return x(entry["probs"][0] + entry["probs"][1]);
+                        }
+                    })
+                    .attr("y", function (data) {
+                        return entry["bbox"]["y"] - yMargin
+                    })
+                    .attr("width", d => x(d))
+                    .attr("height", entry["bbox"]["height"] + 2*yMargin)
+                    .attr("fill", function (d, i) {
+                        if (i == 0) {
+                            return colorpalette["Entailment"];
+                        } else if (i == 1) {
+                            return colorpalette["Neutral"];
+                        } else {
+                            return colorpalette["Contradiction"];
+                        }
+                    })
+                    .attr("opacity", function (d) {
+                        return d * 0.2 + 0.4
+                    })
+                // Add the text
+                tipSVG.append("text")
+                    .attr("x", x(0))
+                    .attr("y", () => {
+                        return 20 + index * 30
+                    })
+                    .text(entry["id"]);
+            })
+        }
 
 
-          }
-          var mouseleave = function(d) {
+        var mousemoveLink = function(d) {
+
+            current_position = d3.pointer(this);
+            tool_tip.show(d, this);
+            var tipSVG = d3.select("#tipDiv")
+                .append("svg")
+                .attr("width", 200)
+                .attr("height", 100);
+            // get id from circle and filter the dictionary by the id
+            const parent = d3.select(this).attr("parent_id")
+            const child = d3.select(this).attr("child_id")
+            var data = probabilities.map(a => Object.assign({}, a));
+
+            // copy the probabilities into data and filter
+            var index = data.length - 1;
+
+            while (index >= 0) {
+              if (!data[index]["id"].includes(parent + " " + child)) {
+                data.splice(index, 1);
+              }
+              index -= 1;
+            }
+
+            if (data.length == 0){
+                tool_tip.hide()
+                return
+            }
+
+
+            const colorpalette =
+                {"Entailment": "#4caf50", "Neutral": "#03a9f4", "Contradiction": "#ef5350"}
+
+
+            data.forEach((entry, index) => {
+                // Add the text to measure it
+                tipSVG.append("text")
+                    .attr("x", 0)
+                    .attr("y", () => {
+                        return 20 + index * 30
+                    })
+                    .text(entry["id"]);
+            })
+
+            // Save the dimensions of the text elements
+            tipSVG.selectAll("text")
+                    .data(data)
+                    .each(function (d) {
+                        d.bbox = this.getBBox();
+                    });
+
+            // Remove the text elements
+            d3.selectAll("tipDiv text").remove();
+
+            var tipWidth = 0
+            var tipHeight = 0
+
+            data.forEach(function (entry) {
+                tipWidth = Math.max(tipWidth, entry["bbox"]["width"]);
+                tipHeight = Math.max(tipHeight, entry["bbox"]["y"] + entry["bbox"]["height"]);
+                });
+
+            // now redo with measurements
+            tipSVG.attr("width", tipWidth + 10)
+                .attr("height", tipHeight + 5)
+
+            const xMargin = 4
+            const yMargin = 2
+            // recompute boxes to match
+
+            data.forEach((entry, index) => {
+                // Add the rect elements, these are placeholders
+                var x = d3.scaleLinear()
+                    .domain([0,1])
+                    .range([0,entry["bbox"]["width"]])
+
+                tipSVG.selectAll("myRect")
+                    .data(entry["probs"])
+                    .enter()
+                    .append("rect")
+                    .attr("x", function (d, i) {
+                        if (i == 0) {
+                            return x(0);
+                        } else if (i == 1) {
+                            return x(entry["probs"][0]);
+                        } else {
+                            return x(entry["probs"][0] + entry["probs"][1]);
+                        }
+                    })
+                    .attr("y", function (data) {
+                        return entry["bbox"]["y"] - yMargin
+                    })
+                    .attr("width", d => x(d))
+                    .attr("height", entry["bbox"]["height"] + 2*yMargin)
+                    .attr("fill", function (d, i) {
+                        if (i == 0) {
+                            return colorpalette["Entailment"];
+                        } else if (i == 1) {
+                            return colorpalette["Neutral"];
+                        } else {
+                            return colorpalette["Contradiction"];
+                        }
+                    })
+                    .attr("opacity", function (d) {
+                        return d * 0.2 + 0.4
+                    })
+                // Add the text
+                tipSVG.append("text")
+                    .attr("x", x(0))
+                    .attr("y", () => {
+                        return 20 + index * 30
+                    })
+                    .text(entry["id"]);
+            })
+        }
+
+
+        var mouseleave = function(d) {
             tool_tip.hide()
             d3.select(this)
               .style("stroke", "none")
               .style("opacity", 0.8)
+          }
+
+          var mouseleaveLink = function(d){
+              tool_tip.hide()
+              d3.select(this)
+                  .style("stroke", "#7c6daa")
           }
 
         linkks.forEach((linkk) => {
@@ -345,6 +530,7 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .selectAll("circle")
                 .data(linkk)
                 .join("circle")
+                .attr("id", d=> d.target.id.trim())
                 .attr("cx", d => d.target.x)
                 .attr("cy", d => d.target.y)
                 .attr("fill", "#521135")
@@ -360,6 +546,7 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .selectAll("circle")
                 .data(linkk)
                 .join("circle")
+                .attr("id", d=> d.source.id.trim())
                 .attr("cx", d => d.source.x)
                 .attr("cy", d => d.source.y)
                 .attr("fill", "#521135")
@@ -375,6 +562,8 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .data(linkk)
                 .join('path')
                 .attr("class", "link")
+                .attr("parent_id", d=>d.target.id.trim())
+                .attr("child_id", d=>d.source.id.trim())
                 .attr("d", d3.linkHorizontal()
                     .source(d => [d.xs, d.ys])
                     .target(d => [d.xt, d.yt]))
@@ -383,6 +572,9 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 .attr("opacity", 0.1)
                 .style("opacity", d => occurrences[d.target.id.trim() + '_' + d.source.id.trim()]/occurrences['ALL_SENTENCES'])
                 .style("stroke", "#7c6daa")
+                .on("mouseover", mouseoverLink)
+                .on("mousemove", mousemoveLink)
+                .on('mouseleave', mouseleaveLink)
 
 
 
@@ -436,29 +628,29 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
         <Container fixed>
           <Card elevation={3}>
             <CardContent>
-              <Typography variant="h4" component="div"> <strong>Step 3: </strong>
-                take a look at existing hypotheses </Typography>
+              <Typography variant="h4" component="div"> <strong>Take a look at existing Hypotheses</strong>
+                </Typography>
               <Divider/>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Select the Hypotheses to display</FormLabel>
                 <FormGroup row>
+                    <FormControlLabel
+                    value="Entailment"
+                    label="Entailment"
+                    labelPlacement="end"
+                    control={<Checkbox checked={EntailmentChecked} onChange={handleEntailment} color="success" />
+                }/>
                 <FormControlLabel
                     value="Neutral"
                     label="Neutral"
                     labelPlacement="end"
-                    control={<Checkbox checked={NeutralChecked} onChange={handleNeutral} color="secondary" />
-                }/>
-                <FormControlLabel
-                    value="Entailment"
-                    label="Entailment"
-                    labelPlacement="end"
-                    control={<Checkbox checked={EntailmentChecked} onChange={handleEntailment} color="secondary" />
+                    control={<Checkbox checked={NeutralChecked} onChange={handleNeutral} color="info" />
                 }/>
                 <FormControlLabel
                     value="Contradiction"
                     label="Contradiction"
                     labelPlacement="end"
-                    control={<Checkbox checked={ContradictionChecked} onChange={handleContradiction} color="secondary" />
+                    control={<Checkbox checked={ContradictionChecked} onChange={handleContradiction} color="error" />
                 }/>
                 </FormGroup>
                 </FormControl>
