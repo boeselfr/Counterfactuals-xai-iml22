@@ -263,8 +263,7 @@ const Visualization: React.FunctionComponent<Props> = ({
         setCF(sentence2);
         // also submit the originakl sentnce one to the submission to get the roberta output for the visualization
         // duplicates are getting filtered out in the backend
-        var submitted_label = (' ' + gold_label).slice(1);
-        console.log(submitted_label)
+        var submitted_label = (' ' + gold_label).slice(1)
         // uppercase first letter to be consistent
         var data = {
             "sentence1": sentence1,
@@ -280,8 +279,8 @@ const Visualization: React.FunctionComponent<Props> = ({
             body: JSON.stringify(data)
         })
     }
-    useEffect(handleUpdateLabeled, [data, GraphLabels])
-    useEffect(initializeCF, [sentence1])
+    useEffect(handleUpdateLabeled, [data, GraphLabels, sentence1, sentence2])
+    useEffect(initializeCF, [sentence1, sentence2])
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
 
