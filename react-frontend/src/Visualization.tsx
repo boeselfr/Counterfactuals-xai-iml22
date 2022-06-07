@@ -260,8 +260,8 @@ const Visualization: React.FunctionComponent<Props> = ({
     const initializeCF = () => {
         setCF(sentence2);
     }
-    useEffect(handleUpdateLabeled, [data, GraphLabels])
-    useEffect(initializeCF, [sentence1])
+    useEffect(handleUpdateLabeled, [data, GraphLabels, sentence1, sentence2])
+    useEffect(initializeCF, [sentence1, sentence2])
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
 
@@ -297,7 +297,7 @@ const Visualization: React.FunctionComponent<Props> = ({
 
                 <Grid item xs={12}>
                     <div className="demo_box_labeledtable">
-                        {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
+                        {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} setGraphLabels={setGraphLabels} />}
                     </div>
                 </Grid>
 

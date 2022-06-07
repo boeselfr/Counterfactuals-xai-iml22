@@ -25,24 +25,21 @@ const useD3 = (renderChartFn, dependencies) => {
 }
 
 // not ready to convert this to ts :(
-function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
+function VarianceGraph ({data, occurrences, setGraphLabels})  {
     const [NeutralChecked, setNeutralChecked] = React.useState(true)
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
 
     const handleContradiction = (e) => {
         setContradictionChecked(e.target.checked);
-        handleGraphLabels()
     }
 
     const handleEntailment = (e) => {
         setEntailmentChecked(e.target.checked);
-        handleGraphLabels()
     }
 
     const handleNeutral = (e) => {
         setNeutralChecked(e.target.checked);
-        handleGraphLabels()
     }
 
     const handleGraphLabels = () => {
@@ -58,7 +55,6 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
             l.push("Contradiction")
         }
         setGraphLabels(l)
-        UpdateLabeled()
     }
 
     React.useEffect(handleGraphLabels, [NeutralChecked, EntailmentChecked, ContradictionChecked])
