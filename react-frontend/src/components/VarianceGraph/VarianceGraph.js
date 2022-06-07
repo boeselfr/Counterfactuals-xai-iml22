@@ -93,9 +93,6 @@ function VarianceGraph ({data, occurrences, setGraphLabels})  {
             .attr('width', totalWidth)
             .attr('height', totalHeight)
 
-        var graphGroup = svg.append('g')
-            .attr('transform', "translate(" + margins.left + "," + margins.top + ")");
-
         // precompute level depth
         levels.forEach((l, i) => l.forEach(n => n.level = i));
 
@@ -380,15 +377,11 @@ function VarianceGraph ({data, occurrences, setGraphLabels})  {
                 .style("opacity", d => occurrences[d.target.id.trim() + '_' + d.source.id.trim()]/occurrences['ALL_SENTENCES'])
                 .style("stroke", "#7c6daa")
 
-
-
             let nodeG2 = svg.append("g")
-                .attr("font-family", "sans-serif")
-                .attr("font-size", 2.5)
                 .selectAll("text")
                 .data(linkk)
                 .join("text")
-                .attr("class", "text")
+                .attr("class", "node_text")
                 .attr("x", d => d.target.x)
                 .attr("y", d => d.target.y - padding)
                 .text(d => d.target.id.trim() )
@@ -397,12 +390,10 @@ function VarianceGraph ({data, occurrences, setGraphLabels})  {
 
             // otherwise the last one gets remove as it is no source just a target
             let nodeG22 = svg.append("g")
-                .attr("font-family", "sans-serif")
-                .attr("font-size", 2.5)
                 .selectAll("text")
                 .data(linkk)
                 .join("text")
-                .attr("class", "text")
+                .attr("class", "node_text")
                 .attr("x", d => d.source.x)
                 .attr("y", d => d.source.y - padding)
                 .text(d => d.source.id.trim() )
