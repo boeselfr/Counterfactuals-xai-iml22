@@ -463,7 +463,7 @@ function VarianceGraph ({data, occurrences, setGraphLabels, UpdateLabeled})  {
                 </FormGroup>
                 </FormControl>
                 <Divider/>
-              <Box sx={{my: 3, mx: 4}}>
+              <Box sx={{my: 3, mx: 4, "margin-top": 5, "margin-left": -15}}>
                 <div style={{height: 400, width: 2000}}>
                   <script src="https://d3js.org/d3.v5.js" charSet="utf-8"></script>
                   <svg viewBox="0 0 400 2000" ref={ref}/>
