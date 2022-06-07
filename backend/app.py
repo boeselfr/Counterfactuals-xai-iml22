@@ -42,7 +42,7 @@ roberta_tokenizer = AutoTokenizer.from_pretrained('roberta-large-mnli')
 roberta_model = AutoModelForSequenceClassification.from_pretrained('roberta-large-mnli',
                                                                    num_labels=3)
 
-DEBUG = True
+DEBUG = False
 
 if not DEBUG:  # Slow imports
     from easy_polyjuice import DynamicPolyjuice
