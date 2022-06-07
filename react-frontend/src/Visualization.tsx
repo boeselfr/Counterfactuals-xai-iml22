@@ -240,9 +240,6 @@ const Visualization: React.FunctionComponent<Props> = ({
     const suggestionRP_label = data.map((d) => d.suggestionRP_label);
     const suggestionRH = data.map((d) => d.suggestionRH);
     const suggestionRH_label = data.map((d) => d.suggestionRH_label);
-    console.log("s1,2")
-    console.log(sentence1)
-    console.log(sentence2)
 
     // selecting the suggestion to work with based on the mode:
     let suggestion = [""];
