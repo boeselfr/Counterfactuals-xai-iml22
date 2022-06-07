@@ -196,239 +196,165 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
 
 
     return (
-        <Container fixed>
-            <Card elevation={3}>
-                <CardContent>
-                    <Typography variant="h4" component="div"> Submit a new Hypothesis </Typography>
-                    <Divider/>
-                    <Stack alignItems={"flex"} justifyContent={"center"} spacing={1} sx={{ my: 3, mx: 2}}>
+        <Container fixed style={{ border: 0, boxShadow: "none" }}>
+            <Typography variant="h4" component="div"> Submit a new Hypothesis </Typography>
+            <Divider/>
+            <Stack alignItems={"flex"} justifyContent={"center"} spacing={1} sx={{ my: 3, mx: 2, width: "100%"}}>
 
-                    <Box sx={{backgroundColor: 'grey.200', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
-                                <Typography variant="body1"> <strong>Premise:</strong> {sentence1} </Typography>
-                    </Box>
-                    
-                    <Box sx={{
-                        backgroundColor: 'primary.light',
-                        border: 1,
-                        borderRadius: '4px',
-                        padding: 3,
-                        borderColor: 'grey.500',
-                        widht: "100%"
-                    }}>
+            <Box sx={{backgroundColor: 'grey.200', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                        <Typography variant="body1"> <strong>Premise:</strong> {sentence1} </Typography>
+            </Box>
+            
+            <Box sx={{
+                backgroundColor: 'primary.light',
+                border: 1,
+                borderRadius: '4px',
+                padding: 3,
+                borderColor: 'grey.500',
+                widht: "100%"
+            }}>
 
-                    <Stack spacing={2}>
-                        <Grid container>
-                            <Grid item xs={10}>
-                                <TextField fullWidth id="counterfactual" inputRef={textArea}
-                                           variant="standard"
-                                        label={<Typography variant="h4">New Hypothesis</Typography>}
-                                        value={cf}
-                                        onSelect={handleSelect}
-                                        onChange={(e) => {setCF(e.target.value); setRobertaLabel('-');}}
-                                        sx={{
-                                            "& .MuiInputLabel-root": {
-                                                color: "black",
-                                                // "font-size": 10,
-                                            },
-                                            "& label.Mui-focused": {
-                                                // Override default styling,
-                                                // Which change the label to be smaller font
-                                                color: "black",
-                                            },
-                                            "& .MuiOutlinedInput-input": {
-                                              "&::selection": {
-                                                  color: "white",
-                                                  background: "purple",
-                                              }
-                                            }
-                                        }}
-                                        inputProps={{fontSize: 30}}
-                                />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Select
-                                    labelId="demo-simple-select-autowidth-label"
-                                    id="demo-simple-select-autowidth"
-                                    value={code}
-                                    onChange={handleCode}
-                                    autoWidth
-                                    label="Manipulate"
-                                >
-                                    {codesItems}
-                                </Select>
-                            </Grid>
-
-                        </Grid>
-
-                        <Grid
-                            container
-                            spacing={0}
-                            direction="column"
-                            alignItems="center"
-                            justifyContent="center"
+            <Stack spacing={2}>
+            <div className='alter_hypothesis'>
+                <Grid container>
+                    <Grid item xs={10}>
+                        <TextField fullWidth id="counterfactual" inputRef={textArea}
+                                    variant="standard"
+                                label={<Typography variant="h4">New Hypothesis</Typography>}
+                                value={cf}
+                                onSelect={handleSelect}
+                                onChange={(e) => {setCF(e.target.value); setRobertaLabel('-');}}
+                                sx={{
+                                    "& .MuiInputLabel-root": {
+                                        color: "black",
+                                        // "font-size": 10,
+                                    },
+                                    "& label.Mui-focused": {
+                                        // Override default styling,
+                                        // Which change the label to be smaller font
+                                        color: "black",
+                                    },
+                                    "& .MuiOutlinedInput-input": {
+                                        "&::selection": {
+                                            color: "white",
+                                            background: "purple",
+                                        }
+                                    }
+                                }}
+                                inputProps={{fontSize: 30}}
+                        />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Select
+                            labelId="demo-simple-select-autowidth-label"
+                            id="demo-simple-select-autowidth"
+                            value={code}
+                            onChange={handleCode}
+                            autoWidth
+                            label="Manipulate"
                         >
-                            <Button variant={"contained"} onClick={handleSuggest}>
-                                🤖  Automatically Modify Selected Area
-                            </Button>
-                        </Grid>
+                            {codesItems}
+                        </Select>
+                    </Grid>
 
-                        <Accordion sx={{
-                                    border: 1,
-                                    borderRadius: '4px',
-                                    borderColor: 'grey.500',
-                                    backgroundColor: 'primary.light'
-                                }}>
-                            <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            >
-                            <Typography> <strong>🤖    Hypothesis Suggestions</strong> </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                            <Box sx={{
-                                    // border: 1,
-                                    borderRadius: '4px',
-                                    borderColor: 'grey.500',
-                                }}>
+                </Grid>
 
-                                    <Typography variant="body1">
-                                        {suggestion[count]}
-                                    </Typography>
-                                    <Stack
-                                        alignItems="center"
-                                        justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
-                                        <Button variant="contained"
-                                                onClick={() => navigator.clipboard.writeText(suggestion[count])}>Copy</Button>
-                                        <Button variant="contained"
-                                                onClick={decrSuggestion}>Previous</Button>
+                <Grid
+                    container
+                    spacing={0}
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <Button variant={"contained"} onClick={handleSuggest}>
+                        🤖  Automatically Modify Selected Area
+                    </Button>
+                </Grid>
 
-                                        <Button variant="contained" onClick={incrSuggestion}>Next</Button>
-                                    </Stack>
-                                </Box>
-                            </AccordionDetails>
-                        </Accordion>
-                        </Stack>
-                        </Box>
-                        
-                        <Box sx={{backgroundColor: '#e0eaed', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
-                        <Stack alignItems={"center"} justifyContent={"flex-start"} direction="row" spacing={4} sx={{p: 1}}>
-                                <Box> <strong>✍  Label the Hypothesis</strong> </Box>
-                                <RadioGroup
-                                    row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
-                                    sx={{}}
-                                >
-                                    <FormControlLabel value="Neutral" control={<Radio/>}
-                                                      label="Neutral"
-                                                      sx={{"& .MuiFormControlLabel-label": {color: "gray"}}}
-                                                      onClick={(e) => {
-                                        setcflabel('Neutral');
-                                    }}/>
-                                    <FormControlLabel value="Entailment" control={<Radio/>}
-                                                      sx={{"& .MuiFormControlLabel-label": {color: "green"}}}
-                                                      label="Entailment" onClick={(e) => {
-                                        setcflabel('Entailment');
-                                    }}/>
-                                    <FormControlLabel value="Contradiction" control={<Radio/>}
-                                                      sx={{"& .MuiFormControlLabel-label": {color: "red"}}}
-                                                      label="Contradiction" onClick={(e) => {
-                                        setcflabel('Contradiction');
-                                    }}/>
-                                </RadioGroup>
-                                <Stack width={"70%"} spacing={1} alignItems={'center'}>
-                                    <Button variant={"contained"} onClick={handleRobertaQuery}> 
-                                            🤖   Label Suggestion
-                                    </Button>
-                                    <Typography variant="body1">
-                                        {robertaLabel.toLowerCase().charAt(0).toUpperCase() + robertaLabel.toLowerCase().slice(1)}
-                                    </Typography>
-                                </Stack>
-                            </Stack>
-                            </Box>
-                            <Button variant={"contained"} onClick={handleSubmit}>
-                                Submit 
-                            </Button>
-                        </Stack>
-                    {/* <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': {my: 3, mx: 2},
-                        }}
-                        noValidate
-                        autoComplete="on"
+                </div>
+                <div className='polyjuice_suggestions'>
+
+                <Accordion sx={{
+                            border: 1,
+                            borderRadius: '4px',
+                            borderColor: 'grey.500',
+                            backgroundColor: 'primary.light'
+                        }}>
+                    <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
                     >
-
+                    <Typography> <strong>🤖    Hypothesis Suggestions</strong> </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
                     <Box sx={{
-                        border: 1,
-                        borderRadius: '4px',
-                        padding: 3,
-                        borderColor: 'grey.500'
-                    }}>
+                            // border: 1,
+                            borderRadius: '4px',
+                            borderColor: 'grey.500',
+                        }}>
 
-                        <Typography variant="body1">
-                            <strong>Suggested {mode}:</strong> {suggestion[count]}
-                        </Typography>
-                        <Stack
-                            alignItems="center"
-                            justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
-                            <Button variant="contained"
-                                    onClick={() => navigator.clipboard.writeText(suggestion[count])}>Copy</Button>
-                            <Button variant="contained"
-                                    onClick={decrSuggestion}>Previous</Button>
+                            <Typography variant="body1">
+                                {suggestion[count]}
+                            </Typography>
+                            <Stack
+                                alignItems="center"
+                                justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
+                                <Button variant="contained"
+                                        onClick={() => navigator.clipboard.writeText(suggestion[count])}>Copy</Button>
+                                <Button variant="contained"
+                                        onClick={decrSuggestion}>Previous</Button>
 
-                            <Button variant="contained" onClick={incrSuggestion}>Next</Button>
-                        </Stack>
-                    </Box>
+                                <Button variant="contained" onClick={incrSuggestion}>Next</Button>
+                            </Stack>
+                        </Box>
+                    </AccordionDetails>
+                </Accordion>
+                </div>
+                </Stack>
+                </Box>
 
-                    <Box sx={{
-                        border: 1,
-                        borderRadius: '4px',
-                        padding: 3,
-                        borderColor: 'grey.500'
-                    }}>
-                        <Grid container>
-                            <Grid item xs={10}>
-                                <TextField fullWidth id="counterfactual" inputRef={textArea}
-                                           label="New Hypothesis"
-                                           value={cf}
-                                           onSelect={handleSelect}
-                                           onChange={(e) => setCF(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Select
-                                    labelId="demo-simple-select-autowidth-label"
-                                    id="demo-simple-select-autowidth"
-                                    value={code}
-                                    onChange={handleCode}
-                                    autoWidth
-                                    label="Manipulate"
-                                >
-                                    {codesItems}
-                                </Select>
-                            </Grid>
+                
+                <Box sx={{backgroundColor: '#e0eaed', border: 1, borderRadius: '4px', padding: 1, borderColor: 'grey.500'}}>
+                <Stack className='label_tour' alignItems={"center"} justifyContent={"flex-start"} direction="row" spacing={4} sx={{p: 1}}>
+                {/* <div className='label_tour'> */}
 
-                        </Grid>
-
-                        <Grid
-                            container
-                            spacing={0}
-                            direction="column"
-                            alignItems="center"
-                            justifyContent="center"
-
+                        <Box> <strong>✍  Label the Hypothesis</strong> </Box>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                            sx={{}}
                         >
-                            <br/>
-                            <Button variant={"contained"} onClick={handleSuggest}>
-                                Modify
+                            <FormControlLabel value="Neutral" control={<Radio/>}
+                                                label="Neutral"
+                                                sx={{"& .MuiFormControlLabel-label": {color: "gray"}}}
+                                                onClick={(e) => {
+                                setcflabel('Neutral');
+                            }}/>
+                            <FormControlLabel value="Entailment" control={<Radio/>}
+                                                sx={{"& .MuiFormControlLabel-label": {color: "green"}}}
+                                                label="Entailment" onClick={(e) => {
+                                setcflabel('Entailment');
+                            }}/>
+                            <FormControlLabel value="Contradiction" control={<Radio/>}
+                                                sx={{"& .MuiFormControlLabel-label": {color: "red"}}}
+                                                label="Contradiction" onClick={(e) => {
+                                setcflabel('Contradiction');
+                            }}/>
+                        </RadioGroup>
+                        <Stack width={"70%"} spacing={1} alignItems={'center'}>
+                            <Button variant={"contained"} onClick={handleRobertaQuery}> 
+                                    🤖   Label Suggestion
                             </Button>
-
-                        </Grid>
+                            <Typography variant="body1">
+                                {robertaLabel.toLowerCase().charAt(0).toUpperCase() + robertaLabel.toLowerCase().slice(1)}
+                            </Typography>
+                        </Stack>
+                    </Stack>
                     </Box>
-                    </Box> */}
-                </CardContent>
-
-            </Card>
+                    <Button variant={"contained"} onClick={handleSubmit}>
+                        Submit 
+                    </Button>
+                </Stack>
         </Container>
     );
 };
