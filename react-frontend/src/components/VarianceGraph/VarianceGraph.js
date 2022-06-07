@@ -32,17 +32,14 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
     const handleContradiction = (e) => {
         setContradictionChecked(e.target.checked);
-        handleGraphLabels()
     }
 
     const handleEntailment = (e) => {
         setEntailmentChecked(e.target.checked);
-        handleGraphLabels()
     }
 
     const handleNeutral = (e) => {
         setNeutralChecked(e.target.checked);
-        handleGraphLabels()
     }
 
     const handleGraphLabels = () => {
@@ -58,7 +55,6 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             l.push("Contradiction")
         }
         setGraphLabels(l)
-        UpdateLabeled()
     }
 
     React.useEffect(handleGraphLabels, [NeutralChecked, EntailmentChecked, ContradictionChecked])
@@ -97,9 +93,6 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             .append('svg')
             .attr('width', totalWidth)
             .attr('height', totalHeight)
-
-        var graphGroup = svg.append('g')
-            .attr('transform', "translate(" + margins.left + "," + margins.top + ")");
 
         // precompute level depth
         levels.forEach((l, i) => l.forEach(n => n.level = i));
@@ -576,15 +569,11 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 .on("mousemove", mousemoveLink)
                 .on('mouseleave', mouseleaveLink)
 
-
-
             let nodeG2 = svg.append("g")
-                .attr("font-family", "sans-serif")
-                .attr("font-size", 2.5)
                 .selectAll("text")
                 .data(linkk)
                 .join("text")
-                .attr("class", "text")
+                .attr("class", "node_text")
                 .attr("x", d => d.target.x)
                 .attr("y", d => d.target.y - padding)
                 .text(d => d.target.id.trim() )
@@ -593,12 +582,10 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
             // otherwise the last one gets remove as it is no source just a target
             let nodeG22 = svg.append("g")
-                .attr("font-family", "sans-serif")
-                .attr("font-size", 2.5)
                 .selectAll("text")
                 .data(linkk)
                 .join("text")
-                .attr("class", "text")
+                .attr("class", "node_text")
                 .attr("x", d => d.source.x)
                 .attr("y", d => d.source.y - padding)
                 .text(d => d.source.id.trim() )
@@ -655,7 +642,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 </FormGroup>
                 </FormControl>
                 <Divider/>
-              <Box sx={{my: 3, mx: 4}}>
+              <Box sx={{my: 3, mx: 4, "margin-top": 5, "margin-left": -15}}>
                 <div style={{height: 400, width: 2000}}>
                   <script src="https://d3js.org/d3.v5.js" charSet="utf-8"></script>
                   <svg viewBox="0 0 400 2000" ref={ref}/>

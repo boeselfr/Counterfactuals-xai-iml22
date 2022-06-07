@@ -283,8 +283,8 @@ const Visualization: React.FunctionComponent<Props> = ({
             body: JSON.stringify(data)
         })
     }
-    useEffect(handleUpdateLabeled, [data, GraphLabels])
-    useEffect(initializeCF, [sentence1])
+    useEffect(handleUpdateLabeled, [data, GraphLabels, sentence1, sentence2])
+    useEffect(initializeCF, [sentence1, sentence2])
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
 
