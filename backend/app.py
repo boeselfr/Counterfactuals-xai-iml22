@@ -92,6 +92,7 @@ def upload_submitted_data(sentence1: str, sentence2: str):
         robot_labels.append(label)
 
     matching_data["Robot_Label"] = robot_labels
+    # renaming here for the table in the frontend
     matching_data = matching_data.rename(columns={"suggestionRH": "New Hypothesis", "Robot_Label": "Robot Label", "suggestionRH_label": "Human Label"})
 
     return matching_data[["New Hypothesis", "Robot Label", "Human Label"]].to_dict(orient="records")
@@ -213,6 +214,7 @@ async def submit_data(data_row: NLIDataSubmission):
 @app.post("/delete-data")
 async def delete_data(sentence1: str, sentence2: str, counterfactual: str):
     old_data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
+    # find line(s) to delete and write new df
     new_data = old_data.drop(old_data[(old_data["sentence1"] == sentence1) & (old_data["sentence2"] == sentence2) & (old_data["suggestionRH"] == counterfactual)].index)
     new_data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True,
                 sep="\t")
