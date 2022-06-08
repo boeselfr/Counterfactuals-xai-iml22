@@ -324,16 +324,16 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                             name="row-radio-buttons-group"
                             sx={{}}
                         >
+                            <FormControlLabel value="Entailment" control={<Radio/>}
+                                                sx={{"& .MuiFormControlLabel-label": {color: "green"}}}
+                                                label="Entailment" onClick={(e) => {
+                                setcflabel('Entailment');
+                            }}/>
                             <FormControlLabel value="Neutral" control={<Radio/>}
                                                 label="Neutral"
                                                 sx={{"& .MuiFormControlLabel-label": {color: "gray"}}}
                                                 onClick={(e) => {
                                 setcflabel('Neutral');
-                            }}/>
-                            <FormControlLabel value="Entailment" control={<Radio/>}
-                                                sx={{"& .MuiFormControlLabel-label": {color: "green"}}}
-                                                label="Entailment" onClick={(e) => {
-                                setcflabel('Entailment');
                             }}/>
                             <FormControlLabel value="Contradiction" control={<Radio/>}
                                                 sx={{"& .MuiFormControlLabel-label": {color: "red"}}}
