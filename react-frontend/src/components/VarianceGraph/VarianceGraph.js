@@ -13,6 +13,16 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormLabel from "@mui/material/FormLabel";
+import { createTheme , ThemeProvider }from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
+
+const theme = createTheme({
+    palette:{
+        primary: {
+            main: grey[500]
+        }
+    }
+})
 
 const useD3 = (renderChartFn, dependencies) => {
     const ref = React.useRef();
@@ -274,7 +284,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
         var mouseoverLink = function(d){
             d3.select(this)
-              .style("stroke", "black")
+              .style("stroke-width", 1.5)
         }
 
         var mousemove = function(d) {
@@ -302,7 +312,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             }
 
             const colorpalette =
-                {"Entailment": "#4caf50", "Neutral": "#03a9f4", "Contradiction": "#ef5350"}
+                {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
 
             var box_x = d3.scaleLinear()
                 .domain([0,1])
@@ -454,7 +464,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
 
             const colorpalette =
-                {"Entailment": "#4caf50", "Neutral": "#03a9f4", "Contradiction": "#ef5350"}
+                {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
 
 
             var box_x = d3.scaleLinear()
@@ -571,6 +581,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             tool_tip.offset([-1 * (tipHeight), 50])
         }
 
+         const mouseleaveLink = function(d){
+            tool_tip.hide()
+            d3.select(this)
+                .style("stroke-width", 0.5)
+        }
+
         function drawNodes(linkk) {
             let nodeG1 = svg.append("g")
                 .selectAll("circle")
@@ -603,11 +619,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
         linkks.forEach(drawNodes);
 
-        const mouseleaveLink = function(d){
-            tool_tip.hide()
-            d3.select(this)
-                .style("stroke", "#7c6daa")
-        }
+
 
         linkks.forEach((linkk) => {
             let nodeG1 = svg.append("g")
@@ -642,25 +654,54 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
         })
 
         linkks.forEach((linkk) => {
-            let nodeG = svg.append('g')
+            // filter the links here once for each label and then draw them:
+            const labels = ["Entailment", "Neutral", "Contradiction"]
+            const colorpalette =
+                {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
+            labels.forEach((label,i) => {
+
+                let nodeG = svg.append('g')
                 .attr('class', 'node')
                 .selectAll("path")
                 .data(linkk)
                 .join('path')
+                    //check if there is a label==label for this link
+                    .filter(function(d){
+                        var data = probabilities.map(a => Object.assign({}, a));
+
+                        // copy the probabilities into data and filter
+                        var index = data.length - 1;
+
+                        while (index >= 0) {
+                          if (!data[index]["id"].includes(d.target.id.trim() + " " + d.source.id.trim())) {
+                            data.splice(index, 1);
+                          }
+                          index -= 1;
+                        }
+                        var labelmatch = false
+                        data.forEach((entry) => {
+                            var ai_max = entry["human_probs"].indexOf(Math.max(...entry["human_probs"]));
+                            if (ai_max == i){
+                                labelmatch = true
+                            }
+                        })
+                        return labelmatch
+                    })
                 .attr("class", "link")
                 .attr("parent_id", d=>d.target.id.trim())
                 .attr("child_id", d=>d.source.id.trim())
                 .attr("d", d3.linkHorizontal()
-                    .source(d => [d.xs, d.ys])
-                    .target(d => [d.xt, d.yt]))
+                    .source(function(d) {return[d.xs, d.ys - 0.5 + i*0.5 ]})
+                    .target(function(d) {return [d.xt, d.yt - 0.5  + i*0.5 ]}))
                 .attr("stroke-width", 1)
                 //source is child here target is parent...
                 .attr("opacity", 0.1)
                 .style("opacity", d => occurrences[d.target.id.trim() + '_' + d.source.id.trim()]/occurrences['ALL_SENTENCES'])
-                .style("stroke", "#7c6daa")
+                .style("stroke", () => {return colorpalette[label]})
                 .on("mouseover", mouseoverLink)
                 .on("mousemove", mousemoveLink)
                 .on('mouseleave', mouseleaveLink)
+            })
 
             let nodeG2 = svg.append("g")
                 .selectAll("text")
@@ -720,12 +761,14 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                     labelPlacement="end"
                     control={<Checkbox checked={EntailmentChecked} onChange={handleEntailment} color="success" />
                 }/>
+                    <ThemeProvider theme={theme}>
                 <FormControlLabel
                     value="Neutral"
                     label="Neutral"
                     labelPlacement="end"
-                    control={<Checkbox checked={NeutralChecked} onChange={handleNeutral} color="info" />
+                    control={<Checkbox checked={NeutralChecked} onChange={handleNeutral} color="primary" />
                 }/>
+                    </ThemeProvider>
                 <FormControlLabel
                     value="Contradiction"
                     label="Contradiction"
