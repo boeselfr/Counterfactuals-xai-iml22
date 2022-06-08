@@ -16,9 +16,10 @@ interface Props {
     sentence1: string;
     sentence2: string;
     UpdateLabeled: any;
+    UpdateLabeledOld: any;
 }
 
-const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sentence2, UpdateLabeled}: Props) => {
+const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sentence2, UpdateLabeled, UpdateLabeledOld}: Props) => {
     const [hoveredRow, setHoveredRow] = React.useState(-1);
 
     const onMouseEnterRow = (event: any) => {
@@ -56,7 +57,7 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sen
                             </IconButton>
                             <IconButton onClick={() => fetch("http://127.0.0.1:8000/delete-data?sentence1=" + sentence1 + "&sentence2=" + sentence2 + "&counterfactual=" + params.row["New Hypothesis"],
                                 {method: "POST"
-                                }).then(UpdateLabeled())}>
+                                }).then(UpdateLabeled()).then(UpdateLabeledOld())}>
                                 <DeleteIcon/>
                             </IconButton>
                         </Box>
