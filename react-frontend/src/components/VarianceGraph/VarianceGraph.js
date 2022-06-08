@@ -750,7 +750,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
           <Card elevation={0}>
             <CardContent>
               <Typography variant="h4" component="div">
-                Hypothesis Visualization </Typography>
+                Hypotheses: Tree View </Typography>
               <Divider/>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Select the Hypotheses to display</FormLabel>
@@ -778,7 +778,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 </FormGroup>
                 </FormControl>
                 <Divider/>
-              <Box sx={{my: 3, mx: 4, "margin-top": 5, "margin-left": -15}}>
+              <Box sx={{my: 3, mx: 4, marginTop: 5, marginLeft: -15}}>
                 <div style={{height: 400, width: 2000}}>
                   <script src="https://d3js.org/d3.v5.js" charSet="utf-8"></script>
                   <svg viewBox="0 0 400 2000" ref={ref}/>

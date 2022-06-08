@@ -329,7 +329,7 @@ const Visualization: React.FunctionComponent<Props> = ({
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
 
-    let styleNoBorder = { border: "none", boxShadow: "none" };
+    let styleNoBorder = { border: "none", boxShadow: "none"};
 
     return (
         <div className='demo-wrapper'>
@@ -339,8 +339,8 @@ const Visualization: React.FunctionComponent<Props> = ({
                     <Card elevation={3}>
                     <Stack
                         direction="row"
-                        divider={<Divider orientation="vertical" flexItem/>} p={2} my={2} mx={2}>
-                        <Card className="demo_box_sentencepair" style={styleNoBorder}>
+                        divider={<Divider orientation="vertical" flexItem/>} p={2} my={2} mx={5}>
+                        <Card className="demo_box_sentencepair" style={{...styleNoBorder, ...{"marginRight": "20px"}}}>
                                 <BoxSentencePair sentence1={sentence1}
                                                 sentence2={sentence2}
                                                 gold_label={gold_label}
@@ -362,10 +362,9 @@ const Visualization: React.FunctionComponent<Props> = ({
                     </Card>
 
                     <Card elevation={3}>
-                    <Stack
-                        direction="row"
-                    >
+                    <Grid container rowSpacing={2} columnSpacing={{xs: 1, sm: 2, md: 3}}>
 
+                        <Grid item xs={6}>
                         <Card className="demo_box_tree_viz" style={styleNoBorder}>
                             {CFLabeled &&
                             <VarianceGraph
@@ -373,12 +372,17 @@ const Visualization: React.FunctionComponent<Props> = ({
                                 probabilities={CFProbabilities} setGraphLabels={setGraphLabels}
                                 UpdateLabeled={handleUpdateLabeled}/>}
                         </Card>
+                        </Grid>
 
+                        <Grid item xs={6}>
                         <Card className={"demo_box_table_viz"} style={styleNoBorder}>
-                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled} sentence1={sentence1} sentence2={sentence2} UpdateLabeled={handleUpdateLabeled} UpdateLabeledOld={handleUpdateLabeledOld}/>}
+                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled} sentence1={sentence1}
+                                                           sentence2={sentence2} UpdateLabeled={handleUpdateLabeled}
+                                                           UpdateLabeledOld={handleUpdateLabeledOld}/>}
                         </Card>
+                        </Grid>
 
-                    </Stack>
+                    </Grid>
                     </Card>
             </Stack>
             </Container>

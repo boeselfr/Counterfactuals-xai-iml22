@@ -72,7 +72,7 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sen
     return (
         <Container fixed>
             <Paper elevation={3} sx={{p: 4}}>
-                <Typography variant="h4"> Hypothesis Tree View </Typography>
+                <Typography variant="h4"> Hypotheses: Table View </Typography>
                 <Divider />
                 <Box sx={{ my: 3, mx: 2 }}>
                 <div style={{ height: 400, width: '100%' }}>

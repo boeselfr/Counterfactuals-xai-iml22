@@ -74,7 +74,3 @@ export const queryBackendEmbedding = async (route: string): Promise<NLIEmbedding
 
     return data;
 }
-
-
-
-

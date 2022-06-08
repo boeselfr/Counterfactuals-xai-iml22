@@ -28,6 +28,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {styled} from "@material-ui/core/styles";
 
 
 interface Props {
@@ -192,8 +193,11 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
     const onCopyButtonClick = (newHypothesis: string) => {
         let input = textArea.current;
         input.value = newHypothesis;
+        input.defaultValue = newHypothesis;
+        console.log(input.value);
     }
-
+    
+    const BLANK_CHAR = "ㅤㅤ"
 
     return (
         <Container fixed style={{ border: 0, boxShadow: "none" }}>
@@ -211,30 +215,30 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                 borderRadius: '4px',
                 padding: 3,
                 borderColor: 'grey.500',
-                widht: "100%"
             }}>
 
             <Stack spacing={2}>
             <div className='alter_hypothesis'>
                 <Grid container>
-                    <Grid item xs={10}>
+                    <Grid item xs={9}>
                         <TextField fullWidth id="counterfactual" inputRef={textArea}
-                                    variant="standard"
-                                label={<Typography variant="h4">New Hypothesis</Typography>}
+                                    // variant="standard"
+                                label={"✍ Your New Hypothesis:" + BLANK_CHAR.repeat(10) + "."}
                                 value={cf}
                                 onSelect={handleSelect}
                                 onChange={(e) => {setCF(e.target.value); setRobertaLabel('-');}}
                                 sx={{
                                     "& .MuiInputLabel-root": {
                                         color: "black",
-                                        // "font-size": 10,
+                                        "font-weight": "bold",
+                                        // "font-size": 20,
                                     },
                                     "& label.Mui-focused": {
                                         // Override default styling,
                                         // Which change the label to be smaller font
-                                        color: "black",
+                                        // color: "black",
                                     },
-                                    "& .MuiOutlinedInput-input": {
+                                    "& .MuiOutlinedInput-input": { // Defunct
                                         "&::selection": {
                                             color: "white",
                                             background: "purple",
@@ -244,7 +248,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                                 inputProps={{fontSize: 30}}
                         />
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <Select
                             labelId="demo-simple-select-autowidth-label"
                             id="demo-simple-select-autowidth"
@@ -299,7 +303,9 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                                 alignItems="center"
                                 justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
                                 <Button variant="contained"
-                                        onClick={() => navigator.clipboard.writeText(suggestion[count])}>Copy</Button>
+                                        // onClick={() => navigator.clipboard.writeText(suggestion[count])}>Copy</Button>
+                                    // onClick={() => onCopyButtonClick(suggestion[count])}>Copy</Button>
+                                        onClick={() => onCopyButtonClick(suggestion[count])}> Copy </Button>
                                 <Button variant="contained"
                                         onClick={decrSuggestion}>Previous</Button>
 
@@ -352,7 +358,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                     </Stack>
                     </Box>
                     <Button variant={"contained"} onClick={handleSubmit}>
-                        Submit 
+                        Submit New Hypothesis
                     </Button>
                 </Stack>
         </Container>
