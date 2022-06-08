@@ -15,6 +15,7 @@ import {ThemeProvider, createTheme} from '@mui/material/styles';
 import EmbeddingPlot from "./components/EmbeddingPlot/EmbeddingPlot";
 import {NLIEmbeddingArray} from "./types/NLIEmbeddingArray";
 
+
 const theme = createTheme({
     palette: {
         primary: {
