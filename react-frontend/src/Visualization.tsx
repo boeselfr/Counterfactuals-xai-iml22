@@ -375,7 +375,7 @@ const Visualization: React.FunctionComponent<Props> = ({
                         </Card>
 
                         <Card className={"demo_box_table_viz"} style={styleNoBorder}>
-                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled}/>}
+                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled} sentence1={sentence1} sentence2={sentence2} UpdateLabeled={handleUpdateLabeled()}/>}
                         </Card>
 
                     </Stack>
