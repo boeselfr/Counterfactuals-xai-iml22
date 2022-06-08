@@ -1,6 +1,5 @@
 export interface NLISubmissionDisplayPoint {
-    Neutral: string;
-    Entailment: string;
-    Contradiction: string;
-    id: number;
+    "New Hypothesis": string;
+    "Robot Label": string;
+    "Human Label": string;
 }

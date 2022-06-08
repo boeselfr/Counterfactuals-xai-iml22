@@ -80,24 +80,22 @@ def upload_data(count: int):
 @app.get("/upload-submitted-data", response_model=NLISubmissionDisplay)
 def upload_submitted_data(sentence1: str, sentence2: str):
     data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
-    # filter for lines with sentence1, sentence2 matching:
     matching_data = data[(data['sentence1'] == sentence1) & (data['sentence2'] == sentence2)]
-    # now reorder the table to show neutral entailment and contradiction
-    neutral = pd.Series(
-        matching_data.loc[matching_data['suggestionRH_label'] == 'Neutral', 'suggestionRH'],
-        name='Neutral').dropna(inplace=False).reset_index(drop=True)
-    entailment = pd.Series(matching_data.loc[matching_data[
-                                                 'suggestionRH_label'] == 'Entailment', 'suggestionRH'],
-                           name='Entailment').dropna(inplace=False).reset_index(drop=True)
-    contradiction = pd.Series(matching_data.loc[matching_data[
-                                                    'suggestionRH_label'] == 'Contradiction', 'suggestionRH'],
-                              name='Contradiction').dropna(inplace=False).reset_index(
-        drop=True)
 
-    displayed_table = pd.concat([neutral, entailment, contradiction], axis=1)
-    displayed_table["id"] = displayed_table.index + 1
+    # compute robot label
+    labels = ["Entailment", "Neutral", "Contradiction"]
+    robot_labels = list()
+    for index, row in matching_data.iterrows():
+        probs = [row["Entailment"], row["Neutral"],row["Contradiction"]]
+        label_index = probs.index(max(probs))
+        label = labels[label_index]
+        robot_labels.append(label)
 
-    return displayed_table.to_dict(orient="records")
+    matching_data["Robot_Label"] = robot_labels
+    # renaming here for the table in the frontend
+    matching_data = matching_data.rename(columns={"suggestionRH": "New Hypothesis", "Robot_Label": "Robot Label", "suggestionRH_label": "Human Label"})
+
+    return matching_data[["New Hypothesis", "Robot Label", "Human Label"]].to_dict(orient="records")
 
 
 @app.get("/upload-submitted-graph", response_model=NLISubmissionDisplayGraph)
@@ -185,7 +183,6 @@ def upload_embeddings():
         columns=['i'])
     return response.to_dict(orient="records")
 
-
 @app.post("/submit-data")
 async def submit_data(data_row: NLIDataSubmission):
     """
@@ -210,6 +207,16 @@ async def submit_data(data_row: NLIDataSubmission):
     data.drop_duplicates(["sentence1", "sentence2", "suggestionRH", "suggestionRH_label"],inplace=True, ignore_index=True)
 
     data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True,
+                sep="\t")
+    return True
+
+
+@app.post("/delete-data")
+async def delete_data(sentence1: str, sentence2: str, counterfactual: str):
+    old_data = pd.read_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", sep="\t")
+    # find line(s) to delete and write new df
+    new_data = old_data.drop(old_data[(old_data["sentence1"] == sentence1) & (old_data["sentence2"] == sentence2) & (old_data["suggestionRH"] == counterfactual)].index)
+    new_data.to_csv(f"data/NLI/submitted/cfs_example_submitted.tsv", index=False, header=True,
                 sep="\t")
     return True
 
