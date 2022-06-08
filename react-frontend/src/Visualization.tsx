@@ -241,7 +241,7 @@ const STEPS: Step[] = [
             Therefore, aim not do create similar/duplicate hypotheses.
         </small>),
     placement: "top",
-    target: ".demo_box_labeledtable",
+    target: ".demo_box_tree_viz",
     title: (<div><h3>PREVIOUS HYPOTHESES VISUALIZATION</h3></div>)
 }
 ];
@@ -256,6 +256,7 @@ const Visualization: React.FunctionComponent<Props> = ({
     const [cflabellist, setCFLabelList] = useState([]);
     const [cfsimilaritylist, setCFSimilarityList] = useState([]);
     const [CFLabeled, setCFLabeled] = useState<NLISubmissionDisplayGraph>([]);
+    const [CFOldLabeled, setCFOldLabeled] = useState<NLISubmissionDisplay>([]);
     const [CFOccurrences, setCFOccurrences] = useState({});
     const [CFProbabilities, setCFProbabilities] = useState({});
     const [GraphLabels, setGraphLabels] = useState(["Neutral","Entailment", "Contradiction"]);
@@ -290,6 +291,16 @@ const Visualization: React.FunctionComponent<Props> = ({
         })
     };
 
+    // initiate the labeled list of counterfactuals:
+    const handleUpdateLabeledOld = () => {
+        // update the counterfactual table
+        queryBackendDisplayData(`upload-submitted-data?sentence1=` + sentence1 + '&sentence2=' + sentence2).then(
+            (response) => {
+                setCFOldLabeled(response);
+        })
+    };
+    useEffect(handleUpdateLabeledOld, [data, sentence1, sentence2])
+
     const initializeCF = () => {
         setCF(sentence2);
         // also submit the originakl sentnce one to the submission to get the roberta output for the visualization
@@ -311,17 +322,17 @@ const Visualization: React.FunctionComponent<Props> = ({
             body: JSON.stringify(data)
         })
     }
+
     useEffect(handleUpdateLabeled, [data, GraphLabels, sentence1, sentence2])
+    useEffect(handleUpdateLabeledOld, [data, GraphLabels, sentence1, sentence2])
     useEffect(initializeCF, [sentence1, sentence2])
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
 
+    let styleNoBorder = { border: "none", boxShadow: "none" };
 
     return (
         <div className='demo-wrapper'>
-            <div className='demo_box_tour_button'>
-                {tour}
-            </div>
 
             <Container maxWidth={false}>
                 <Stack spacing={3}>
@@ -329,7 +340,7 @@ const Visualization: React.FunctionComponent<Props> = ({
                     <Stack
                         direction="row"
                         divider={<Divider orientation="vertical" flexItem/>} p={2} my={2} mx={2}>
-                        <Card className="demo_box_sentencepair" style={{ border: "none", boxShadow: "none" }}>
+                        <Card className="demo_box_sentencepair" style={styleNoBorder}>
                                 <BoxSentencePair sentence1={sentence1}
                                                 sentence2={sentence2}
                                                 gold_label={gold_label}
@@ -339,7 +350,7 @@ const Visualization: React.FunctionComponent<Props> = ({
                                                 setRobertaLabel={setRobertaLabel}
                                 />
                         </Card>
-                        <Card className="demo_box_polyjuice" style={{ border: "none", boxShadow: "none" }}>
+                        <Card className="demo_box_polyjuice" style={styleNoBorder}>
                                 <BoxPolyjuice suggestion={suggestion} setCount={setCfCount}
                                             count={cfCount}
                                             sentence1={sentence1} sentence2={sentence2} gold_label={gold_label}
@@ -350,11 +361,31 @@ const Visualization: React.FunctionComponent<Props> = ({
                     </Stack>
                     </Card>
 
-            <Card className="demo_box_labeledtable" elevation={3}>
-                {CFLabeled && <VarianceGraph data={CFLabeled} occurrences={CFOccurrences} probabilities={CFProbabilities} setGraphLabels={setGraphLabels} UpdateLabeled={handleUpdateLabeled}/>}
-            </Card>
+                    <Card elevation={3}>
+                    <Stack
+                        direction="row"
+                    >
+
+                        <Card className="demo_box_tree_viz" style={styleNoBorder}>
+                            {CFLabeled &&
+                            <VarianceGraph
+                                data={CFLabeled} occurrences={CFOccurrences}
+                                probabilities={CFProbabilities} setGraphLabels={setGraphLabels}
+                                UpdateLabeled={handleUpdateLabeled}/>}
+                        </Card>
+
+                        <Card className={"demo_box_table_viz"} style={styleNoBorder}>
+                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled}/>}
+                        </Card>
+
+                    </Stack>
+                    </Card>
             </Stack>
             </Container>
+
+            <div className='demo_box_tour_button'>
+                {tour}
+            </div>
         </div>
     )
 };
