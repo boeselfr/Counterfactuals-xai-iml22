@@ -94,8 +94,8 @@ def upload_submitted_data(sentence1: str, sentence2: str):
     matching_data["Robot_Label"] = robot_labels
     # renaming here for the table in the frontend
     matching_data = matching_data.rename(columns={"suggestionRH": "New Hypothesis", "Robot_Label": "Robot Label", "suggestionRH_label": "Human Label"})
-
-    return matching_data[["New Hypothesis", "Robot Label", "Human Label"]].to_dict(orient="records")
+    matching_data["id"] = matching_data.index + 1
+    return matching_data[["id","New Hypothesis", "Robot Label", "Human Label"]].to_dict(orient="records")
 
 
 @app.get("/upload-submitted-graph", response_model=NLISubmissionDisplayGraph)

@@ -45,7 +45,7 @@ class NLIDataSubmission(TypedDict):
     Human Label: str
     id: int"""
 
-NLISubmissionDisplayPoint = TypedDict("NLISubmissionDisplayPoint", {"New Hypothesis": str, "Robot Label": str, "Human Label": str})
+NLISubmissionDisplayPoint = TypedDict("NLISubmissionDisplayPoint", {"New Hypothesis": str, "Robot Label": str, "Human Label": str, "id": int})
 
 
 class NLISubmissionDisplay(BaseModel):

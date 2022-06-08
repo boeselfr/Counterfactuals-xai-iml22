@@ -13,9 +13,12 @@ import {DataGrid, GridColDef} from '@mui/x-data-grid';
 
 interface Props {
     CFLabeled: NLISubmissionDisplay;
+    sentence1: string;
+    sentence2: string;
+    UpdateLabeled: any;
 }
 
-const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled}: Props) => {
+const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sentence2, UpdateLabeled}: Props) => {
     const [hoveredRow, setHoveredRow] = React.useState(-1);
 
     const onMouseEnterRow = (event: any) => {
@@ -28,9 +31,9 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled}: Props) => {
     };
 
     const columns: GridColDef[] = [
-        {field: 'Neutral', headerName: 'Neutral', flex: 0.3},
-        {field: 'Entailment', headerName: 'Entailment', flex: 0.3},
-        {field: 'Contradiction', headerName: 'Contradiction', flex: 0.3},
+        {field: 'New Hypothesis', headerName: 'Hypothesis', flex: 0.3},
+        {field: 'Robot Label', headerName: 'Robot Label', flex: 0.3},
+        {field: 'Human Label', headerName: 'Human Label', flex: 0.3},
         {field: "actions", headerName: "", width: 120,
             disableColumnMenu: true,
             renderCell: (params) => {
@@ -48,10 +51,12 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled}: Props) => {
                                 justifyContent: "center",
                                 alignItems: "center",
                         }}>
-                            <IconButton onClick={() => console.log(params.id)}>
+                            <IconButton onClick={() => console.log(params)}>
                                 <CopyIcon/>
                             </IconButton>
-                            <IconButton onClick={() => console.log(params.id)}>
+                            <IconButton onClick={() => fetch("http://127.0.0.1:8000/delete-data?sentence1=" + sentence1 + "&sentence2=" + sentence2 + "&counterfactual=" + params.row["New Hypothesis"],
+                                {method: "POST"
+                                }).then(UpdateLabeled())}>
                                 <DeleteIcon/>
                             </IconButton>
                         </Box>
@@ -61,9 +66,11 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled}: Props) => {
         }
     ];
 
+
+
     return (
         <Container fixed>
-            <Paper elevation={3} sx={{p: 2}}>
+            <Paper elevation={3} sx={{p: 4}}>
                 <Typography variant="h4"> Hypothesis Tree View </Typography>
                 <Divider />
                 <Box sx={{ my: 3, mx: 2 }}>
