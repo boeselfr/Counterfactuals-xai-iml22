@@ -52,7 +52,7 @@ const STEPS: Step[] = [
                 whether a hypothesis sentence is true (entailment), false (contradiction)
                 or neither (neutral). See following examples.</small>
         </div>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3> SELECT THE ORIGINAL SENTENCE PAIR</h3></div>)
 },
@@ -69,7 +69,7 @@ const STEPS: Step[] = [
                 <strong> Label: </strong> Entailment
             </div>
         </small>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
 },
@@ -87,7 +87,7 @@ const STEPS: Step[] = [
                 <strong> Label: </strong> Contradiction
             </div>
         </small>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
 },
@@ -105,7 +105,7 @@ const STEPS: Step[] = [
                 <strong> Label: </strong> Neutral
             </div>
         </small>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3>SENTENCE PAIR EXAMPLES</h3></div>)
 }, {
@@ -118,7 +118,7 @@ const STEPS: Step[] = [
         than the original pair. For now we will focus on changing the hypothesis.
         Let's have a look at some examples:
     </small>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3>THE TASK</h3></div>)
 },
@@ -139,7 +139,7 @@ const STEPS: Step[] = [
                 <ins>Contradiction</ins>
             </div>
         </small>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
 }, {
@@ -158,7 +158,7 @@ const STEPS: Step[] = [
                 Neutral
             </div>
         </small>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
 }, {
@@ -178,7 +178,7 @@ const STEPS: Step[] = [
                 <ins>Contradiction</ins>
             </div>
         </small>),
-    placement: "top",
+    placement: "right",
     target: ".sentencepair_tour",
     title: (<div><h3>COUNTERFACTUAL EXAMPLES</h3></div>)
 },
@@ -240,8 +240,17 @@ const STEPS: Step[] = [
             for the model to get a more general understanding of language.
             Therefore, aim not do create similar/duplicate hypotheses.
         </small>),
-    placement: "top",
+    placement: "right",
     target: ".demo_box_tree_viz",
+    title: (<div><h3>PREVIOUS HYPOTHESES VISUALIZATION</h3></div>)
+},
+{
+    content: (
+        <small> Additionally, the new hypotheses are listed in a table. In this more structured, less cluttered view, hypotheses can additionally be
+            deleted or copied for further usage.
+        </small>),
+    placement: "left",
+    target: ".demo_box_table_viz",
     title: (<div><h3>PREVIOUS HYPOTHESES VISUALIZATION</h3></div>)
 }
 ];
@@ -329,18 +338,22 @@ const Visualization: React.FunctionComponent<Props> = ({
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
 
-    let styleNoBorder = { border: "none", boxShadow: "none"};
+    let styleNoBorder = { border: "none", boxShadow: "none" };
 
     return (
         <div className='demo-wrapper'>
+
+        <div className='demo_box_tour_button'>
+                        {tour}
+                    </div>
 
             <Container maxWidth={false}>
                 <Stack spacing={3}>
                     <Card elevation={3}>
                     <Stack
                         direction="row"
-                        divider={<Divider orientation="vertical" flexItem/>} p={2} my={2} mx={5}>
-                        <Card className="demo_box_sentencepair" style={{...styleNoBorder, ...{"marginRight": "20px"}}}>
+                        divider={<Divider orientation="vertical" flexItem/>} p={2} my={2} mx={2}>
+                        <Card className="demo_box_sentencepair" style={styleNoBorder}>
                                 <BoxSentencePair sentence1={sentence1}
                                                 sentence2={sentence2}
                                                 gold_label={gold_label}
@@ -361,10 +374,9 @@ const Visualization: React.FunctionComponent<Props> = ({
                     </Stack>
                     </Card>
 
-                    <Card elevation={3}>
-                    <Grid container rowSpacing={2} columnSpacing={{xs: 1, sm: 2, md: 3}}>
-
-                        <Grid item xs={6}>
+                    <Card elevation={3} >
+                    <Stack
+                        direction="row" divider={<Divider orientation="vertical" flexItem/>} p={2} my={2} mx={2}>
                         <Card className="demo_box_tree_viz" style={styleNoBorder}>
                             {CFLabeled &&
                             <VarianceGraph
@@ -372,24 +384,15 @@ const Visualization: React.FunctionComponent<Props> = ({
                                 probabilities={CFProbabilities} setGraphLabels={setGraphLabels}
                                 UpdateLabeled={handleUpdateLabeled}/>}
                         </Card>
-                        </Grid>
 
-                        <Grid item xs={6}>
                         <Card className={"demo_box_table_viz"} style={styleNoBorder}>
-                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled} sentence1={sentence1}
-                                                           sentence2={sentence2} UpdateLabeled={handleUpdateLabeled}
-                                                           UpdateLabeledOld={handleUpdateLabeledOld}/>}
+                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled} sentence1={sentence1} sentence2={sentence2} UpdateLabeled={handleUpdateLabeled} UpdateLabeledOld={handleUpdateLabeledOld}/>}
                         </Card>
-                        </Grid>
 
-                    </Grid>
+                    </Stack>
                     </Card>
             </Stack>
             </Container>
-
-            <div className='demo_box_tour_button'>
-                {tour}
-            </div>
         </div>
     )
 };

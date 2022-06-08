@@ -28,7 +28,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {styled} from "@material-ui/core/styles";
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 interface Props {
@@ -67,6 +69,27 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
     const [selectSpan, setSpan] = useState([0, 0]);
     const [code, setCode] = useState("negation");
     const [cflabel, setcflabel] = useState('Neutral')
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+      };
+    
+      const action = (
+        <React.Fragment>
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </React.Fragment>
+      );
 
 
     const handleUpdateSentence = () => {
@@ -303,9 +326,17 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                                 alignItems="center"
                                 justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
                                 <Button variant="contained"
-                                        // onClick={() => navigator.clipboard.writeText(suggestion[count])}>Copy</Button>
-                                    // onClick={() => onCopyButtonClick(suggestion[count])}>Copy</Button>
-                                        onClick={() => onCopyButtonClick(suggestion[count])}> Copy </Button>
+                                        onClick={() => {navigator.clipboard.writeText(suggestion[count]); setOpen(true);}}>Copy</Button>
+                                        <Snackbar
+                                            open={open}
+                                            autoHideDuration={1000}
+                                            onClose={handleClose}
+                                            message="Copied to Clipboard"
+                                            action={action}
+                                            />
+
+                                    {/* onClick={() => onCopyButtonClick(suggestion[count])}>Copy</Button> */}
+                                        {/* onClick={() => onCopyButtonClick(suggestion[count])}> Copy </Button> */}
                                 <Button variant="contained"
                                         onClick={decrSuggestion}>Previous</Button>
 

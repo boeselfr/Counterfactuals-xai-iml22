@@ -10,6 +10,9 @@ import CopyIcon from "@mui/icons-material/ContentCopy";
 
 import {DataGrid, GridColDef} from '@mui/x-data-grid';
 
+import Snackbar from '@mui/material/Snackbar';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 interface Props {
     CFLabeled: NLISubmissionDisplay;
@@ -21,6 +24,28 @@ interface Props {
 
 const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sentence2, UpdateLabeled, UpdateLabeledOld}: Props) => {
     const [hoveredRow, setHoveredRow] = React.useState(-1);
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
+      };
+    
+      const action = (
+        <React.Fragment>
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </React.Fragment>
+      );
+
 
     const onMouseEnterRow = (event: any) => {
       const id = Number(event.currentTarget.getAttribute("data-id"));
@@ -52,9 +77,16 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sen
                                 justifyContent: "center",
                                 alignItems: "center",
                         }}>
-                            <IconButton onClick={() => console.log(params)}>
-                                <CopyIcon/>
-                            </IconButton>
+                        <IconButton onClick={() => {console.log(params); navigator.clipboard.writeText(params.row["New Hypothesis"]); setOpen(true)}}>
+                            <CopyIcon/>
+                        </IconButton>
+                            <Snackbar
+                                open={open}
+                                autoHideDuration={1000}
+                                onClose={handleClose}
+                                message="Copied to Clipboard"
+                                action={action}
+                                />
                             <IconButton onClick={() => fetch("http://127.0.0.1:8000/delete-data?sentence1=" + sentence1 + "&sentence2=" + sentence2 + "&counterfactual=" + params.row["New Hypothesis"],
                                 {method: "POST"
                                 }).then(UpdateLabeled()).then(UpdateLabeledOld())}>
@@ -71,7 +103,7 @@ const LabeledTable: React.FunctionComponent<Props> = ({CFLabeled, sentence1, sen
 
     return (
         <Container fixed>
-            <Paper elevation={3} sx={{p: 4}}>
+            <Paper elevation={0} sx={{p: 3}}>
                 <Typography variant="h4"> Hypotheses: Table View </Typography>
                 <Divider />
                 <Box sx={{ my: 3, mx: 2 }}>

@@ -54,6 +54,20 @@ code {
   text-align: center;
 }
 
+.demo_box_tree_viz{
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.demo_box_table_viz{
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+
+
 .demo_box_CF{
   position: relative;
   width: 100%;
