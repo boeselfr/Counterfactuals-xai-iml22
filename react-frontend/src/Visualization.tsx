@@ -343,6 +343,10 @@ const Visualization: React.FunctionComponent<Props> = ({
     return (
         <div className='demo-wrapper'>
 
+        <div className='demo_box_tour_button'>
+                        {tour}
+                    </div>
+
             <Container maxWidth={false}>
                 <Stack spacing={3}>
                     <Card elevation={3}>
@@ -389,10 +393,6 @@ const Visualization: React.FunctionComponent<Props> = ({
                     </Card>
             </Stack>
             </Container>
-
-            <div className='demo_box_tour_button'>
-                {tour}
-            </div>
         </div>
     )
 };
