@@ -146,19 +146,22 @@ def upload_submitted_graph(sentence1: str, sentence2: str, labels: str):
 
     # return probabilities for each sentence as a nested dictionary
     #list of probs is ["entailment, neutral, contradiction"]
+    # also return pseudo probabilities of human annotator e.g. 1,0,0
     probabilities = list()
     if not matching_data.empty:
         for index,row in matching_data.iterrows():
             dic = dict()
             dic["id"] = row["suggestionRH"]
             dic["probs"] = [row["Entailment"],row["Neutral"],row["Contradiction"]]
+            label = row["suggestionRH_label"]
+            if label == "Entailment":
+                dic["human_probs"] = [1.0, 0.0, 0.0]
+            elif label == "Neutral":
+                dic["human_probs"] = [0.0, 1.0, 0.0]
+            elif label == "Contradiction":
+                dic["human_probs"] = [0.0, 0.0, 1.0]
+
             probabilities.append(dic)
-            """probabilities[row["suggestionRH"]].append({"Label": "Neutral", "Value": row["Neutral"]})
-            probabilities[row["suggestionRH"]].append({"Label": "Entailment", "Value": row["Entailment"]})
-            probabilities[row["suggestionRH"]].append({"Label": "Contradiction", "Value": row["Contradiction"]})
-            probabilities[row["suggestionRH"]].append(row["Entailment"])
-            probabilities[row["suggestionRH"]].append(row["Neutral"])
-            probabilities[row["suggestionRH"]].append(row["Contradiction"])"""
 
     print(f'probabilities: '
           f'{probabilities}')

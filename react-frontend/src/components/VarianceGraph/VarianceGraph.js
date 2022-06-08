@@ -301,20 +301,100 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 return
             }
 
-
             const colorpalette =
                 {"Entailment": "#4caf50", "Neutral": "#03a9f4", "Contradiction": "#ef5350"}
 
+            var box_x = d3.scaleLinear()
+                .domain([0,1])
+                .range([0,120])
 
+            const labels = ["Entailment", "Neutral", "Contradiction"]
+            // space the text 80 apart
             data.forEach((entry, index) => {
                 // Add the text to measure it
                 tipSVG.append("text")
                     .attr("x", 0)
                     .attr("y", () => {
-                        return 20 + index * 30
+                        return 20 + index * 80
                     })
+                    .attr("font-weight", 500)
                     .text(entry["id"]);
+
+                //print human and ai:
+                tipSVG.append("text")
+                    .attr("x", 5)
+                    .attr("y", 50 + index * 80)
+                    .text("🤖:")
+
+                tipSVG.append("text")
+                    .attr("x", 205)
+                    .attr("y", 50 + index * 80)
+                    .text("🧑✍️:")
+
+                var ai_max = entry["probs"].indexOf(Math.max(...entry["probs"]));
+                var human_max = entry["human_probs"].indexOf(Math.max(...entry["human_probs"]));
+
+                if (ai_max !== human_max) {
+                    tipSVG.append("text")
+                        .attr("x", 185)
+                        .attr("y", 50 + index * 80)
+                        .text("⚡")
+                }
+                // print entailment neutral counterfactual below:
+                labels.forEach((label, i) => {
+                     tipSVG
+                         .append("rect")
+                            .attr("x", 50)
+                            .attr("y", () => {
+                            return 40 + index * 80 + 10 * (i) - 9
+                            })
+                            .attr("width", () => {
+                            return box_x(entry["probs"][i])
+                            })
+                             .attr("height", 10)
+                             .attr("fill", () => {
+                                return colorpalette[label]
+                             })
+                            .attr("opacity", () => {
+                             return 0.5 + 0.5 * entry["probs"][i]
+                         })
+                    tipSVG.append("text")
+                        .attr("x", 50)
+                        .attr("y", () => {
+                            return 40 + index * 80 + 10 * i
+                        })
+                        .text(label)
+                        .style("font-size", 12)
+
+                    //human probs:
+                    tipSVG
+                         .append("rect")
+                            .attr("x", 250)
+                            .attr("y", () => {
+                            return 40 + index * 80 + 10 * (i) - 9
+                            })
+                            .attr("width", () => {
+                            return box_x(entry["human_probs"][i])
+                            })
+                             .attr("height", 10)
+                             .attr("fill", () => {
+                                return colorpalette[label]
+                             })
+                            .attr("opacity", () => {
+                             return 0.5 + 0.5 * entry["human_probs"][i]
+                         })
+                    tipSVG.append("text")
+                        .attr("x", 250)
+                        .attr("y", () => {
+                            return 40 + index * 80 + 10 * i
+                        })
+                        .text(label)
+                        .style("font-size", 12)
+                })
+
+
             })
+
 
             // Save the dimensions of the text elements
             tipSVG.selectAll("text")
@@ -323,69 +403,19 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                         d.bbox = this.getBBox();
                     });
 
-            // Remove the text elements
-            d3.selectAll("tipDiv text").remove();
-
-            var tipWidth = 0
-            var tipHeight = 0
+            //min 400 to cover the plot
+            var tipWidth = 400
 
             data.forEach(function (entry) {
                 tipWidth = Math.max(tipWidth, entry["bbox"]["width"]);
-                tipHeight = Math.max(tipHeight, entry["bbox"]["y"] + entry["bbox"]["height"]);
                 });
 
+            var tipHeight = data.length * 80
             // now redo with measurements
-            tipSVG.attr("width", tipWidth + 10)
-                .attr("height", tipHeight + 5)
+            tipSVG.attr("width", tipWidth)
+                .attr("height", tipHeight)
 
-            const xMargin = 4
-            const yMargin = 2
-            // recompute boxes to match
-
-            data.forEach((entry, index) => {
-                // Add the rect elements, these are placeholders
-                var x = d3.scaleLinear()
-                    .domain([0,1])
-                    .range([0,entry["bbox"]["width"]])
-
-                tipSVG.selectAll("myRect")
-                    .data(entry["probs"])
-                    .enter()
-                    .append("rect")
-                    .attr("x", function (d, i) {
-                        if (i == 0) {
-                            return x(0);
-                        } else if (i == 1) {
-                            return x(entry["probs"][0]);
-                        } else {
-                            return x(entry["probs"][0] + entry["probs"][1]);
-                        }
-                    })
-                    .attr("y", function (data) {
-                        return entry["bbox"]["y"] - yMargin
-                    })
-                    .attr("width", d => x(d))
-                    .attr("height", entry["bbox"]["height"] + 2*yMargin)
-                    .attr("fill", function (d, i) {
-                        if (i == 0) {
-                            return colorpalette["Entailment"];
-                        } else if (i == 1) {
-                            return colorpalette["Neutral"];
-                        } else {
-                            return colorpalette["Contradiction"];
-                        }
-                    })
-                    .attr("opacity", function (d) {
-                        return d * 0.2 + 0.4
-                    })
-                // Add the text
-                tipSVG.append("text")
-                    .attr("x", x(0))
-                    .attr("y", () => {
-                        return 20 + index * 30
-                    })
-                    .text(entry["id"]);
-            })
+            tool_tip.offset([-1 * (tipHeight), 50])
         }
 
         const mouseleave = function(d) {
@@ -427,15 +457,97 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 {"Entailment": "#4caf50", "Neutral": "#03a9f4", "Contradiction": "#ef5350"}
 
 
+            var box_x = d3.scaleLinear()
+                .domain([0,1])
+                .range([0,120])
+
+            const labels = ["Entailment", "Neutral", "Contradiction"]
+            // space the text 80 apart
             data.forEach((entry, index) => {
                 // Add the text to measure it
                 tipSVG.append("text")
                     .attr("x", 0)
                     .attr("y", () => {
-                        return 20 + index * 30
+                        return 20 + index * 80
                     })
+                    .attr("font-weight", 500)
                     .text(entry["id"]);
+
+                //print human and ai:
+                tipSVG.append("text")
+                    .attr("x", 5)
+                    .attr("y", 50 + index * 80)
+                    .text("🤖:")
+
+                tipSVG.append("text")
+                    .attr("x", 205)
+                    .attr("y", 50 + index * 80)
+                    .text("🧑✍️:")
+
+                var ai_max = entry["probs"].indexOf(Math.max(...entry["probs"]));
+                var human_max = entry["human_probs"].indexOf(Math.max(...entry["human_probs"]));
+
+                if (ai_max !== human_max) {
+                    tipSVG.append("text")
+                        .attr("x", 185)
+                        .attr("y", 50 + index * 80)
+                        .text("⚡")
+                }
+                // print entailment neutral counterfactual below:
+                labels.forEach((label, i) => {
+                     tipSVG
+                         .append("rect")
+                            .attr("x", 50)
+                            .attr("y", () => {
+                            return 40 + index * 80 + 10 * (i) - 9
+                            })
+                            .attr("width", () => {
+                            return box_x(entry["probs"][i])
+                            })
+                             .attr("height", 10)
+                             .attr("fill", () => {
+                                return colorpalette[label]
+                             })
+                            .attr("opacity", () => {
+                             return 0.5 + 0.5 * entry["probs"][i]
+                         })
+                    tipSVG.append("text")
+                        .attr("x", 50)
+                        .attr("y", () => {
+                            return 40 + index * 80 + 10 * i
+                        })
+                        .text(label)
+                        .style("font-size", 12)
+
+                    //human probs:
+                    tipSVG
+                         .append("rect")
+                            .attr("x", 250)
+                            .attr("y", () => {
+                            return 40 + index * 80 + 10 * (i) - 9
+                            })
+                            .attr("width", () => {
+                            return box_x(entry["human_probs"][i])
+                            })
+                             .attr("height", 10)
+                             .attr("fill", () => {
+                                return colorpalette[label]
+                             })
+                            .attr("opacity", () => {
+                             return 0.5 + 0.5 * entry["human_probs"][i]
+                         })
+                    tipSVG.append("text")
+                        .attr("x", 250)
+                        .attr("y", () => {
+                            return 40 + index * 80 + 10 * i
+                        })
+                        .text(label)
+                        .style("font-size", 12)
+                })
+
+
             })
+
 
             // Save the dimensions of the text elements
             tipSVG.selectAll("text")
@@ -444,69 +556,19 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                         d.bbox = this.getBBox();
                     });
 
-            // Remove the text elements
-            d3.selectAll("tipDiv text").remove();
-
-            var tipWidth = 0
-            var tipHeight = 0
+            //min 400 to cover the plot
+            var tipWidth = 400
 
             data.forEach(function (entry) {
                 tipWidth = Math.max(tipWidth, entry["bbox"]["width"]);
-                tipHeight = Math.max(tipHeight, entry["bbox"]["y"] + entry["bbox"]["height"]);
                 });
 
+            var tipHeight = data.length * 80
             // now redo with measurements
-            tipSVG.attr("width", tipWidth + 10)
-                .attr("height", tipHeight + 5)
+            tipSVG.attr("width", tipWidth)
+                .attr("height", tipHeight)
 
-            const xMargin = 4
-            const yMargin = 2
-            // recompute boxes to match
-
-            data.forEach((entry, index) => {
-                // Add the rect elements, these are placeholders
-                var x = d3.scaleLinear()
-                    .domain([0,1])
-                    .range([0,entry["bbox"]["width"]])
-
-                tipSVG.selectAll("myRect")
-                    .data(entry["probs"])
-                    .enter()
-                    .append("rect")
-                    .attr("x", function (d, i) {
-                        if (i == 0) {
-                            return x(0);
-                        } else if (i == 1) {
-                            return x(entry["probs"][0]);
-                        } else {
-                            return x(entry["probs"][0] + entry["probs"][1]);
-                        }
-                    })
-                    .attr("y", function (data) {
-                        return entry["bbox"]["y"] - yMargin
-                    })
-                    .attr("width", d => x(d))
-                    .attr("height", entry["bbox"]["height"] + 2*yMargin)
-                    .attr("fill", function (d, i) {
-                        if (i == 0) {
-                            return colorpalette["Entailment"];
-                        } else if (i == 1) {
-                            return colorpalette["Neutral"];
-                        } else {
-                            return colorpalette["Contradiction"];
-                        }
-                    })
-                    .attr("opacity", function (d) {
-                        return d * 0.2 + 0.4
-                    })
-                // Add the text
-                tipSVG.append("text")
-                    .attr("x", x(0))
-                    .attr("y", () => {
-                        return 20 + index * 30
-                    })
-                    .text(entry["id"]);
-            })
+            tool_tip.offset([-1 * (tipHeight), 50])
         }
 
         function drawNodes(linkk) {
