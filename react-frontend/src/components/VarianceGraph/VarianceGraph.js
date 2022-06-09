@@ -14,15 +14,37 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormLabel from "@mui/material/FormLabel";
 import { createTheme , ThemeProvider }from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { grey, blue, orange, black } from '@mui/material/colors';
+import Button from "@mui/material/Button";
 
-const theme = createTheme({
+
+var cblind = false
+
+const theme_regular = createTheme({
     palette:{
         primary: {
             main: grey[500]
         }
     }
 })
+
+const theme_cblind = createTheme({
+    palette:{
+        primary: {
+            main: grey[800]
+        },    
+        success: blue,
+        error: orange
+    }
+})
+
+const colorpalette_regular ={"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} 
+
+const colorpalette_cblind = {"Entailment": "#2196f3", "Neutral": "black", "Contradiction": "#ff9800"}
+
+// {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
+// {"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} # actuall error and success colors
+// {"Entailment": "#2196f3", "Neutral": "black", "Contradiction": "#ff9800"}
 
 const useD3 = (renderChartFn, dependencies) => {
     const ref = React.useRef();
@@ -39,6 +61,8 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
     const [NeutralChecked, setNeutralChecked] = React.useState(true)
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
+    const [theme, setTheme] = React.useState(theme_regular)
+    const [colorpalette, setColorpalette] = React.useState(colorpalette_regular)
 
     const handleContradiction = (e) => {
         setContradictionChecked(e.target.checked);
@@ -311,8 +335,11 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 return
             }
 
-            const colorpalette =
-                {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
+            // const colorpalette =
+            //     // {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
+            //     // {"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} # actuall error and success colors
+            //     {"Entailment": "#2196f3", "Neutral": "black", "Contradiction": "#ff9800"}
+
 
             var box_x = d3.scaleLinear()
                 .domain([0,1])
@@ -462,10 +489,10 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 return
             }
 
-
-            const colorpalette =
-                {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
-
+            // const colorpalette =         
+            // // {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
+            // // {"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} # actuall error and success colors
+            // {"Entailment": "#2196f3", "Neutral": "gray", "Contradiction": "#ff9800"}
 
             var box_x = d3.scaleLinear()
                 .domain([0,1])
@@ -656,8 +683,10 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
         linkks.forEach((linkk) => {
             // filter the links here once for each label and then draw them:
             const labels = ["Entailment", "Neutral", "Contradiction"]
-            const colorpalette =
-                {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
+            // const colorpalette =
+            // // {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
+            // // {"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} # actuall error and success colors
+            // {"Entailment": "#2196f3", "Neutral": "black", "Contradiction": "#ff9800"}
             labels.forEach((label,i) => {
 
                 let nodeG = svg.append('g')
@@ -753,6 +782,8 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 Hypotheses: Tree View </Typography>
               <Divider/>
                 <FormControl component="fieldset">
+                <ThemeProvider theme={theme}>
+
                     <FormLabel component="legend">Select the Hypotheses to display</FormLabel>
                 <FormGroup row>
                     <FormControlLabel
@@ -761,14 +792,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                     labelPlacement="end"
                     control={<Checkbox checked={EntailmentChecked} onChange={handleEntailment} color="success" />
                 }/>
-                    <ThemeProvider theme={theme}>
                 <FormControlLabel
                     value="Neutral"
                     label="Neutral"
                     labelPlacement="end"
                     control={<Checkbox checked={NeutralChecked} onChange={handleNeutral} color="primary" />
                 }/>
-                    </ThemeProvider>
                 <FormControlLabel
                     value="Contradiction"
                     label="Contradiction"
@@ -776,6 +805,8 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                     control={<Checkbox checked={ContradictionChecked} onChange={handleContradiction} color="error" />
                 }/>
                 </FormGroup>
+                </ThemeProvider>
+
                 </FormControl>
                 <Divider/>
               <Box sx={{my: 3, mx: 4, marginTop: 5, marginLeft: -15}}>
@@ -786,6 +817,8 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
               </Box>
             </CardContent>
           </Card>
+          <Button variant="contained" onClick={() => {setColorpalette(colorpalette_cblind); setTheme(theme_cblind);}}> Use Colorblind-Friendly Colors </Button>
+
         </Container>
     );
 }
