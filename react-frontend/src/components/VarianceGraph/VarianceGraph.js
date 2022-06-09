@@ -63,7 +63,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
     //const [colorpalette, setColorpalette] = React.useState(colorpalette_regular)
-    const [checked, setChecked] = React.useState(true);
+    const [checked, setChecked] = React.useState(false);
 
     const handleChange = (event) => {
       setChecked(event.target.checked);
