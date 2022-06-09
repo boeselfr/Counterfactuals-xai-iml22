@@ -16,6 +16,8 @@ import FormLabel from "@mui/material/FormLabel";
 import { createTheme , ThemeProvider }from '@mui/material/styles';
 import { grey, blue, orange, black } from '@mui/material/colors';
 import Button from "@mui/material/Button";
+import Switch from '@mui/material/Switch';
+
 
 
 
@@ -61,6 +63,18 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
     //const [colorpalette, setColorpalette] = React.useState(colorpalette_regular)
+    const [checked, setChecked] = React.useState(true);
+
+    const handleChange = (event) => {
+      setChecked(event.target.checked);
+      if(cblind){
+        setcblind(false);
+      }
+      else{
+          setcblind(true);
+      }
+
+    };
 
     if (cblind){
         var theme = theme_cblind
@@ -823,8 +837,13 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
               </Box>
             </CardContent>
           </Card>
-          <Button variant="contained" onClick={() => {setcblind(true)}}> Use Colorblind-Friendly Colors </Button>
-
+          {/* <Button variant="contained" onClick={() => {setcblind(true)}}> Use Colorblind-Friendly Colors </Button> */}
+          <FormLabel> Use Colorblind-Friendly Colors</FormLabel>
+          <Switch
+            checked={checked}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': 'controlled' }}
+            label= "Use Colorblind-Friendly Colors"/>
         </Container>
     );
 }
