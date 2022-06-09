@@ -269,6 +269,7 @@ const Visualization: React.FunctionComponent<Props> = ({
     const [CFOccurrences, setCFOccurrences] = useState({});
     const [CFProbabilities, setCFProbabilities] = useState({});
     const [GraphLabels, setGraphLabels] = useState(["Neutral","Entailment", "Contradiction"]);
+    const [cblind,setcblind] = useState(false);
 
     const [robertaLabel, setRobertaLabel] = useState('-');
 
@@ -382,7 +383,9 @@ const Visualization: React.FunctionComponent<Props> = ({
                             <VarianceGraph
                                 data={CFLabeled} occurrences={CFOccurrences}
                                 probabilities={CFProbabilities} setGraphLabels={setGraphLabels}
-                                UpdateLabeled={handleUpdateLabeled}/>}
+                                UpdateLabeled={handleUpdateLabeled}
+                            cblind={cblind}
+                            setcblind={setcblind}/>}
                         </Card>
 
                         <Card className={"demo_box_table_viz"} style={styleNoBorder}>

@@ -18,7 +18,6 @@ import { grey, blue, orange, black } from '@mui/material/colors';
 import Button from "@mui/material/Button";
 
 
-var cblind = false
 
 const theme_regular = createTheme({
     palette:{
@@ -57,12 +56,19 @@ const useD3 = (renderChartFn, dependencies) => {
 }
 
 // not ready to convert this to ts :(
-function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, UpdateLabeled})  {
+function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, UpdateLabeled, cblind, setcblind})  {
     const [NeutralChecked, setNeutralChecked] = React.useState(true)
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
-    const [theme, setTheme] = React.useState(theme_regular)
-    const [colorpalette, setColorpalette] = React.useState(colorpalette_regular)
+    //const [colorpalette, setColorpalette] = React.useState(colorpalette_regular)
+
+    if (cblind){
+        var theme = theme_cblind
+        var colorpalette = colorpalette_cblind
+    } else {
+        var theme = theme_regular
+        var colorpalette = colorpalette_regular
+    }
 
     const handleContradiction = (e) => {
         setContradictionChecked(e.target.checked);
@@ -817,7 +823,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
               </Box>
             </CardContent>
           </Card>
-          <Button variant="contained" onClick={() => {setColorpalette(colorpalette_cblind); setTheme(theme_cblind);}}> Use Colorblind-Friendly Colors </Button>
+          <Button variant="contained" onClick={() => {setcblind(true)}}> Use Colorblind-Friendly Colors </Button>
 
         </Container>
     );
