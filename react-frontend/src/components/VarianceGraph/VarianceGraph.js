@@ -374,12 +374,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 50)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 10
+                            return 40 + index * 80 + 12 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["probs"][i])
                         })
-                        .attr("height", 11)
+                        .attr("height", 13)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -389,7 +389,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                     tipSVG.append("text")
                         .attr("x", 50)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * i
+                            return 40 + index * 80 + 12 * i
                         })
                         .text(label)
                         .style("font-size", 12)
@@ -399,12 +399,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 250)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 10
+                            return 40 + index * 80 + 12 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["human_probs"][i])
                         })
-                        .attr("height", 11)
+                        .attr("height", 13)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -414,7 +414,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                     tipSVG.append("text")
                         .attr("x", 250)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * i
+                            return 40 + index * 80 + 12 * i
                         })
                         .text(label)
                         .style("font-size", 12)
@@ -527,12 +527,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 50)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 10
+                            return 40 + index * 80 + 12 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["probs"][i])
                         })
-                        .attr("height", 11)
+                        .attr("height", 13)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -542,7 +542,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                     tipSVG.append("text")
                         .attr("x", 50)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * i
+                            return 40 + index * 80 + 12 * i
                         })
                         .text(label)
                         .style("font-size", 12)
@@ -552,12 +552,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 250)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 10
+                            return 40 + index * 80 + 12 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["human_probs"][i])
                         })
-                        .attr("height", 11)
+                        .attr("height", 13)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -567,7 +567,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                     tipSVG.append("text")
                         .attr("x", 250)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * i
+                            return 40 + index * 80 + 12 * i
                         })
                         .text(label)
                         .style("font-size", 12)
