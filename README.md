@@ -289,7 +289,7 @@ Tags:
   - Use `springulum/frontend:week10` and `springulum/backend:week10` Docker images.
 - Week 12 (May 26): [Week 12 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week12)
     - Use `springulum/frontend:week12` and `springulum/backend:week12` Docker images.
-- Final (June 13):
+- Final (June 13): [Final Submission Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/final_submission)
     - Use `springulum/frontend:final` and `springulum/backend:final` Docker images.
 
 ## Launching the app with Docker
