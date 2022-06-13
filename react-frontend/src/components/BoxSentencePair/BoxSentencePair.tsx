@@ -57,7 +57,7 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
             <Divider />
             <Box sx={{ my: 4, mx: 2 }}>
             <Stack alignItems="center" justifyContent="center" spacing={2} direction="row" sx={{p: 1}}>
-                <Button variant="contained"  onClick={(e) => {decrCount(); setRobertaLabel('-')}}> <ArrowBackIosNewIcon /> </Button>
+                <Button variant="contained"  onClick={(e) => {decrCount(); setRobertaLabel('-')}} style={{minHeight: '80px', maxHeight: '80px'}}> <ArrowBackIosNewIcon /> </Button>
                 <div className="sentencepair_tour">
                 <Stack alignItems={"flex"} justifyContent={"flex"} spacing={1} sx={{ my: 3, mx: 2, width: "93%"}}>
 
@@ -88,7 +88,7 @@ const SentencePairBox: React.FunctionComponent<Props> = ({
                 </Stack>
                 </div>
 
-                    <Button variant="contained" onClick={(e) => {incrCount(); setRobertaLabel('-')}}><ArrowForwardIosIcon/></Button>
+                    <Button variant="contained" style={{minHeight: '80px', maxHeight: '80px'}} onClick={(e) => {incrCount(); setRobertaLabel('-')}}><ArrowForwardIosIcon/></Button>
             </Stack>
             </Box>
         </Container>);
