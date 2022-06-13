@@ -302,5 +302,5 @@ docker run -d --rm -it --net=host springulum/frontend:final  # Listens on port 8
 docker run -d --rm -it --net=host springulum/backend:final  # Listens on port 3000. Will download 2.0 GB of ML models upon launch.
 ```
 
-You can then use the app by loading http://localhost:8000 in your web browser.
+You can then use the app by loading http://localhost:3000 in your web browser.
 Using --net=host, a *Linux-only option*, will automatically bind containers ports 3000 and 8000 to localhost.
