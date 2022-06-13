@@ -269,7 +269,6 @@ const Visualization: React.FunctionComponent<Props> = ({
     const [CFOccurrences, setCFOccurrences] = useState({});
     const [CFProbabilities, setCFProbabilities] = useState({});
     const [GraphLabels, setGraphLabels] = useState(["Neutral","Entailment", "Contradiction"]);
-    const [cblind,setcblind] = useState(false);
 
     const [robertaLabel, setRobertaLabel] = useState('-');
 
@@ -309,7 +308,6 @@ const Visualization: React.FunctionComponent<Props> = ({
                 setCFOldLabeled(response);
         })
     };
-    useEffect(handleUpdateLabeledOld, [data, sentence1, sentence2])
 
     const initializeCF = () => {
         setCF(sentence2);
@@ -336,6 +334,35 @@ const Visualization: React.FunctionComponent<Props> = ({
     useEffect(handleUpdateLabeled, [data, GraphLabels, sentence1, sentence2])
     useEffect(handleUpdateLabeledOld, [data, GraphLabels, sentence1, sentence2])
     useEffect(initializeCF, [sentence1, sentence2])
+
+    // Color palette used for setting colors in Graph and Table visualizations.
+    const colorpalette_regular ={
+        "Entailment": "#2e7d32",
+        "entailment": "#2e7d32",
+        "Neutral": "gray",
+        "neutral": "gray",
+        "Contradiction": "#d32f2f",
+        "contradiction": "#d32f2f",
+    }
+    const colorpalette_cblind = {
+        "Entailment": "#2196f3",
+        "entailment": "#2196f3",
+        "Neutral": "black",
+        "neutral": "black",
+        "Contradiction": "#ff9800",
+        "contradiction": "#ff9800",
+    }
+
+    const [colorpalette, setColorpalette] = React.useState(colorpalette_regular)
+
+    function handleColorpalette(isColorBlind: boolean) {
+        if (isColorBlind) {
+            setColorpalette(colorpalette_cblind);
+        } else {
+            setColorpalette(colorpalette_regular);
+        }
+    }
+
     // const tour = useTour(STEPS, "LS_KEY");
     const tour = useTour(STEPS);
 
@@ -370,7 +397,9 @@ const Visualization: React.FunctionComponent<Props> = ({
                                             sentence1={sentence1} sentence2={sentence2} gold_label={gold_label}
                                             cf={cf} setCF={setCF} robertaLabel={robertaLabel}
                                             setRobertaLabel={setRobertaLabel}
-                                            mode={mode} UpdateLabeled={handleUpdateLabeled}/>
+                                            mode={mode} UpdateLabeled={handleUpdateLabeled}
+                                            UpdateLabeledOld={handleUpdateLabeledOld}
+                                />
                         </Card>
                     </Stack>
                     </Card>
@@ -383,13 +412,17 @@ const Visualization: React.FunctionComponent<Props> = ({
                             <VarianceGraph
                                 data={CFLabeled} occurrences={CFOccurrences}
                                 probabilities={CFProbabilities} setGraphLabels={setGraphLabels}
-                                UpdateLabeled={handleUpdateLabeled}
-                            cblind={cblind}
-                            setcblind={setcblind}/>}
+                                colorpalette={colorpalette} handleColorpalette={handleColorpalette}
+                            />}
                         </Card>
 
                         <Card className={"demo_box_table_viz"} style={styleNoBorder}>
-                            {CFOldLabeled && <LabeledTable CFLabeled={CFOldLabeled} sentence1={sentence1} sentence2={sentence2} UpdateLabeled={handleUpdateLabeled} UpdateLabeledOld={handleUpdateLabeledOld}/>}
+                            {CFOldLabeled && <LabeledTable
+                                CFLabeled={CFOldLabeled} sentence1={sentence1} sentence2={sentence2}
+                                UpdateLabeled={handleUpdateLabeled}
+                                UpdateLabeledOld={handleUpdateLabeledOld}
+                                colorpalette={colorpalette}
+                            />}
                         </Card>
 
                     </Stack>

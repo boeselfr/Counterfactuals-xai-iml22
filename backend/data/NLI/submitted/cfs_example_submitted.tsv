@@ -12,10 +12,7 @@ A German shepherd biting the protected arm of an attack trainer.	A dog bites an 
 A Girl with long brown hair standing outside.	A girl has long light brown hair.	neutral	A girl has long light brown hair.	Neutral	0.220418781042099	0.7776856422424316	0.0018955809064209
 A Girl with long brown hair standing outside.	A girl has long light brown hair.	neutral	A girl has long brown hair.	Entailment	0.0045624393969774	0.9927343130111694	0.0027031986974179
 A Girl with long brown hair standing outside.	A girl has long light brown hair.	neutral	A girl has short brown hair.	Contradiction	0.0004122609097976	0.0002449394960422	0.9993427395820618
-1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	The 2 men are spending their week with a musical tour group.	Neutral	0.9976603984832764	0.0014504635473713	0.0008890688186511
 A Jewish man wearing glasses, button up long blue shirt getting desserts on the table	The man is getting something sweet.	entailment	The man is getting something sweet.	Entailment	0.0666271299123764	0.9327198266983032	0.0006529830861836
-1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	The 2 men are not spending their week with a musical tour group.	Contradiction	0.0141426557675004	0.0021822068374603	0.983675181865692
-1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	The 2 women are not spending their week with a musical tour group.	Contradiction	0.0115224234759807	0.0008937732782214	0.9875838160514832
 A BMX biker shoots up into the air.	The bike is bright red.	neutral	The bike is bright blue.	Contradiction	0.9975494742393494	0.0009886170737445	0.0014619147405028
 A BMX biker shoots up into the air.	The bike is bright red.	neutral	The bike is bright	Contradiction	0.9630807042121888	0.0336932465434074	0.0032260820735245
 A BMX biker shoots up into the air.	The bike is bright red.	neutral	The bike is on the ground	Contradiction	0.0113830864429473	0.0045440685935318	0.9840728640556335
@@ -71,3 +68,12 @@ A big, brown dog is shaking off while in the water.	The dog is dry.	contradictio
 A BMX biker riding down a muddy trail wearing protective gear.	Biker in a helmet riding a trail	entailment	Two bikers in helmets are riding a trail	Neutral	0.848237156867981	0.0577899366617202	0.0939730107784271
 A BMX biker riding down a muddy trail wearing protective gear.	Biker in a helmet riding a trail	entailment	A BMX biker has knee pads	Entailment	0.9057090878486632	0.0914903655648231	0.0028004960622638
 A BMX biker riding down a muddy trail wearing protective gear.	Biker in a helmet riding a trail	entailment	A BMX biker does not have knee pads	Contradiction	0.0486212819814682	0.0048474017530679	0.9465312957763672
+2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	entailment	The people are close to the laptop	Entailment	0.4072053432464599	0.5899375677108765	0.0028570888098329
+2 people wearing sunglasses with red mohawks are sitting at an ASUS laptop.	The people are near the laptop.	entailment	The people are in a museum	Neutral	0.9969295859336852	0.0007894319132901	0.0022809337824583
+A BMX biker shoots up into the air.	The bike is bright red.	neutral	A human on a vehicle is not on the ground	Entailment	0.0168321188539266	0.9819211959838868	0.0012466248590499
+A BMX biker shoots up into the air.	The bike is bright red.	neutral	The bike is flying	Entailment	0.1430941224098205	0.853819727897644	0.0030861946288496
+A BMX biker riding down a muddy trail wearing protective gear.	Biker in a helmet riding a trail	entailment	Biker in a bright orange helmet is a trail	Neutral	0.9927216172218324	0.0024564119521528	0.004822002723813
+A BMX biker shoots up into the air.	The bike is bright red.	neutral	The bike is broken.	Neutral	0.9597432613372804	0.0174711737781763	0.0227856300771236
+1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	The 2 men are spending their week with a musical tour group.	Neutral	0.9976603984832764	0.0014504635473713	0.0008890688186511
+1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	The 2 men are spending their week with a test.	Neutral	0.9159418940544128	0.0025357622653245	0.0815222710371017
+1 man singing and 1 man playing a saxophone in a concert.	The 2 men are spending their week with a musical tour group.	neutral	There are 2 women performing in a concert.	Contradiction	0.0006332071498036	0.0003579074109438	0.9990088939666748

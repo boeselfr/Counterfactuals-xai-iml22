@@ -39,10 +39,6 @@ const theme_cblind = createTheme({
     }
 })
 
-const colorpalette_regular ={"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} 
-
-const colorpalette_cblind = {"Entailment": "#2196f3", "Neutral": "black", "Contradiction": "#ff9800"}
-
 // {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
 // {"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} # actuall error and success colors
 // {"Entailment": "#2196f3", "Neutral": "black", "Contradiction": "#ff9800"}
@@ -58,31 +54,13 @@ const useD3 = (renderChartFn, dependencies) => {
 }
 
 // not ready to convert this to ts :(
-function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, UpdateLabeled, cblind, setcblind})  {
+function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
+                        colorpalette, handleColorpalette})  {
     const [NeutralChecked, setNeutralChecked] = React.useState(true)
     const [EntailmentChecked, setEntailmentChecked] = React.useState(true)
     const [ContradictionChecked, setContradictionChecked] = React.useState(true)
-    //const [colorpalette, setColorpalette] = React.useState(colorpalette_regular)
-    const [checked, setChecked] = React.useState(false);
-
-    const handleChange = (event) => {
-      setChecked(event.target.checked);
-      if(cblind){
-        setcblind(false);
-      }
-      else{
-          setcblind(true);
-      }
-
-    };
-
-    if (cblind){
-        var theme = theme_cblind
-        var colorpalette = colorpalette_cblind
-    } else {
-        var theme = theme_regular
-        var colorpalette = colorpalette_regular
-    }
+    const [cBlind, setCBlind] = React.useState(false)
+    // const [theme, setTheme] = React.useState(theme_cblind);
 
     const handleContradiction = (e) => {
         setContradictionChecked(e.target.checked);
@@ -113,13 +91,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
     React.useEffect(handleGraphLabels, [NeutralChecked, EntailmentChecked, ContradictionChecked])
 
-    const ref = useD3((svg, current) => {
-
+    function renderChartFn(svg, current) {
         svg.selectAll("*").remove();
         d3.selectAll("#tipDiv").remove();
         var levels = [[]]
         if (typeof(data) != "undefined") {
-          levels = data
+            levels = data
             // delete empty parents
             levels.forEach(l => {
                 l.forEach(n => {
@@ -237,7 +214,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
         // is zero
         nodes.forEach(n => n.height = (Math.max(1, n.bundles.length) - 1) * metro_d)
 
-        var x_offset = 0
+        var x_offset = 20
         var y_offset = padding
         levels.forEach(l => {
             //x_offset += l.bundles.length * bundle_width
@@ -304,16 +281,16 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
         linkks = new_linkks
         // create a tooltip
-        var current_position = [0,0]
+        var current_position = [0, 0]
         var tool_tip = d3tip()
-                .attr("class", "d3-tip")
-                .style("background-color", "white")
-                .style("border", "solid")
-                .style("border-width", "2px")
-                .style("border-radius", "5px")
-                .style("padding", "5px")
-                .html("<div id='tipDiv'></div>")
-                .offset([-70, 70]);
+            .attr("class", "d3-tip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+            .html("<div id='tipDiv'></div>")
+            .offset([-70, 70]);
         // Call it as a function to our app-wide SVG
         svg.call(tool_tip);
 
@@ -321,14 +298,14 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
         // Three function that change the tooltip when user hover / move / leave a cell
 
         var mouseover = function(d) {
-              d3.select(this)
-              .style("stroke", "black")
-              .style("opacity", 1)
-          }
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
+        }
 
         var mouseoverLink = function(d){
             d3.select(this)
-              .style("stroke-width", 1.5)
+                .style("stroke-width", 1.5)
         }
 
         var mousemove = function(d) {
@@ -345,21 +322,15 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             var index = data.length - 1;
 
             while (index >= 0) {
-              if (!data[index]["id"].includes(" " + id) && !data[index]["id"].includes(id + " ")) {
-                data.splice(index, 1);
-              }
-              index -= 1;
+                if (!data[index]["id"].includes(" " + id) && !data[index]["id"].includes(id + " ")) {
+                    data.splice(index, 1);
+                }
+                index -= 1;
             }
             if (data.length == 0){
                 tool_tip.hide()
                 return
             }
-
-            // const colorpalette =
-            //     // {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
-            //     // {"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} # actuall error and success colors
-            //     {"Entailment": "#2196f3", "Neutral": "black", "Contradiction": "#ff9800"}
-
 
             var box_x = d3.scaleLinear()
                 .domain([0,1])
@@ -399,22 +370,22 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 }
                 // print entailment neutral counterfactual below:
                 labels.forEach((label, i) => {
-                     tipSVG
-                         .append("rect")
-                            .attr("x", 50)
-                            .attr("y", () => {
+                    tipSVG
+                        .append("rect")
+                        .attr("x", 50)
+                        .attr("y", () => {
                             return 40 + index * 80 + 10 * (i) - 9
-                            })
-                            .attr("width", () => {
+                        })
+                        .attr("width", () => {
                             return box_x(entry["probs"][i])
-                            })
-                             .attr("height", 10)
-                             .attr("fill", () => {
-                                return colorpalette[label]
-                             })
-                            .attr("opacity", () => {
-                             return 0.5 + 0.5 * entry["probs"][i]
-                         })
+                        })
+                        .attr("height", 10)
+                        .attr("fill", () => {
+                            return colorpalette[label]
+                        })
+                        .attr("opacity", () => {
+                            return 0.5 + 0.5 * entry["probs"][i]
+                        })
                     tipSVG.append("text")
                         .attr("x", 50)
                         .attr("y", () => {
@@ -425,21 +396,21 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
                     //human probs:
                     tipSVG
-                         .append("rect")
-                            .attr("x", 250)
-                            .attr("y", () => {
+                        .append("rect")
+                        .attr("x", 250)
+                        .attr("y", () => {
                             return 40 + index * 80 + 10 * (i) - 9
-                            })
-                            .attr("width", () => {
+                        })
+                        .attr("width", () => {
                             return box_x(entry["human_probs"][i])
-                            })
-                             .attr("height", 10)
-                             .attr("fill", () => {
-                                return colorpalette[label]
-                             })
-                            .attr("opacity", () => {
-                             return 0.5 + 0.5 * entry["human_probs"][i]
-                         })
+                        })
+                        .attr("height", 10)
+                        .attr("fill", () => {
+                            return colorpalette[label]
+                        })
+                        .attr("opacity", () => {
+                            return 0.5 + 0.5 * entry["human_probs"][i]
+                        })
                     tipSVG.append("text")
                         .attr("x", 250)
                         .attr("y", () => {
@@ -455,17 +426,17 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
             // Save the dimensions of the text elements
             tipSVG.selectAll("text")
-                    .data(data)
-                    .each(function (d) {
-                        d.bbox = this.getBBox();
-                    });
+                .data(data)
+                .each(function (d) {
+                    d.bbox = this.getBBox();
+                });
 
             //min 400 to cover the plot
             var tipWidth = 400
 
             data.forEach(function (entry) {
                 tipWidth = Math.max(tipWidth, entry["bbox"]["width"]);
-                });
+            });
 
             var tipHeight = data.length * 80
             // now redo with measurements
@@ -498,10 +469,10 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             var index = data.length - 1;
 
             while (index >= 0) {
-              if (!data[index]["id"].includes(parent + " " + child)) {
-                data.splice(index, 1);
-              }
-              index -= 1;
+                if (!data[index]["id"].includes(parent + " " + child)) {
+                    data.splice(index, 1);
+                }
+                index -= 1;
             }
 
             if (data.length == 0){
@@ -509,7 +480,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 return
             }
 
-            // const colorpalette =         
+            // const colorpalette =
             // // {"Entailment": "#4caf50", "Neutral": "gray", "Contradiction": "#ef5350"}
             // // {"Entailment": "#2e7d32", "Neutral": "gray", "Contradiction": "#d32f2f"} # actuall error and success colors
             // {"Entailment": "#2196f3", "Neutral": "gray", "Contradiction": "#ff9800"}
@@ -552,22 +523,22 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 }
                 // print entailment neutral counterfactual below:
                 labels.forEach((label, i) => {
-                     tipSVG
-                         .append("rect")
-                            .attr("x", 50)
-                            .attr("y", () => {
+                    tipSVG
+                        .append("rect")
+                        .attr("x", 50)
+                        .attr("y", () => {
                             return 40 + index * 80 + 10 * (i) - 9
-                            })
-                            .attr("width", () => {
+                        })
+                        .attr("width", () => {
                             return box_x(entry["probs"][i])
-                            })
-                             .attr("height", 10)
-                             .attr("fill", () => {
-                                return colorpalette[label]
-                             })
-                            .attr("opacity", () => {
-                             return 0.5 + 0.5 * entry["probs"][i]
-                         })
+                        })
+                        .attr("height", 10)
+                        .attr("fill", () => {
+                            return colorpalette[label]
+                        })
+                        .attr("opacity", () => {
+                            return 0.5 + 0.5 * entry["probs"][i]
+                        })
                     tipSVG.append("text")
                         .attr("x", 50)
                         .attr("y", () => {
@@ -578,21 +549,21 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
                     //human probs:
                     tipSVG
-                         .append("rect")
-                            .attr("x", 250)
-                            .attr("y", () => {
+                        .append("rect")
+                        .attr("x", 250)
+                        .attr("y", () => {
                             return 40 + index * 80 + 10 * (i) - 9
-                            })
-                            .attr("width", () => {
+                        })
+                        .attr("width", () => {
                             return box_x(entry["human_probs"][i])
-                            })
-                             .attr("height", 10)
-                             .attr("fill", () => {
-                                return colorpalette[label]
-                             })
-                            .attr("opacity", () => {
-                             return 0.5 + 0.5 * entry["human_probs"][i]
-                         })
+                        })
+                        .attr("height", 10)
+                        .attr("fill", () => {
+                            return colorpalette[label]
+                        })
+                        .attr("opacity", () => {
+                            return 0.5 + 0.5 * entry["human_probs"][i]
+                        })
                     tipSVG.append("text")
                         .attr("x", 250)
                         .attr("y", () => {
@@ -608,17 +579,17 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
             // Save the dimensions of the text elements
             tipSVG.selectAll("text")
-                    .data(data)
-                    .each(function (d) {
-                        d.bbox = this.getBBox();
-                    });
+                .data(data)
+                .each(function (d) {
+                    d.bbox = this.getBBox();
+                });
 
             //min 400 to cover the plot
             var tipWidth = 400
 
             data.forEach(function (entry) {
                 tipWidth = Math.max(tipWidth, entry["bbox"]["width"]);
-                });
+            });
 
             var tipHeight = data.length * 80
             // now redo with measurements
@@ -628,7 +599,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             tool_tip.offset([-1 * (tipHeight), 50])
         }
 
-         const mouseleaveLink = function(d){
+        const mouseleaveLink = function(d){
             tool_tip.hide()
             d3.select(this)
                 .style("stroke-width", 0.5)
@@ -665,8 +636,6 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
         }
 
         linkks.forEach(drawNodes);
-
-
 
         linkks.forEach((linkk) => {
             let nodeG1 = svg.append("g")
@@ -710,10 +679,10 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
             labels.forEach((label,i) => {
 
                 let nodeG = svg.append('g')
-                .attr('class', 'node')
-                .selectAll("path")
-                .data(linkk)
-                .join('path')
+                    .attr('class', 'node')
+                    .selectAll("path")
+                    .data(linkk)
+                    .join('path')
                     //check if there is a label==label for this link
                     .filter(function(d){
                         var data = probabilities.map(a => Object.assign({}, a));
@@ -722,10 +691,10 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                         var index = data.length - 1;
 
                         while (index >= 0) {
-                          if (!data[index]["id"].includes(d.target.id.trim() + " " + d.source.id.trim())) {
-                            data.splice(index, 1);
-                          }
-                          index -= 1;
+                            if (!data[index]["id"].includes(d.target.id.trim() + " " + d.source.id.trim())) {
+                                data.splice(index, 1);
+                            }
+                            index -= 1;
                         }
                         var labelmatch = false
                         data.forEach((entry) => {
@@ -736,20 +705,20 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                         })
                         return labelmatch
                     })
-                .attr("class", "link")
-                .attr("parent_id", d=>d.target.id.trim())
-                .attr("child_id", d=>d.source.id.trim())
-                .attr("d", d3.linkHorizontal()
-                    .source(function(d) {return[d.xs, d.ys - 0.5 + i*0.5 ]})
-                    .target(function(d) {return [d.xt, d.yt - 0.5  + i*0.5 ]}))
-                .attr("stroke-width", 1)
-                //source is child here target is parent...
-                .attr("opacity", 0.1)
-                .style("opacity", d => occurrences[d.target.id.trim() + '_' + d.source.id.trim()]/occurrences['ALL_SENTENCES'])
-                .style("stroke", () => {return colorpalette[label]})
-                .on("mouseover", mouseoverLink)
-                .on("mousemove", mousemoveLink)
-                .on('mouseleave', mouseleaveLink)
+                    .attr("class", "link")
+                    .attr("parent_id", d=>d.target.id.trim())
+                    .attr("child_id", d=>d.source.id.trim())
+                    .attr("d", d3.linkHorizontal()
+                        .source(function(d) {return[d.xs, d.ys - 0.5 + i*0.5 ]})
+                        .target(function(d) {return [d.xt, d.yt - 0.5  + i*0.5 ]}))
+                    .attr("stroke-width", 1)
+                    //source is child here target is parent...
+                    .attr("opacity", 0.1)
+                    .style("opacity", d => occurrences[d.target.id.trim() + '_' + d.source.id.trim()]/occurrences['ALL_SENTENCES'])
+                    .style("stroke", () => {return colorpalette[label]})
+                    .on("mouseover", mouseoverLink)
+                    .on("mousemove", mousemoveLink)
+                    .on('mouseleave', mouseleaveLink)
             })
 
             let nodeG2 = svg.append("g")
@@ -761,7 +730,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 .attr("y", d => d.target.y - padding)
                 .text(d => d.target.id.trim() )
                 .attr("fill", '#000000')
-                //.style("font-size", d => occurrences[d.target.id.trim()])
+            //.style("font-size", d => occurrences[d.target.id.trim()])
 
             // otherwise the last one gets remove as it is no source just a target
             let nodeG22 = svg.append("g")
@@ -773,7 +742,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
                 .attr("y", d => d.source.y - padding)
                 .text(d => d.source.id.trim() )
                 .attr("fill", '#000000')
-                //.style("font-size", d => occurrences[d.target.id.trim()])
+            //.style("font-size", d => occurrences[d.target.id.trim()])
         });
 
         function handleZoom(e) {
@@ -783,28 +752,38 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
 
         let zoom = d3.zoom()
             .scaleExtent([0.5, 6])
-            .on('zoom', handleZoom);
-        
-        function initZoom() {
-            d3.selectAll("svg")
-                .call(zoom)
-        }
+            .on('zoom', handleZoom)
 
-        initZoom()
-      }, [data]
-  );
+        d3.selectAll("svg")
+            .call(zoom)
+        d3.selectAll("svg g").attr("transform", "transform(30, 30)")
+    }
+
+    const ref = useD3(renderChartFn, [data]);
+
+    const handleCBlind = (event) => {
+        setCBlind(event.target.checked);
+        handleColorpalette(event.target.checked);
+        handleGraphLabels()  // You must call this to properly update the graph.
+    };
+
+    if (cBlind) {
+        var theme = theme_cblind
+    } else {
+        var theme = theme_regular
+    }
+
 
     return (
         <Container fixed>
           <Card elevation={0} p={3}>
             <CardContent>
               <Typography variant="h4" component="div">
-                Hypotheses: Tree View </Typography>
+                Hypotheses: Graph View </Typography>
               <Divider/>
                 <FormControl component="fieldset">
                 <ThemeProvider theme={theme}>
-
-                    <FormLabel component="legend">Select the Hypotheses to display</FormLabel>
+                    <FormLabel component="legend">Filter Hypotheses by Label</FormLabel>
                 <FormGroup row>
                     <FormControlLabel
                     value="Entailment"
@@ -840,8 +819,8 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels, Updat
           {/* <Button variant="contained" onClick={() => {setcblind(true)}}> Use Colorblind-Friendly Colors </Button> */}
           <FormLabel> Use Colorblind-Friendly Colors</FormLabel>
           <Switch
-            checked={checked}
-            onChange={handleChange}
+            checked={cBlind}
+            onChange={handleCBlind}
             inputProps={{ 'aria-label': 'controlled' }}
             label= "Use Colorblind-Friendly Colors"/>
         </Container>

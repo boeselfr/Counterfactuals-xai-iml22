@@ -46,6 +46,7 @@ interface Props {
     setRobertaLabel: any;
     mode: string;
     UpdateLabeled: any;
+    UpdateLabeledOld: any;
 }
 
 
@@ -61,7 +62,8 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
                                                           robertaLabel,
                                                           setRobertaLabel,
                                                           mode,
-                                                          UpdateLabeled
+                                                          UpdateLabeled,
+                                                          UpdateLabeledOld,
                                                       }: Props) => {
 
 
@@ -103,7 +105,6 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
 
     const handleSelect = () => {
         let textInput = textArea.current;
-        console.log(textInput);
         if (textInput) {
             // Snap selections to the word boundary, if this option is enabled.
             let singletonSelection: boolean = textInput.selectionStart === textInput.selectionEnd;
@@ -172,6 +173,7 @@ const BoxPolyjuice: React.FunctionComponent<Props> = ({
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
         }).then(UpdateLabeled())
+          .then(UpdateLabeledOld())
 
     }
 
