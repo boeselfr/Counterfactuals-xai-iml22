@@ -299,7 +299,7 @@ For now our Docker setup is only compatible with Linux, because we don't know ho
 You can launch the front and backend docker images on Ubuntu via
 ```
 docker run -d --rm -it --net=host springulum/frontend:final  # Listens on port 8000, connects to backend port 3000
-docker run -d --rm -it --net=host springulum/backend:final  # Listens on port 3000
+docker run -d --rm -it --net=host springulum/backend:final  # Listens on port 3000. Will download 2.0 GB of ML models upon launch.
 ```
 
 You can then use the app by loading http://localhost:8000 in your web browser.
