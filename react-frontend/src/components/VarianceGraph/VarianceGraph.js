@@ -374,12 +374,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 50)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 9
+                            return 40 + index * 80 + 10 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["probs"][i])
                         })
-                        .attr("height", 10)
+                        .attr("height", 11)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -399,12 +399,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 250)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 9
+                            return 40 + index * 80 + 10 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["human_probs"][i])
                         })
-                        .attr("height", 10)
+                        .attr("height", 11)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -527,12 +527,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 50)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 9
+                            return 40 + index * 80 + 10 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["probs"][i])
                         })
-                        .attr("height", 10)
+                        .attr("height", 11)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -552,12 +552,12 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                         .append("rect")
                         .attr("x", 250)
                         .attr("y", () => {
-                            return 40 + index * 80 + 10 * (i) - 9
+                            return 40 + index * 80 + 10 * (i) - 10
                         })
                         .attr("width", () => {
                             return box_x(entry["human_probs"][i])
                         })
-                        .attr("height", 10)
+                        .attr("height", 11)
                         .attr("fill", () => {
                             return colorpalette[label]
                         })
@@ -708,6 +708,7 @@ function VarianceGraph ({data, occurrences, probabilities, setGraphLabels,
                     .attr("class", "link")
                     .attr("parent_id", d=>d.target.id.trim())
                     .attr("child_id", d=>d.source.id.trim())
+                    //draw the differently colored links.
                     .attr("d", d3.linkHorizontal()
                         .source(function(d) {return[d.xs, d.ys - 0.5 + i*0.5 ]})
                         .target(function(d) {return [d.xt, d.yt - 0.5  + i*0.5 ]}))
