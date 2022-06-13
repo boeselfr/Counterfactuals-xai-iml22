@@ -289,6 +289,8 @@ Tags:
   - Use `springulum/frontend:week10` and `springulum/backend:week10` Docker images.
 - Week 12 (May 26): [Week 12 Tag](https://gitlab.inf.ethz.ch/COURSE-XAI-IML22/Counterfactuals-xai-iml22/-/tags/Week12)
     - Use `springulum/frontend:week12` and `springulum/backend:week12` Docker images.
+- Final (June 13):
+    - Use `springulum/frontend:final` and `springulum/backend:ifnal` Docker images.
 
 ## Launching the app with Docker
 
@@ -296,8 +298,8 @@ For now our Docker setup is only compatible with Linux, because we don't know ho
 
 You can launch the front and backend docker images on Ubuntu via
 ```
-docker run -d --rm -it --net=host springulum/frontend:week10  # Listens on port 8000, connects to backend port 3000
-docker run -d --rm -it --net=host springulum/backend:week10  # Listens on port 3000
+docker run -d --rm -it --net=host springulum/frontend:final  # Listens on port 8000, connects to backend port 3000
+docker run -d --rm -it --net=host springulum/backend:final  # Listens on port 3000
 ```
 
 You can then use the app by loading http://localhost:8000 in your web browser.
