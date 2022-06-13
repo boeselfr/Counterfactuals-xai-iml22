@@ -53,9 +53,7 @@ Specify here the structure of you code and comment what the most important files
 ├── Dockerfile
 ├── README.md
 ├── backend
-│   ├── AlignmentGraph.py
-│   ├── __pycache__
-│   │   └── app.cpython-310.pyc
+│   ├── AlignmentGraph.py    <------------ Uses text sequence alignment algorithms as preprocessing step for creating variance graph.
 │   ├── app.py
 │   ├── data
 │   │   ├── NLI # nli dataset, partially used
@@ -90,16 +88,11 @@ Specify here the structure of you code and comment what the most important files
 │   │   ├── hidden_states.npz
 │   │   ├── umap_all_edited.png
 │   │   └── umap_mapper.pkl
-│   ├── easy_polyjuice.py # functions for polyjuice functionalities
+│   ├── easy_polyjuice.py <----------------------- functions for polyjuice functionalities
 │   ├── pydantic_models
-│   │   ├── __pycache__
-│   │   │   ├── example_data_points.cpython-310.pyc
-│   │   │   ├── example_data_points.cpython-39.pyc
-│   │   │   └── nli_data_point.cpython-310.pyc
 │   │   ├── example_data_points.py
 │   │   └── nli_data_point.py
-│   ├── roberta_inference.py # function for roberta counterfactual labeling
-│   └── umap_visualization.py # functions for a umap activation visualization
+│   ├── roberta_inference.py  <----------------- function for roberta counterfactual labeling
 ├── backend_launch.sh
 ├── classifiers
 │   ├── README.md
@@ -116,7 +109,10 @@ Specify here the structure of you code and comment what the most important files
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── src # app and typescript components
-|   |   ...
+|   |   | Visualization.tsx   <------------- Main app
+|   |   | components/BoxPolyjuice/BoxPolyjuice.tsx  <----------- AI assisted CF writng component
+|   |   | components/VarianceGraph/VarianceGraph.tsx  <----------- Text Variants Graph view of CFs
+|   |   | components/BoxTable/BoxTable.tsx  <----------- Table view of CFs
 │   │   ├── system.js
 │   │   ├── types # datatypes
 │   │   │   ├── DataArray.ts
