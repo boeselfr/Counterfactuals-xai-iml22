@@ -20,7 +20,7 @@ lint_helm:
 build_backend:
   stage: build
   image:
-    name: springulum/backend:final
+    name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   tags:
     - isg-test
@@ -37,7 +37,7 @@ build_backend:
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}/backend-project"
-      --dockerfile "${CI_PROJECT_DIR}/backend-project/Dockerfile"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${IMAGE_NAME}:${CI_COMMIT_REF_NAME}"
       --destination "${IMAGE_NAME}:${CI_COMMIT_SHORT_SHA}"
       --destination "${IMAGE_NAME}:latest"
@@ -48,7 +48,7 @@ build_backend:
 build_frontend:
   stage: build
   image:
-    name: springulum/frontend:final
+    name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   tags:
     - isg-test
