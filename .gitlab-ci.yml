@@ -36,7 +36,7 @@ build_backend:
     #    echo "${KANIKOCFG}" > /kaniko/.docker/config.json
     - >-
       /kaniko/executor
-      --context "${CI_PROJECT_DIR}/backend-project"
+      --context "${CI_PROJECT_DIR}/backend"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${IMAGE_NAME}:${CI_COMMIT_REF_NAME}"
       --destination "${IMAGE_NAME}:${CI_COMMIT_SHORT_SHA}"
