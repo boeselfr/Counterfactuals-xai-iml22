@@ -1,6 +1,6 @@
 # Counterfactual Generation
 
-[[_TOC_]]
+Project Report: [Counterfactual_Generation.pdf](https://github.com/boeselfr/Counterfactuals-xai-iml22/blob/e434e955e559b8ae719f305e01fd5f3ef694135b/Counterfactual_Generation.pdf)
 
 ## Team Members
 
